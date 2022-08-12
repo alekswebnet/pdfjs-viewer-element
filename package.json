@@ -1,6 +1,6 @@
 {
   "name": "pdfjs-viewer-element",
-  "version": "0.0.6",
+  "version": "1.0.0",
   "license": "UNLICENSED",
   "type": "module",
   "main": "./dist/my-lib.umd.cjs",
