@@ -2,23 +2,20 @@
   "name": "pdfjs-viewer-element",
   "version": "0.0.1",
   "type": "module",
-  "main": "dist/my-element.es.js",
+  "main": "dist/pdfjs-viewer-element.es.js",
   "exports": {
-    ".": "./dist/my-element.es.js"
+    ".": "./dist/pdfjs-viewer-element.es.js"
   },
-  "types": "types/my-element.d.ts",
   "files": [
-    "dist",
-    "types"
+    "dist"
   ],
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build"
   },
-  "dependencies": {
-    "lit": "^2.2.8"
-  },
+  "dependencies": {},
   "devDependencies": {
+    "lit": "^2.3.0",
     "typescript": "^4.6.4",
     "vite": "^3.0.6"
   }

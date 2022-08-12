@@ -183,7 +183,7 @@ lit-html@^2.2.0, lit-html@^2.3.0:
   dependencies:
     "@types/trusted-types" "^2.0.2"
 
-lit@^2.2.8:
+lit@^2.3.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/lit/-/lit-2.3.0.tgz#611e122cbf9f34f1af0c1f3f791f886453bdcbde"
   integrity sha512-ynSGsUYKSGN2weFQ1F3SZq0Ihlj+vr/3KAET//Yf8Tz86L7lZizlw9Px+ab5iN8Si4RkVoLqd9YtKQmjdyKHNg==
