@@ -2,11 +2,16 @@
   "name": "pdfjs-viewer-element",
   "version": "0.0.5",
   "license": "UNLICENSED",
-  "main": "dist/index.mjs",
+  "type": "module",
+  "main": "./dist/my-lib.umd.cjs",
+  "module": "./dist/my-lib.js",
   "exports": {
-    ".": "./dist/index.mjs"
+    ".": {
+      "import": "./dist/pdfjs-viewer-element.js",
+      "require": "./dist/pdfjs-viewer-element.umd.cjs"
+    }
   },
-  "types": "types/index.d.ts",
+  "types": "types/pdfjs-viewer-element.d.ts",
   "files": [
     "dist",
     "types"

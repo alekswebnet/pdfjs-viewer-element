@@ -6,8 +6,8 @@ export default defineConfig({
   build: {
     lib: {
       name: 'PdfjsViewerElement',
-      fileName: 'index',
-      entry: 'src/index.ts',
+      fileName: 'pdfjs-viewer-element',
+      entry: 'src/pdfjs-viewer-element.ts',
       formats: ['es', 'umd']
     }
   }
