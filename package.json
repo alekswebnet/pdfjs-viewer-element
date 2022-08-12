@@ -1,11 +1,12 @@
 {
   "name": "pdfjs-viewer-element",
-  "version": "0.0.4",
-  "main": "dist/pdfjs-viewer-element.es.js",
+  "version": "0.0.5",
+  "license": "UNLICENSED",
+  "main": "dist/index.mjs",
   "exports": {
-    ".": "./dist/pdfjs-viewer-element.es.js"
+    ".": "./dist/index.mjs"
   },
-  "types": "types/pdfjs-viewer-element.d.ts",
+  "types": "types/index.d.ts",
   "files": [
     "dist",
     "types"
@@ -14,11 +15,10 @@
     "dev": "vite",
     "build": "tsc && vite build"
   },
-  "dependencies": {
-    "lit": "^2.3.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/node": "^18.7.1",
+    "lit": "^2.3.0",
     "typescript": "^4.6.4",
     "vite": "^3.0.6"
   }

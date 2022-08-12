@@ -1,32 +1,18 @@
 import { LitElement, html, css } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
-
-/**
- * An example element.
- *
- * @slot - This element has a slot
- * @csspart button - The button
- */
 @customElement('pdfjs-viewer-element')
 export class PdfjsViewerElement extends LitElement {
+  @property()
+  src = ''
+  
+  @property()
+  height = '600px'
+
   static styles = css`
     :host {
       width: 100%
     }
   `
-
-  /**
-   * PDF file url
-   */
-  @property()
-  src = ''
-
-  /**
-   * Viewer height
-   */
-   @property()
-   height = '600px'
-
   render() {
     return html`
       <iframe

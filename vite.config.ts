@@ -5,14 +5,10 @@ import { resolve } from 'path'
 export default defineConfig({
   build: {
     lib: {
-      entry: 'src/pdfjs-viewer-element.ts',
-      formats: ['es'],
-    },
-    manifest: true,
-    rollupOptions: {
-      input: {
-        main: resolve(__dirname, 'index.html'),
-      },
-    },
-  },
+      name: 'PdfjsViewerElement',
+      fileName: 'index',
+      entry: 'src/index.ts',
+      formats: ['es', 'umd']
+    }
+  }
 })
