@@ -1,6 +1,6 @@
 {
   "name": "pdfjs-viewer-element",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "main": "dist/pdfjs-viewer-element.es.js",
   "exports": {
     ".": "./dist/pdfjs-viewer-element.es.js"
