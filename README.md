@@ -27,7 +27,10 @@ Extract the PDF.js prebuilt. See [example](https://github.com/alekswebnet/pdfjs-
 Use the element inside your template:
 
 ```javascript
-<pdfjs-viewer-element src="/compressed.tracemonkey-pldi-09.pdf" height="100vh"></pdfjs-viewer-element>
+<pdfjs-viewer-element 
+  src="/pdfjs-2.15.349-dist/web/compressed.tracemonkey-pldi-09.pdf"
+  height="100vh">
+</pdfjs-viewer-element>
 ```
 ## License
 [MIT](http://opensource.org/licenses/MIT)
