@@ -19,8 +19,8 @@ export class PdfjsViewerElement extends LitElement {
         frameborder="0"
         width="100%"
         style="height: ${this.height}"
-        src="/pdfjs-2.15.349-dist/web/viewer.html?file=${this.src}"
-      >
+        src="/pdfjs-2.15.349-dist/web/viewer.html?file=${this.src}">
+      </iframe>
     `
   }
 }
