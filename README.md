@@ -16,7 +16,7 @@ yarn add pdfjs-viewer-element
 ```
 
 ## Usage
-Import to your project:
+Import to your project as module:
 
 ```javascript
 import 'pdfjs-viewer-element'
