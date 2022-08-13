@@ -26,6 +26,9 @@
     "url": "git+https://github.com/alekswebnet/pdfjs-viewer-element.git"
   },
   "homepage": "https://github.com/alekswebnet/pdfjs-viewer-element#readme",
+  "bugs": {
+    "url": "https://github.com/alekswebnet/pdfjs-viewer-element/issues"
+  },
   "types": "types/pdfjs-viewer-element.d.ts",
   "files": [
     "dist",
