@@ -13,8 +13,8 @@
     "web component"
   ],
   "type": "module",
-  "main": "./dist/my-lib.umd.cjs",
-  "module": "./dist/my-lib.js",
+  "main": "./dist/pdfjs-viewer-element.umd.cjs",
+  "module": "./dist/pdfjs-viewer-element.js",
   "exports": {
     ".": {
       "import": "./dist/pdfjs-viewer-element.js",
