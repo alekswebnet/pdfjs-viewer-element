@@ -10,7 +10,7 @@
     "pdf",
     "pdf viewer",
     "pdfjs",
-    "webcomponent"
+    "web component"
   ],
   "type": "module",
   "main": "./dist/my-lib.umd.cjs",
