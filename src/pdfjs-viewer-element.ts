@@ -6,7 +6,7 @@ export class PdfjsViewerElement extends LitElement {
   src = ''
   
   @property()
-  height = '600px'
+  height = '100%'
 
   static styles = css`
     :host {
