@@ -1,32 +1,59 @@
-import { LitElement, html, css } from 'lit'
-import { customElement, property } from 'lit/decorators.js'
-@customElement('pdfjs-viewer-element')
-export class PdfjsViewerElement extends LitElement {
-  @property()
-  src = ''
-  
-  @property()
-  height = '100%'
-
-  static styles = css`
+const template = document.createElement('template');
+template.innerHTML = `
+  <iframe
+    frameborder="0"
+    width="100%">
+  </iframe>
+  <style>
     :host {
-      width: 100%
+      width: 100%;
+      display: block;
     }
-  `
-  render() {
-    return html`
-      <iframe
-        frameborder="0"
-        width="100%"
-        style="height: ${this.height}"
-        src="/pdfjs-2.15.349-dist/web/viewer.html?file=${this.src}">
-      </iframe>
-    `
+    :host iframe {
+      height: inherit;
+    }
+  </style>
+`
+
+class PdfjsViewerElement extends HTMLElement {
+  static get observedAttributes() {
+    return ['src', 'viewerPath']
+  }
+
+  constructor() {
+    super()
+    const shadowRoot = this.attachShadow({mode: 'open'})
+    shadowRoot.appendChild(template.content.cloneNode(true))
+  }
+
+  connectedCallback(): void {
+    if (!this.hasAttribute('viewerPath')) this.setAttribute('viewerPath', '/pdfjs-3.4.120-dist')
+    this.updateIframeSrc()
+  }
+
+  attributeChangedCallback(name: string): void {
+    if (['src', 'viewerPath'].includes(name)) {
+      this.updateIframeSrc()
+    }
+  }
+
+  updateIframeSrc() {
+    this.shadowRoot?.querySelector('iframe')?.setAttribute(
+      'src', 
+      `${this.getAttribute('viewerPath')}/web/viewer.html?file=${this.getAttribute('src') || ''}`
+    )
   }
 }
 
 declare global {
-  interface HTMLElementTagNameMap {
-    'pdfjs-viewer-element': PdfjsViewerElement
+  interface Window {
+    PdfjsViewerElement: typeof PdfjsViewerElement
   }
+}
+
+export default PdfjsViewerElement
+
+if (!window.customElements.get('pdfjs-viewer-element')) {
+  window.PdfjsViewerElement = PdfjsViewerElement
+  window.customElements.define('pdfjs-viewer-element', PdfjsViewerElement)
 }
