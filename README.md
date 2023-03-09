@@ -1,6 +1,7 @@
 # pdfjs-viewer-element
 
 [![Package Quality](https://packagequality.com/shield/pdfjs-viewer-element.svg)](https://packagequality.com/#?package=pdfjs-viewer-element)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/57ac3a0ca9134749a4000cc0fc3675ee)](https://www.codacy.com/gh/alekswebnet/pdfjs-viewer-element/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=alekswebnet/pdfjs-viewer-element&amp;utm_campaign=Badge_Grade)
 
 A web component for [PDF.js viewer](https://mozilla.github.io/pdf.js/web/viewer.html). See [demo](https://alekswebnet.github.io/pdfjs-viewer-element/index.html).
 
