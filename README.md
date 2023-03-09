@@ -9,10 +9,14 @@ A web component for [PDF.js viewer](https://mozilla.github.io/pdf.js/web/viewer.
 npm install --save pdfjs-viewer-element
 ```
 
+```
+yarn add pdfjs-viewer-element
+```
+
 or
 
 ```
-yarn add pdfjs-viewer-element
+<script type="module" src="https://cdn.skypack.dev/pdfjs-viewer-element"></script>
 ```
 
 ## Usage

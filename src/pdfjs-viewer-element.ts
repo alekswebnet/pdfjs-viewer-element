@@ -1,5 +1,5 @@
 const template = document.createElement('template');
-template.innerHTML = `<iframe frameborder="0" width="100%"></iframe><style>:host{width:100%;display: block}:host iframe{height:inherit}</style>`
+template.innerHTML = `<iframe frameborder="0" width="100%"></iframe><style>:host{width:100%;display:block;overflow:hidden}:host iframe{height:inherit}</style>`
 
 export class PdfjsViewerElement extends HTMLElement {
   constructor() {
