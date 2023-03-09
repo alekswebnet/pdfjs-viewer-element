@@ -1,6 +1,6 @@
 {
   "name": "pdfjs-viewer-element",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "license": "MIT",
   "author": {
     "name": "Oleksandr Shevchuk",
@@ -8,19 +8,15 @@
   },
   "keywords": [
     "pdf",
-    "pdf viewer",
     "pdfjs",
+    "pdf viewer",
+    "pdfjs viewer",
     "web component"
   ],
-  "type": "module",
-  "main": "./dist/pdfjs-viewer-element.umd.cjs",
+  "main": "./dist/pdfjs-viewer-element.js",
   "module": "./dist/pdfjs-viewer-element.js",
-  "exports": {
-    ".": {
-      "import": "./dist/pdfjs-viewer-element.js",
-      "require": "./dist/pdfjs-viewer-element.umd.cjs"
-    }
-  },
+  "types": "types/pdfjs-viewer-element.d.ts",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alekswebnet/pdfjs-viewer-element.git"
@@ -29,7 +25,6 @@
   "bugs": {
     "url": "https://github.com/alekswebnet/pdfjs-viewer-element/issues"
   },
-  "types": "types/pdfjs-viewer-element.d.ts",
   "files": [
     "dist",
     "types"
@@ -38,10 +33,9 @@
     "dev": "vite",
     "build": "tsc && vite build"
   },
-  "dependencies": {},
   "devDependencies": {
     "@types/node": "^18.7.1",
     "typescript": "^4.6.4",
-    "vite": "^3.0.6"
+    "vite": "^4.1.4"
   }
 }

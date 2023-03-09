@@ -1,5 +1,4 @@
 import { defineConfig } from 'vite'
-import { resolve } from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -8,7 +7,7 @@ export default defineConfig({
       name: 'PdfjsViewerElement',
       fileName: 'pdfjs-viewer-element',
       entry: 'src/pdfjs-viewer-element.ts',
-      formats: ['es', 'umd']
+      formats: ['es']
     }
   }
 })

@@ -1,46 +1,32 @@
 const template = document.createElement('template');
-template.innerHTML = `
-  <iframe
-    frameborder="0"
-    width="100%">
-  </iframe>
-  <style>
-    :host {
-      width: 100%;
-      display: block;
-    }
-    :host iframe {
-      height: inherit;
-    }
-  </style>
-`
+template.innerHTML = `<iframe frameborder="0" width="100%"></iframe><style>:host{width:100%;display: block}:host iframe{height:inherit}</style>`
 
-class PdfjsViewerElement extends HTMLElement {
-  static get observedAttributes() {
-    return ['src', 'viewerPath']
-  }
-
+export class PdfjsViewerElement extends HTMLElement {
   constructor() {
     super()
     const shadowRoot = this.attachShadow({mode: 'open'})
     shadowRoot.appendChild(template.content.cloneNode(true))
   }
 
+  static get observedAttributes() {
+    return ['src', 'viewer-path']
+  }
+
   connectedCallback(): void {
-    if (!this.hasAttribute('viewerPath')) this.setAttribute('viewerPath', '/pdfjs-3.4.120-dist')
-    this.updateIframeSrc()
+    if (!this.hasAttribute('viewer-path')) this.setAttribute('viewer-path', '/pdfjs')
+    this.updateIframe()
   }
 
   attributeChangedCallback(name: string): void {
-    if (['src', 'viewerPath'].includes(name)) {
-      this.updateIframeSrc()
+    if (['src', 'viewer-path'].includes(name)) {
+      this.updateIframe()
     }
   }
 
-  updateIframeSrc() {
+  updateIframe() {
     this.shadowRoot?.querySelector('iframe')?.setAttribute(
       'src', 
-      `${this.getAttribute('viewerPath')}/web/viewer.html?file=${this.getAttribute('src') || ''}`
+      `${this.getAttribute('viewer-path')}/web/viewer.html?file=${this.getAttribute('src') || ''}`
     )
   }
 }
