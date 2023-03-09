@@ -1,5 +1,7 @@
 # pdfjs-viewer-element
 
+[![Package Quality](https://packagequality.com/badge/pdfjs-viewer-element.png)](https://packagequality.com/#?package=pdfjs-viewer-element)
+
 A web component for [PDF.js viewer](https://mozilla.github.io/pdf.js/web/viewer.html). See [demo](https://alekswebnet.github.io/pdfjs-viewer-element/index.html).
 
 ⚠️ `pdfjs-viewer-element` uses PDF.js [prebuilt](https://github.com/mozilla/pdf.js/releases/download/v3.4.120/pdfjs-3.4.120-dist.zip), that includes the generic build of PDF.js and the viewer. To use the package you should **extract the prebuilt** files into some directory of your project. You may specify the path to this directory with `viewer-path` property (by default is '/pdfjs').
