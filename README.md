@@ -1,6 +1,6 @@
 # pdfjs-viewer-element
 
-[![Package Quality](https://packagequality.com/badge/pdfjs-viewer-element.png)](https://packagequality.com/#?package=pdfjs-viewer-element)
+[![Package Quality](https://packagequality.com/shield/pdfjs-viewer-element.svg)](https://packagequality.com/#?package=pdfjs-viewer-element)
 
 A web component for [PDF.js viewer](https://mozilla.github.io/pdf.js/web/viewer.html). See [demo](https://alekswebnet.github.io/pdfjs-viewer-element/index.html).
 
