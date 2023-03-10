@@ -1,5 +1,6 @@
 # pdfjs-viewer-element
 
+[![npm version](https://img.shields.io/npm/v/pdfjs-viewer-element?logo=npm&logoColor=fff)](https://www.npmjs.com/package/pdfjs-viewer-element)
 [![Package Quality](https://packagequality.com/shield/pdfjs-viewer-element.svg)](https://packagequality.com/#?package=pdfjs-viewer-element)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/57ac3a0ca9134749a4000cc0fc3675ee)](https://www.codacy.com/gh/alekswebnet/pdfjs-viewer-element/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=alekswebnet/pdfjs-viewer-element&amp;utm_campaign=Badge_Grade)
 
