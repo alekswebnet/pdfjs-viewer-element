@@ -8,26 +8,42 @@ export class PdfjsViewerElement extends HTMLElement {
     shadowRoot.appendChild(template.content.cloneNode(true))
   }
 
+  private iframe!: PdfjsViewerElementIframe;
+
   static get observedAttributes() {
-    return ['src', 'viewer-path']
+    return ['src', 'viewer-path', 'locale']
   }
 
-  connectedCallback(): void {
-    if (!this.hasAttribute('viewer-path')) this.setAttribute('viewer-path', '/pdfjs')
-    this.updateIframe()
+  connectedCallback() {
+    this.iframe = this.shadowRoot?.querySelector('iframe') as PdfjsViewerElementIframe
+    this.setAttributes()
+    this.initEventListeners()
   }
 
-  attributeChangedCallback(name: string): void {
+  attributeChangedCallback(name: string) {
     if (['src', 'viewer-path'].includes(name)) {
-      this.updateIframe()
+      this.setAttributes()
+      this.initEventListeners()
     }
   }
 
-  updateIframe() {
-    this.shadowRoot?.querySelector('iframe')?.setAttribute(
+  setAttributes() {
+    if (!this.hasAttribute('viewer-path')) this.setAttribute('viewer-path', '/pdfjs')
+    this.iframe?.setAttribute(
       'src', 
       `${this.getAttribute('viewer-path')}/web/viewer.html?file=${this.getAttribute('src') || ''}`
     )
+  }
+
+  initEventListeners() {
+    document.addEventListener('webviewerloaded', () => {
+      this.setViewerOptions()
+    })
+  }
+
+  setViewerOptions() {
+    const locale = this.getAttribute('locale')
+    if (locale) this.iframe.contentWindow?.PDFViewerApplicationOptions.set('locale', locale)
   }
 }
 
@@ -35,6 +51,16 @@ declare global {
   interface Window {
     PdfjsViewerElement: typeof PdfjsViewerElement
   }
+}
+
+export interface PdfjsViewerElementIframeWindow extends Window {
+  PDFViewerApplicationOptions: {
+    set: (name: string, value: string) => void
+  };
+}
+
+export interface PdfjsViewerElementIframe extends HTMLIFrameElement {
+  contentWindow: PdfjsViewerElementIframeWindow
 }
 
 export default PdfjsViewerElement
