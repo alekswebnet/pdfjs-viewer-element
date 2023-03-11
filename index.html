@@ -4,11 +4,16 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + Lit + TS</title>
+    <title>pdfjs-viewer-element</title>
     <link rel="stylesheet" href="./src/index.css" />
     <script type="module" src="/src/pdfjs-viewer-element.ts"></script>
   </head>
   <body>
-    <pdfjs-viewer-element src="/compressed.tracemonkey-pldi-09.pdf" viewer-path="/pdfjs" style="height: 99vh"></pdfjs-viewer-element>
+    <pdfjs-viewer-element 
+      src="/compressed.tracemonkey-pldi-09.pdf" 
+      viewer-path="/pdfjs"
+      locale="en"
+      style="height: 100dvh"
+    ></pdfjs-viewer-element>
   </body>
 </html>
