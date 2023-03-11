@@ -3,69 +3,69 @@ template.innerHTML = `<iframe frameborder="0" width="100%"></iframe><style>:host
 
 export class PdfjsViewerElement extends HTMLElement {
   constructor() {
-    super();
-    const shadowRoot = this.attachShadow({mode: 'open'});
-    shadowRoot.appendChild(template.content.cloneNode(true));
+    super()
+    const shadowRoot = this.attachShadow({mode: 'open'})
+    shadowRoot.appendChild(template.content.cloneNode(true))
   }
 
   private iframe!: PdfjsViewerElementIframe;
 
   static get observedAttributes() {
-    return ["src", "viewer-path", "locale"];
+    return ['src', 'viewer-path', 'locale']
   }
 
   connectedCallback() {
-    this.iframe = this.shadowRoot?.querySelector("iframe") as PdfjsViewerElementIframe;
-    this.setAttributes();
-    this.initEventListeners();
+    this.iframe = this.shadowRoot?.querySelector('iframe') as PdfjsViewerElementIframe
+    this.setAttributes()
+    this.initEventListeners()
   }
 
   attributeChangedCallback(name: string) {
-    if (["src", "viewer-path"].includes(name)) {
-      this.setAttributes();
-      this.initEventListeners();
+    if (['src', 'viewer-path'].includes(name)) {
+      this.setAttributes()
+      this.initEventListeners()
     }
   }
 
   setAttributes() {
-    if (!this.hasAttribute("viewer-path")) this.setAttribute("viewer-path", '/pdfjs')
+    if (!this.hasAttribute('viewer-path')) this.setAttribute('viewer-path', '/pdfjs')
     this.iframe?.setAttribute(
       'src', 
-      `${this.getAttribute("viewer-path")}/web/viewer.html?file=${this.getAttribute("src") || ''}`
+      `${this.getAttribute('viewer-path')}/web/viewer.html?file=${this.getAttribute('src') || ''}`
     )
   }
 
   initEventListeners() {
-    document.addEventListener("webviewerloaded", () => {
-      this.setViewerOptions();
-    });
+    document.addEventListener('webviewerloaded', () => {
+      this.setViewerOptions()
+    })
   }
 
   setViewerOptions() {
-    const locale = this.getAttribute("locale");
-    if (locale) this.iframe.contentWindow?.PDFViewerApplicationOptions.set('locale', locale);
+    const locale = this.getAttribute('locale')
+    if (locale) this.iframe.contentWindow?.PDFViewerApplicationOptions.set('locale', locale)
   }
 }
 
 declare global {
   interface Window {
-    PdfjsViewerElement: typeof PdfjsViewerElement;
+    PdfjsViewerElement: typeof PdfjsViewerElement
   }
 }
 
-interface PdfjsViewerElementIframeWindow extends Window {
+export interface PdfjsViewerElementIframeWindow extends Window {
   PDFViewerApplicationOptions: {
-    set: (name: string, value: string) => void;
+    set: (name: string, value: string) => void
   };
 }
 
-interface PdfjsViewerElementIframe extends HTMLIFrameElement {
-  contentWindow: PdfjsViewerElementIframeWindow;
+export interface PdfjsViewerElementIframe extends HTMLIFrameElement {
+  contentWindow: PdfjsViewerElementIframeWindow
 }
 
-export default PdfjsViewerElement;
+export default PdfjsViewerElement
 
 if (!window.customElements.get('pdfjs-viewer-element')) {
-  window.PdfjsViewerElement = PdfjsViewerElement;
-  window.customElements.define('pdfjs-viewer-element', PdfjsViewerElement);
+  window.PdfjsViewerElement = PdfjsViewerElement
+  window.customElements.define('pdfjs-viewer-element', PdfjsViewerElement)
 }
