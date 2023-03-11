@@ -37,7 +37,7 @@ export class PdfjsViewerElement extends HTMLElement {
 
   initEventListeners() {
     document.addEventListener("webviewerloaded", () => {
-      this.setViewerOptions()
+      this.setViewerOptions();
     })
   }
 
