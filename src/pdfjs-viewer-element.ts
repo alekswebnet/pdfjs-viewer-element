@@ -42,7 +42,7 @@ export class PdfjsViewerElement extends HTMLElement {
   }
 
   setViewerOptions() {
-    const locale = this.getAttribute('locale')
+    const locale = this.getAttribute("locale");
     if (locale) this.iframe.contentWindow?.PDFViewerApplicationOptions.set('locale', locale)
   }
 }
