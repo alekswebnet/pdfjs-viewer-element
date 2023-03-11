@@ -60,7 +60,7 @@ export interface PdfjsViewerElementIframeWindow extends Window {
 }
 
 export interface PdfjsViewerElementIframe extends HTMLIFrameElement {
-  contentWindow: PdfjsViewerElementIframeWindow
+  contentWindow: PdfjsViewerElementIframeWindow;
 }
 
 export default PdfjsViewerElement
