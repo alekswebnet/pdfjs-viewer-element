@@ -15,7 +15,7 @@ export class PdfjsViewerElement extends HTMLElement {
   }
 
   connectedCallback() {
-    this.iframe = this.shadowRoot?.querySelector('iframe') as PdfjsViewerElementIframe
+    this.iframe = this.shadowRoot?.querySelector(
     this.setAttributes()
     this.initEventListeners();
   }
