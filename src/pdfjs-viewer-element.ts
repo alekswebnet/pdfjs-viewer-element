@@ -55,7 +55,7 @@ declare global {
 
 export interface PdfjsViewerElementIframeWindow extends Window {
   PDFViewerApplicationOptions: {
-    set: (name: string, value: string) => void
+    set: (name: string, value: string) => void;
   };
 }
 
