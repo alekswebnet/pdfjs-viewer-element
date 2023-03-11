@@ -11,7 +11,7 @@ export class PdfjsViewerElement extends HTMLElement {
   private iframe!: PdfjsViewerElementIframe;
 
   static get observedAttributes() {
-    return ['src', 'viewer-path', 'locale']
+    return ["src", "viewer-path", "locale"];
   }
 
   connectedCallback() {
