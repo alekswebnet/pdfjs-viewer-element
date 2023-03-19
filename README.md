@@ -8,37 +8,33 @@ A web component for viewing pdf files in the browser. The package is based on [P
 ⚠️ `pdfjs-viewer-element` uses PDF.js [prebuilt](http://mozilla.github.io/pdf.js/getting_started/), that includes the generic build of PDF.js and the viewer. To use the package you should download and **place the prebuilt** files to some directory of your project. Then specify the path to this directory with `viewer-path` property (`/pdfjs` by default).
 
 ## Install
-```
-npm install --save pdfjs-viewer-element
-```
 
-```
+Using module bundlers:
+
+```bash
+# With npm
+npm install pdfjs-viewer-element
+# With yarn
 yarn add pdfjs-viewer-element
 ```
-
-or
-
-```
-<script type="module" src="https://cdn.skypack.dev/pdfjs-viewer-element"></script>
-```
-
-## Usage
-
-Place **PDF.js prebuilt** files to some directory of your project (`pdfjs` used as the standard name). See demo [example](https://github.com/alekswebnet/pdfjs-viewer-element/tree/master/public). You may call the directory as you want, but then you should specify the `viewer-path` property.
 
 ```javascript
 import 'pdfjs-viewer-element'
 ```
 
-```javascript
+Using browser:
+
+```html
+<script type="module" src="https://cdn.skypack.dev/pdfjs-viewer-element"></script>
+```
+
+## Usage
+
+```html
 <pdfjs-viewer-element src="/file.pdf" viewer-path="/path-to-viewer"></pdfjs-viewer-element>
 ```
 
 ## Properties
-
-`src` - path to pdf file.
-
-`viewer-path` - path to prebuilt directory (`/pdfjs` by default).
 
 `src` - Path to pdf file
 
@@ -55,6 +51,8 @@ import 'pdfjs-viewer-element'
 `zoom` - Zoom level
 
 `pagemode` - Page mode
+
+For more clarity, see the [demo playground](https://alekswebnet.github.io/pdfjs-viewer-element/api).
 
 ## License
 For this package - [MIT](http://opensource.org/licenses/MIT).
