@@ -52,7 +52,7 @@ Using browser:
 
 `pagemode` - Page mode
 
-For more clarity, see the [demo playground](https://alekswebnet.github.io/pdfjs-viewer-element/api).
+For more clarity, see the [demo playground]https://alekswebnet.github.io/pdfjs-viewer-element/#api).
 
 ## License
 For this package - [MIT](http://opensource.org/licenses/MIT).
