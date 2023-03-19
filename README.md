@@ -3,9 +3,9 @@
 [![npm version](https://img.shields.io/npm/v/pdfjs-viewer-element?logo=npm&logoColor=fff)](https://www.npmjs.com/package/pdfjs-viewer-element)
 [![Package Quality](https://packagequality.com/shield/pdfjs-viewer-element.svg)](https://packagequality.com/#?package=pdfjs-viewer-element)
 
-A web component for viewing pdf files in the browser. The package is based on [PDF.js viewer](https://mozilla.github.io/pdf.js/web/viewer.html) build and works with any framework. See [demo](https://alekswebnet.github.io/pdfjs-viewer-element/index.html).
+A web component for viewing pdf files in the browser. The package is based on [PDF.js default viewer](https://mozilla.github.io/pdf.js/web/viewer.html) build and works with any framework. See [demo](https://alekswebnet.github.io/pdfjs-viewer-element/).
 
-⚠️ `pdfjs-viewer-element` uses PDF.js [prebuilt](http://mozilla.github.io/pdf.js/getting_started/), that includes the generic build of PDF.js and the viewer. To use the package you should download and **place the prebuilt** files to some directory of your project. You may specify the path to this directory with `viewer-path` property (`/pdfjs` by default).
+⚠️ `pdfjs-viewer-element` uses PDF.js [prebuilt](http://mozilla.github.io/pdf.js/getting_started/), that includes the generic build of PDF.js and the viewer. To use the package you should download and **place the prebuilt** files to some directory of your project. Then specify the path to this directory with `viewer-path` property (`/pdfjs` by default).
 
 ## Install
 ```
@@ -31,7 +31,7 @@ import 'pdfjs-viewer-element'
 ```
 
 ```javascript
-<pdfjs-viewer-element src="/compressed.tracemonkey-pldi-09.pdf" viewer-path="/path-to-viewer"></pdfjs-viewer-element>
+<pdfjs-viewer-element src="/file.pdf" viewer-path="/path-to-viewer"></pdfjs-viewer-element>
 ```
 
 ## Properties
@@ -40,7 +40,22 @@ import 'pdfjs-viewer-element'
 
 `viewer-path` - path to prebuilt directory (`/pdfjs` by default).
 
-`locale` - language localization (e.g. 'en', 'en-US', 'es', 'de'), see [pdf.js i10n files](https://github.com/mozilla/pdf.js/tree/master/l10n) (the language of your browser by default)
+`src` - Path to pdf file
+
+`viewer-path` - Path to PDF.js prebuilt
+
+`locale` - Language of the interface
+
+`page` - Page number
+
+`search` - Search text
+
+`phrase` - Search by phrase
+
+`zoom` - Zoom level
+
+`pagemode` - Page mode
+
 ## License
 For this package - [MIT](http://opensource.org/licenses/MIT).
 
