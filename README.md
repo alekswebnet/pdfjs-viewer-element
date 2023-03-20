@@ -1,11 +1,19 @@
 # pdfjs-viewer-element
 
+A web component for viewing pdf files in the browser. The package is based on [PDF.js default viewer](https://mozilla.github.io/pdf.js/web/viewer.html) build and works with any framework.
+
+⚠️ `pdfjs-viewer-element` uses PDF.js [prebuilt](http://mozilla.github.io/pdf.js/getting_started/), that includes the generic build of PDF.js and the viewer. To use the package you should download and **place the prebuilt** files to some directory of your project. Then specify the path to this directory with `viewer-path` property (`/pdfjs` by default).
+
+## Status
+
 [![npm version](https://img.shields.io/npm/v/pdfjs-viewer-element?logo=npm&logoColor=fff)](https://www.npmjs.com/package/pdfjs-viewer-element)
 [![Package Quality](https://packagequality.com/shield/pdfjs-viewer-element.svg)](https://packagequality.com/#?package=pdfjs-viewer-element)
 
-A web component for viewing pdf files in the browser. The package is based on [PDF.js default viewer](https://mozilla.github.io/pdf.js/web/viewer.html) build and works with any framework. See [demo](https://alekswebnet.github.io/pdfjs-viewer-element/).
+## Docs
 
-⚠️ `pdfjs-viewer-element` uses PDF.js [prebuilt](http://mozilla.github.io/pdf.js/getting_started/), that includes the generic build of PDF.js and the viewer. To use the package you should download and **place the prebuilt** files to some directory of your project. Then specify the path to this directory with `viewer-path` property (`/pdfjs` by default).
+[Getting started](https://alekswebnet.github.io/pdfjs-viewer-element/)
+
+[Api](https://alekswebnet.github.io/pdfjs-viewer-element/)
 
 ## Install
 
@@ -52,7 +60,7 @@ Using browser:
 
 `pagemode` - Page mode
 
-For more clarity, see the [demo playground](https://alekswebnet.github.io/pdfjs-viewer-element/#api).
+For more clarity, see the [Api docs page](https://alekswebnet.github.io/pdfjs-viewer-element/#api).
 
 ## License
 For this package - [MIT](http://opensource.org/licenses/MIT).
