@@ -4,8 +4,8 @@ export declare class PdfjsViewerElement extends HTMLElement {
     static get observedAttributes(): string[];
     connectedCallback(): void;
     attributeChangedCallback(): void;
-    private onAttrsChanged;
     private setProps;
+    private rerenderIframe;
     private setEventListeners;
     private getFullPath;
 }
