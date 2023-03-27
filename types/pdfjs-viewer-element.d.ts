@@ -7,7 +7,7 @@ export declare class PdfjsViewerElement extends HTMLElement {
     private onAttrsChanged;
     private setProps;
     private setEventListeners;
-    private getFileSrc;
+    private getFullPath;
 }
 declare global {
     interface Window {

@@ -48,7 +48,9 @@ Using browser:
 
 `viewer-path` - Path to PDF.js prebuilt
 
-`locale` - Language of the interface
+`locale` - Language of the interface, see [all l10n files](https://github.com/mozilla/pdf.js/tree/master/l10n)
+
+`text-layer` - Text layer, that is used for text selection
 
 `page` - Page number
 

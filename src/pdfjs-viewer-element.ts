@@ -1,6 +1,11 @@
 import { debounce } from "./debounce";
 
-const template = document.createElement('template');
+const defaults = {
+  viewerPath: '/pdfjs',
+  viewerEntry: '/web/viewer.html'
+}
+
+const template = document.createElement('template')
 template.innerHTML = `<iframe frameborder="0" width="100%"></iframe><style>:host{width:100%;display:block;overflow:hidden}:host iframe{height:100%}</style>`
 
 export class PdfjsViewerElement extends HTMLElement {
@@ -13,7 +18,7 @@ export class PdfjsViewerElement extends HTMLElement {
   private iframe!: PdfjsViewerElementIframe
 
   static get observedAttributes() {
-    return ['src', 'viewer-path', 'locale', 'page', 'search', 'phrase', 'zoom', 'pagemode']
+    return ['src', 'viewer-path', 'locale', 'page', 'search', 'phrase', 'zoom', 'pagemode', 'text-layer']
   }
 
   connectedCallback() {
@@ -25,42 +30,47 @@ export class PdfjsViewerElement extends HTMLElement {
     this.onAttrsChanged()
   }
 
-  private onAttrsChanged = debounce(async () => {
-    const url = this.iframe?.getAttribute('src')
+  private onAttrsChanged = debounce(() => {
+    const src = this.iframe.getAttribute('src')
     
-    if (url && url.split('&locale=')[1] !== this.getAttribute('locale')) {
-      await this.setProps()
+    if (src && src.split('&locale=')[1] !== this.getAttribute('locale')) {
+      this.setProps()
+      this.iframe.contentWindow.location.reload()
+    }
+    else if (src && src.split(defaults.viewerEntry)[0] !== this.getFullPath(this.getAttribute('viewer-path') || '') ) {
+      this.setProps()
       this.iframe.contentWindow.location.reload()
     }
     else {
-      await this.setProps()
+      this.setProps()
     }
   })
 
   private async setProps() {
-    const viewerPath = this.getAttribute('viewer-path') || '/pdfjs'
-    const file = this.getFileSrc(this.getAttribute('src') || '')
+    const viewerPath = this.getAttribute('viewer-path') || defaults.viewerPath
     const page = this.getAttribute('page') || ''
     const search = this.getAttribute('search') || ''
     const phrase = this.getAttribute('phrase') || ''
     const zoom = this.getAttribute('zoom') || ''
     const pagemode = this.getAttribute('pagemode') || ''
-    const locale = this.getAttribute('locale')
+    const locale = this.getAttribute('locale') || ''
+    const textLayer = this.getAttribute('text-layer') || ''
 
     this.iframe.setAttribute(
       'src',
-      `${viewerPath}/web/viewer.html#file=${file}&page=${page}&zoom=${zoom}&pagemode=${pagemode}&search=${search}&phrase=${phrase}${locale ? '&locale='+locale : ''}`
+      `${this.getFullPath(viewerPath)}${defaults.viewerEntry}#page=${page}&zoom=${zoom}&pagemode=${pagemode}&search=${search}&phrase=${phrase}&textLayer=${textLayer}${locale ? '&locale='+locale : ''}`
     )
   }
 
   private setEventListeners() {
-    document.addEventListener('webviewerloaded', async () => {
-      this.iframe.contentWindow?.PDFViewerApplicationOptions.set('disablePreferences', true)
-      this.iframe.contentWindow?.PDFViewerApplicationOptions.set('pdfBugEnabled', true)
+    document.addEventListener('webviewerloaded', () => {
+      this.iframe.contentWindow.PDFViewerApplicationOptions.set('defaultUrl', this.getFullPath(this.getAttribute('src') || ''))
+      this.iframe.contentWindow.PDFViewerApplicationOptions.set('disablePreferences', true)
+      this.iframe.contentWindow.PDFViewerApplicationOptions.set('pdfBugEnabled', true)
     })
   }
 
-  private getFileSrc(path: string) {
+  private getFullPath(path: string) {
     return path.startsWith('/') ? `${window.location.origin}${path}` : path
   }
 }
