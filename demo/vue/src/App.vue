@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import PdfViewer from './components/PdfViewer.vue'
 
-const src: string | null = '/sample-pdf-file.pdf'
+const src: string | null = `${window.location.origin}/sample-pdf-file.pdf`
 const viewerPath: string | null = '/pdfjs-viewer'
 const page: string | null = '1'
 const locale: string | null = 'uk'
