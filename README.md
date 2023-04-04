@@ -16,6 +16,8 @@ A web component for viewing pdf files in the browser. The package is based on [P
 
 [Api](https://alekswebnet.github.io/pdfjs-viewer-element/#api)
 
+[Live examples](https://alekswebnet.github.io/pdfjs-viewer-element/#api)
+
 ## Install
 
 Using module bundlers:
