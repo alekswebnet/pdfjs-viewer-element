@@ -2,15 +2,15 @@
 import { ref } from "vue";
 import "pdfjs-viewer-element";
 
-const src: string | null = ref("/sample-pdf-with-images.pdf");
-const viewerPath: string | null = ref("/pdfjs-prebuilt");
-const page: string | null = ref("2");
-const locale: string | null = ref("de");
-const zoom: string | null = ref("auto");
-const pagemode: string | null = ref("none");
-const search: string | null = ref(null);
-const phrase: boolean = ref(true);
-const textLayer: string | null = ref("hover");
+const src = ref("/sample-pdf-with-images.pdf");
+const viewerPath = ref("/pdfjs-prebuilt");
+const page = ref("2");
+const locale = ref("uk");
+const zoom = ref("auto");
+const pagemode = ref("none");
+const search = ref(null);
+const phrase = ref(true);
+const textLayer = ref("hover");
 </script>
 
 <template>
