@@ -39,15 +39,12 @@ export class PdfjsViewerElement extends HTMLElement {
   }
 
   attributeChangedCallback() {
-    this.debouncedRenderViewer()
+    this.debouncedRenderIframe()
   }
 
-  private debouncedRenderViewer = debounce(async () => {
+  private debouncedRenderIframe = debounce(async () => {
     await elementReady('iframe', this.shadowRoot!)
-    const updatedSrc = this.getIframeSrc()
-    if (updatedSrc !== this.iframe.getAttribute('src')) {
-      this.renderViewer(updatedSrc)
-    }
+    this.renderViewer(this.getIframeSrc())
   }, 0, { leading: true })
 
   private getIframeSrc() {
@@ -61,23 +58,16 @@ export class PdfjsViewerElement extends HTMLElement {
     const locale = this.getAttribute('locale') || DEFAULTS.locale
     const textLayer = this.getAttribute('text-layer') || DEFAULTS.textLayer
 
-    return `${viewerPath}${DEFAULTS.viewerEntry
-      }?file=${src
-      }#page=${page
-      }&zoom=${zoom
-      }&pagemode=${pagemode
-      }&search=${search
-      }&phrase=${phrase
-      }&textLayer=${textLayer}${
-        locale ? '&locale='+locale : ''
-    }`
+    const updatedSrc = `${viewerPath}${DEFAULTS.viewerEntry}?file=${src}#page=${page}&zoom=${zoom}&pagemode=${pagemode}&search=${search}&phrase=${phrase}&textLayer=${textLayer}${locale ? '&locale='+locale : ''}`
+    if (updatedSrc !== this.iframe.getAttribute('src')) return updatedSrc
+    return ''
   }
 
   private renderViewer(src: string) {
+    if (!src) return
     this.shadowRoot!.replaceChild(this.iframe.cloneNode(), this.iframe)
     this.iframe = this.shadowRoot!.querySelector('iframe') as PdfjsViewerElementIframe
     this.iframe.contentWindow.location.href = src
-    console.log('ok')
   }
 
   private setEventListeners() {
