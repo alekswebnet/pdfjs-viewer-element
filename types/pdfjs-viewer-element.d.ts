@@ -4,8 +4,9 @@ export declare class PdfjsViewerElement extends HTMLElement {
     static get observedAttributes(): string[];
     connectedCallback(): void;
     attributeChangedCallback(): void;
-    private setProps;
-    private rerenderIframe;
+    private debouncedRenderIframe;
+    private getIframeSrc;
+    private renderViewer;
     private setEventListeners;
     private getFullPath;
 }
@@ -18,6 +19,7 @@ export interface PdfjsViewerElementIframeWindow extends Window {
     PDFViewerApplicationOptions: {
         set: (name: string, value: string | boolean) => void;
     };
+    PDFViewerApplication: any;
 }
 export interface PdfjsViewerElementIframe extends HTMLIFrameElement {
     contentWindow: PdfjsViewerElementIframeWindow;
