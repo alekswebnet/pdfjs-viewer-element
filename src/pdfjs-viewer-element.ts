@@ -58,7 +58,7 @@ export class PdfjsViewerElement extends HTMLElement {
     const locale = this.getAttribute('locale') || DEFAULTS.locale
     const textLayer = this.getAttribute('text-layer') || DEFAULTS.textLayer
 
-    const updatedSrc = `${viewerPath}${DEFAULTS.viewerEntry}?file=${src}#page=${page}&zoom=${zoom}&pagemode=${pagemode}&search=${search}&phrase=${phrase}&textLayer=${textLayer}${locale ? '&locale='+locale : ''}`
+    const updatedSrc = `${viewerPath}${DEFAULTS.viewerEntry}?file=${encodeURIComponent(src)}#page=${page}&zoom=${zoom}&pagemode=${pagemode}&search=${search}&phrase=${phrase}&textLayer=${textLayer}${locale ? '&locale='+locale : ''}`
     if (updatedSrc !== this.iframe.getAttribute('src')) return updatedSrc
     return ''
   }
@@ -94,7 +94,6 @@ export interface PdfjsViewerElementIframeWindow extends Window {
   PDFViewerApplicationOptions: {
     set: (name: string, value: string | boolean) => void
   }
-  PDFViewerApplication: any
 }
 
 export interface PdfjsViewerElementIframe extends HTMLIFrameElement {
