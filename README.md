@@ -1,8 +1,8 @@
 # pdfjs-viewer-element
 
-A custom element, based on [PDF.js default viewer](https://mozilla.github.io/pdf.js/web/viewer.html). Works in all [major browsers](https://caniuse.com/custom-elementsv1) and with most [JS frameworks](https://custom-elements-everywhere.com/). See [examples](https://alekswebnet.github.io/pdfjs-viewer-element/#demo) of usage in the different frameworks.
+A custom element, based on [PDF.js default viewer](https://mozilla.github.io/pdf.js/web/viewer.html). Supported in all [major browsers](https://caniuse.com/custom-elementsv1) and works with most [JS frameworks](https://custom-elements-everywhere.com/). See [examples](https://alekswebnet.github.io/pdfjs-viewer-element/#demo) of usage in the different frameworks.
 
-⚠️ `pdfjs-viewer-element` requires PDF.js [prebuilt](http://mozilla.github.io/pdf.js/getting_started/), that includes the generic build of PDF.js and the viewer. To use the package you should download and **place the prebuilt** files to some directory of your project. Then specify the path to this directory with `viewer-path` property (`/pdfjs` by default).
+⚠️ `pdfjs-viewer-element` requires PDF.js [prebuilt](http://mozilla.github.io/pdf.js/getting_started/), that includes the generic build of PDF.js and the viewer. To use the package you should [download](http://mozilla.github.io/pdf.js/getting_started/) and **place the prebuilt** files to some directory of your project. Then specify the path to this directory with `viewer-path` property (`/pdfjs` by default).
 
 ## Status
 
@@ -47,7 +47,7 @@ Using browser:
 
 ## Properties
 
-`src` - Path to pdf file
+`src` - PDF file URL, should refer to the [same origin](https://github.com/mozilla/pdf.js/wiki/Frequently-Asked-Questions#can-i-load-a-pdf-from-another-server-cross-domain-request) 
 
 `viewer-path` - Path to PDF.js [prebuilt](http://mozilla.github.io/pdf.js/getting_started/)
 
