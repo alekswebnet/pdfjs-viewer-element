@@ -14,16 +14,15 @@ const DEFAULTS = {
   textLayer: ''
 }
 
-const template = document.createElement('template')
-template.innerHTML = `
-  <iframe frameborder="0" width="100%"></iframe>
-  <style>:host{width:100%;display:block;overflow:hidden}:host iframe{height:100%}</style>
-`
-
 export class PdfjsViewerElement extends HTMLElement {
   constructor() {
     super()
     const shadowRoot = this.attachShadow({mode: 'open'})
+    const template = document.createElement('template')
+    template.innerHTML = `
+      <iframe frameborder="0" width="100%"></iframe>
+      <style>:host{width:100%;display:block;overflow:hidden}:host iframe{height:100%}</style>
+    `
     shadowRoot.appendChild(template.content.cloneNode(true))
   }
 
@@ -64,10 +63,10 @@ export class PdfjsViewerElement extends HTMLElement {
   }
 
   private renderViewer(src: string) {
-    if (!src) return
+    if (!src || !this.iframe) return
     this.shadowRoot!.replaceChild(this.iframe.cloneNode(), this.iframe)
     this.iframe = this.shadowRoot!.querySelector('iframe') as PdfjsViewerElementIframe
-    this.iframe.contentWindow.location.href = src
+    this.iframe.src = src
   }
 
   private setEventListeners() {
