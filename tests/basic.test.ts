@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { getViewerContainer, renderViewer } from './test-utils'
 import '../src/pdfjs-viewer-element'
 
-describe('Viewer render process', async () => {
+describe('Basic render process', async () => {
   it('should render the PDF file', async () => {
     await renderViewer(`
       <pdfjs-viewer-element 

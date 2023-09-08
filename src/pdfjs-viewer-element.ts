@@ -71,6 +71,7 @@ export class PdfjsViewerElement extends HTMLElement {
 
   private setEventListeners() {
     document.addEventListener('webviewerloaded', () => {
+      console.log(this.iframe.contentWindow.PDFViewerApplication)
       if (this.getAttribute('src') !== DEFAULTS.src) this.iframe.contentWindow.PDFViewerApplicationOptions?.set('defaultUrl', '')
       this.iframe.contentWindow.PDFViewerApplicationOptions?.set('disablePreferences', true);
       this.iframe.contentWindow.PDFViewerApplicationOptions?.set('pdfBugEnabled', true);
@@ -90,6 +91,7 @@ declare global {
 }
 
 export interface PdfjsViewerElementIframeWindow extends Window {
+  PDFViewerApplication: any,
   PDFViewerApplicationOptions: {
     set: (name: string, value: string | boolean) => void
   }
