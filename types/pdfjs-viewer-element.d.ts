@@ -12,14 +12,13 @@ export declare class PdfjsViewerElement extends HTMLElement {
 }
 declare global {
     interface Window {
-        PdfjsViewerElement: typeof PdfjsViewerElement;
+        'PdfjsViewerElement': typeof PdfjsViewerElement;
     }
 }
 export interface PdfjsViewerElementIframeWindow extends Window {
     PDFViewerApplicationOptions: {
         set: (name: string, value: string | boolean) => void;
     };
-    PDFViewerApplication: any;
 }
 export interface PdfjsViewerElementIframe extends HTMLIFrameElement {
     contentWindow: PdfjsViewerElementIframeWindow;
