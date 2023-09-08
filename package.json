@@ -37,6 +37,6 @@
     "@types/node": "^18.7.1",
     "perfect-debounce": "^1.0.0",
     "typescript": "^4.6.4",
-    "vite": "^4.1.4"
+    "vite": "^3.2.7"
   }
 }
