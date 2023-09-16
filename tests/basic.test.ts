@@ -1,36 +1,58 @@
 import { describe, expect, it } from 'vitest'
-import { getViewerContainer, renderViewer } from './test-utils'
+import { getFileData, getViewerElement, mountViewer } from './utils'
 import '../src/pdfjs-viewer-element'
 
 describe('Basic render process', async () => {
   it('should render the PDF file', async () => {
-    await renderViewer(`
+    const viewerApp = await mountViewer(`
       <pdfjs-viewer-element 
         src="/sample-pdf-10MB.pdf" 
         viewer-path="/pdfjs-3.9.179-dist"
       ></pdfjs-viewer-element>`
     )
-    expect(getViewerContainer()?.querySelector('#numPages')?.textContent).contain('37')
-    expect(getViewerContainer()?.querySelector('#viewer .page')).exist
+    expect(getViewerElement()).exist
+
+    viewerApp.eventBus.on('pagesloaded', () => {
+      expect(getViewerElement('#numPages')?.textContent).contain('37')
+    })
   })
 
   it('should not render PDF with wrong url', async () => {
-    await renderViewer(`
+    await mountViewer(`
       <pdfjs-viewer-element 
         src="/fake-file.pdf" 
         viewer-path="/pdfjs-3.9.179-dist"
       ></pdfjs-viewer-element>`
     )
-    expect(getViewerContainer()?.querySelector('#viewer .page')).not.exist
+    expect(getViewerElement()).exist
+    expect(getViewerElement('#viewer .page')).not.exist
   })
 
-  it('should not render the viewer with wrong viewer-path attribute', async () => {
-    await renderViewer(`
+  it('should not render the viewer with wrong viewer path', async () => {
+    await mountViewer(`
       <pdfjs-viewer-element 
-      src="/sample-pdf-10MB.pdf" 
-      viewer-path="/fake-dist"
+        src="/sample-pdf-10MB.pdf" 
+        viewer-path="/fake-dist"
       ></pdfjs-viewer-element>`
     )
-    expect(getViewerContainer()).not.exist
+    expect(getViewerElement()).not.exist
+  })
+
+  it('should open the external file with base64 source', async () => {
+    const viewerApp = await mountViewer(`
+      <pdfjs-viewer-element 
+        src="/sample-pdf-10MB.pdf" 
+        viewer-path="/pdfjs-3.9.179-dist"
+      ></pdfjs-viewer-element>`
+    )
+
+    expect(getViewerElement()).exist
+
+    const file = await getFileData()
+    viewerApp.open(file)
+
+    viewerApp.eventBus.on('pagesloaded', () => {
+      expect(getViewerElement('#viewer .page')).exist
+    })
   })
 })
