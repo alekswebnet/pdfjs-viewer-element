@@ -38,12 +38,12 @@ export class PdfjsViewerElement extends HTMLElement {
   }
 
   attributeChangedCallback() {
-    this.debouncedRenderIframe()
+    this.onIframeReady(() => this.mountViewer(this.getIframeSrc()))
   }
 
-  private debouncedRenderIframe = debounce(async () => {
+  private onIframeReady = debounce(async (callback: () => void) => {
     await elementReady('iframe', this.shadowRoot!)
-    this.renderViewer(this.getIframeSrc())
+    callback()
   }, 0, { leading: true })
 
   private getIframeSrc() {
@@ -62,7 +62,7 @@ export class PdfjsViewerElement extends HTMLElement {
     return ''
   }
 
-  private renderViewer(src: string) {
+  private mountViewer(src: string) {
     if (!src || !this.iframe) return
     this.shadowRoot!.replaceChild(this.iframe.cloneNode(), this.iframe)
     this.iframe = this.shadowRoot!.querySelector('iframe') as PdfjsViewerElementIframe
@@ -71,16 +71,24 @@ export class PdfjsViewerElement extends HTMLElement {
 
   private setEventListeners() {
     document.addEventListener('webviewerloaded', () => {
-      if (this.getAttribute('src') !== DEFAULTS.src) this.iframe.contentWindow.PDFViewerApplicationOptions?.set('defaultUrl', '')
-      this.iframe.contentWindow.PDFViewerApplicationOptions?.set('disablePreferences', true);
-      this.iframe.contentWindow.PDFViewerApplicationOptions?.set('pdfBugEnabled', true);
-      this.iframe.contentWindow.PDFViewerApplicationOptions?.set('eventBusDispatchToDOM', true);
+      if (this.getAttribute('src') !== DEFAULTS.src) this.iframe.contentWindow?.PDFViewerApplicationOptions?.set('defaultUrl', '')
+      this.iframe.contentWindow?.PDFViewerApplicationOptions?.set('disablePreferences', true);
+      this.iframe.contentWindow?.PDFViewerApplicationOptions?.set('pdfBugEnabled', true);
+      this.iframe.contentWindow?.PDFViewerApplicationOptions?.set('eventBusDispatchToDOM', true);
     });
   }
 
   private getFullPath(path: string) {
     return path.startsWith('/') ? `${window.location.origin}${path}` : path
   }
+
+  public initialize = () => new Promise(async (reslove) => {
+    await elementReady('iframe', this.shadowRoot!)
+    this.iframe?.addEventListener('load', async () => {
+      await this.iframe.contentWindow?.PDFViewerApplication?.initializedPromise
+      reslove(this.iframe.contentWindow?.PDFViewerApplication)
+    }, { once: true })
+  })
 }
 
 declare global {
@@ -89,8 +97,17 @@ declare global {
   }
 }
 
+export interface IPdfjsViewerElement extends HTMLElement {
+  initialize: () => Promise<PdfjsViewerElementIframeWindow['PDFViewerApplication']>
+}
+
 export interface PdfjsViewerElementIframeWindow extends Window {
-  PDFViewerApplication: any,
+  PDFViewerApplication: {
+    initializedPromise: Promise<void>;
+    initialized: boolean;
+    open: (data: Uint8Array) => void;
+    eventBus: Record<string, any>;
+  },
   PDFViewerApplicationOptions: {
     set: (name: string, value: string | boolean) => void
   }
@@ -98,6 +115,12 @@ export interface PdfjsViewerElementIframeWindow extends Window {
 
 export interface PdfjsViewerElementIframe extends HTMLIFrameElement {
   contentWindow: PdfjsViewerElementIframeWindow
+}
+
+export interface PdfjsViewerLoadedEvent extends Event {
+  detail: {
+    source: PdfjsViewerElementIframeWindow
+  }
 }
 
 export default PdfjsViewerElement

@@ -1,6 +1,6 @@
 {
   "name": "pdfjs-viewer-element",
-  "version": "2.3.3",
+  "version": "2.4.0",
   "license": "MIT",
   "author": {
     "name": "Oleksandr Shevchuk",
@@ -43,6 +43,6 @@
     "typescript": "^4.6.4",
     "vite": "^4.4.9",
     "vitest": "^0.34.3",
-    "webdriverio": "^8.16.4"
+    "webdriverio": "^8.16.7"
   }
 }

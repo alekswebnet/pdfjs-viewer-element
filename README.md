@@ -4,6 +4,8 @@ A custom element, based on [PDF.js default viewer](https://mozilla.github.io/pdf
 
 ⚠️ `pdfjs-viewer-element` requires PDF.js [prebuilt](http://mozilla.github.io/pdf.js/getting_started/), that includes the generic build of PDF.js and the viewer. To use the package you should [download](http://mozilla.github.io/pdf.js/getting_started/) and **place the prebuilt** files to some directory of your project. Then specify the path to this directory with `viewer-path` property (`/pdfjs` by default).
 
+You have full access to PDF.js viewer application using `initialize` method. 
+
 ## Status
 
 [![npm version](https://img.shields.io/npm/v/pdfjs-viewer-element?logo=npm&logoColor=fff)](https://www.npmjs.com/package/pdfjs-viewer-element)
@@ -67,5 +69,19 @@ Using browser:
 
 For more clarity, see the [Api docs page](https://alekswebnet.github.io/pdfjs-viewer-element/#api).
 
+## PDF.js Viewer Application
+
+`initialize` - using this method you can access PDFViewerApplication and use methods and events of PDF.js default viewer
+
+```javascript
+document.addEventListener('DOMContentLoaded', async () => {
+  const viewer = document.querySelector('pdfjs-viewer-element')
+  // Wait for the viewer initialization, receive PDFViewerApplication
+  const viewerApp = await viewer.initialize()
+  // Open PDF file data using Uint8Array instead of URL
+  viewerApp.open(pdfData)
+})
+```
+
 ## License
-[MIT](http://opensource.org/licenses/MIT).
+[MIT](http://opensource.org/licenses/MIT)
