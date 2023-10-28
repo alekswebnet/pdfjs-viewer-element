@@ -21,11 +21,18 @@
       style="height: min(500px, 50dvh)">
     </pdfjs-viewer-element>
     <pdfjs-viewer-element 
+      id="themedViewer"
       src="/sample-pdf-10MB.pdf" 
       viewer-path="/pdfjs-3.9.179-dist"
-      locale="es"
+      viewer-css-theme="DARK"
       style="height: min(500px, 50dvh)">
     </pdfjs-viewer-element>
+    <button onclick="document.querySelector('#themedViewer').setAttribute('viewer-css-theme', 'LIGHT')">Change theme</button>
+    <button onclick="document.querySelector('#themedViewer').setAttribute('viewer-css-theme', 'DARK')">Reset theme</button>
+    <button onclick="document.querySelector('#themedViewer').setAttribute('page', '2')">Change page</button>
+    <button onclick="document.querySelector('#themedViewer').setAttribute('page', '1')">Reset page</button>
+    <button onclick="document.querySelector('#themedViewer').setAttribute('locale', 'de')">Change locale</button>
+    <button onclick="document.querySelector('#themedViewer').setAttribute('locale', 'es')">Reset locale</button>
     <pdfjs-viewer-element
       id="base-viewer"
       viewer-path="/pdfjs-3.9.179-dist"
@@ -56,6 +63,7 @@
       const viewer = document.querySelector('#base-viewer')
       // Wait for the viewer initialization
       const viewerApp = await viewer.initialize()
+      console.log(viewerApp)
       // Open PDF file data using Uint8Array instead of URL
       viewerApp.open(pdfData)
     })

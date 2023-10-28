@@ -11,13 +11,20 @@ const DEFAULTS = {
   zoom: 'auto',
   pagemode: 'none',
   locale: '',
-  textLayer: ''
-}
+  textLayer: '',
+  viewerCssTheme: 'AUTOMATIC'
+} as const
+
+export const ViewerCssTheme = {
+  AUTOMATIC: 0, // Default value.
+  LIGHT: 1,
+  DARK: 2,
+} as const
 
 export class PdfjsViewerElement extends HTMLElement {
   constructor() {
     super()
-    const shadowRoot = this.attachShadow({mode: 'open'})
+    const shadowRoot = this.attachShadow({ mode: 'open' })
     const template = document.createElement('template')
     template.innerHTML = `
       <iframe frameborder="0" width="100%"></iframe>
@@ -29,7 +36,7 @@ export class PdfjsViewerElement extends HTMLElement {
   private iframe!: PdfjsViewerElementIframe
 
   static get observedAttributes() {
-    return ['src', 'viewer-path', 'locale', 'page', 'search', 'phrase', 'zoom', 'pagemode', 'text-layer']
+    return ['src', 'viewer-path', 'locale', 'page', 'search', 'phrase', 'zoom', 'pagemode', 'text-layer', 'viewer-css-theme']
   }
 
   connectedCallback() {
@@ -56,8 +63,9 @@ export class PdfjsViewerElement extends HTMLElement {
     const pagemode = this.getAttribute('pagemode') || DEFAULTS.pagemode
     const locale = this.getAttribute('locale') || DEFAULTS.locale
     const textLayer = this.getAttribute('text-layer') || DEFAULTS.textLayer
+    const viewerCssTheme = this.getAttribute('viewer-css-theme') || DEFAULTS.viewerCssTheme
 
-    const updatedSrc = `${viewerPath}${DEFAULTS.viewerEntry}?file=${encodeURIComponent(src)}#page=${page}&zoom=${zoom}&pagemode=${pagemode}&search=${search}&phrase=${phrase}&textLayer=${textLayer}${locale ? '&locale='+locale : ''}`
+    const updatedSrc = `${viewerPath}${DEFAULTS.viewerEntry}?file=${encodeURIComponent(src)}#page=${page}&zoom=${zoom}&pagemode=${pagemode}&search=${search}&phrase=${phrase}&textLayer=${textLayer}${locale ? '&locale='+locale : ''}&viewerCssTheme=${viewerCssTheme}`
     if (updatedSrc !== this.iframe.getAttribute('src')) return updatedSrc
     return ''
   }
@@ -70,11 +78,12 @@ export class PdfjsViewerElement extends HTMLElement {
   }
 
   private setEventListeners() {
-    document.addEventListener('webviewerloaded', () => {
+    document.addEventListener('webviewerloaded', async () => {
       if (this.getAttribute('src') !== DEFAULTS.src) this.iframe.contentWindow?.PDFViewerApplicationOptions?.set('defaultUrl', '')
-      this.iframe.contentWindow?.PDFViewerApplicationOptions?.set('disablePreferences', true);
-      this.iframe.contentWindow?.PDFViewerApplicationOptions?.set('pdfBugEnabled', true);
-      this.iframe.contentWindow?.PDFViewerApplicationOptions?.set('eventBusDispatchToDOM', true);
+      this.iframe.contentWindow?.PDFViewerApplicationOptions?.set('viewerCssTheme', this.getCssThemeOption())
+      this.iframe.contentWindow?.PDFViewerApplicationOptions?.set('disablePreferences', true)
+      this.iframe.contentWindow?.PDFViewerApplicationOptions?.set('pdfBugEnabled', true)
+      this.iframe.contentWindow?.PDFViewerApplicationOptions?.set('eventBusDispatchToDOM', true)
     });
   }
 
@@ -82,11 +91,18 @@ export class PdfjsViewerElement extends HTMLElement {
     return path.startsWith('/') ? `${window.location.origin}${path}` : path
   }
 
-  public initialize = () => new Promise(async (reslove) => {
+  private getCssThemeOption() {
+    const attrValue = this.getAttribute('viewer-css-theme') as keyof typeof ViewerCssTheme
+    return Object.keys(ViewerCssTheme).includes(attrValue) 
+      ? ViewerCssTheme[attrValue] 
+      : ViewerCssTheme[DEFAULTS.viewerCssTheme]
+  }
+
+  public initialize = (): Promise<PdfjsViewerElementIframeWindow['PDFViewerApplication']> => new Promise(async (resolve) => {
     await elementReady('iframe', this.shadowRoot!)
     this.iframe?.addEventListener('load', async () => {
       await this.iframe.contentWindow?.PDFViewerApplication?.initializedPromise
-      reslove(this.iframe.contentWindow?.PDFViewerApplication)
+      resolve(this.iframe.contentWindow?.PDFViewerApplication)
     }, { once: true })
   })
 }
@@ -109,7 +125,8 @@ export interface PdfjsViewerElementIframeWindow extends Window {
     eventBus: Record<string, any>;
   },
   PDFViewerApplicationOptions: {
-    set: (name: string, value: string | boolean) => void
+    set: (name: string, value: string | boolean | number) => void,
+    getAll: () => Record<string, any>
   }
 }
 

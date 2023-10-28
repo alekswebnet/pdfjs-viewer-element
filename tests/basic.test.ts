@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
-import { getFileData, getViewerElement, mountViewer } from './utils'
+import { getFileData, getIframe, getViewerElement, mountViewer } from './utils'
 import '../src/pdfjs-viewer-element'
 
-describe('Basic render process', async () => {
+describe('Basic tests', async () => {
   it('should render the PDF file', async () => {
     const viewerApp = await mountViewer(`
       <pdfjs-viewer-element 
@@ -41,7 +41,6 @@ describe('Basic render process', async () => {
   it('should open the external file with base64 source', async () => {
     const viewerApp = await mountViewer(`
       <pdfjs-viewer-element 
-        src="/sample-pdf-10MB.pdf" 
         viewer-path="/pdfjs-3.9.179-dist"
       ></pdfjs-viewer-element>`
     )
@@ -54,5 +53,18 @@ describe('Basic render process', async () => {
     viewerApp.eventBus.on('pagesloaded', () => {
       expect(getViewerElement('#viewer .page')).exist
     })
+  })
+
+  it('should load the dark theme', async () => {
+    const viewerApp = await mountViewer(`
+      <pdfjs-viewer-element 
+        src="/sample-pdf-10MB.pdf" 
+        viewer-path="/pdfjs-3.9.179-dist"
+        viewer-css-theme="DARK"
+      ></pdfjs-viewer-element>`
+    )
+
+    expect(getViewerElement()).exist
+    expect(getComputedStyle(getViewerElement()!).getPropertyValue('--loading-icon')).toMatch('dark')
   })
 })
