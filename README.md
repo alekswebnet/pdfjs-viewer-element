@@ -1,6 +1,6 @@
 # pdfjs-viewer-element
 
-A custom element, based on [PDF.js default viewer](https://mozilla.github.io/pdf.js/web/viewer.html). Supported in all [major browsers](https://caniuse.com/custom-elementsv1) and works with most [JS frameworks](https://custom-elements-everywhere.com/). See [examples](https://alekswebnet.github.io/pdfjs-viewer-element/#demo) of usage in Vue, React and Svelte or pure HTML.
+A custom element, based on [PDF.js default viewer](https://mozilla.github.io/pdf.js/web/viewer.html) and . Supported in all [major browsers](https://caniuse.com/custom-elementsv1) and works with most [JS frameworks](https://custom-elements-everywhere.com/). See [examples](https://alekswebnet.github.io/pdfjs-viewer-element/#demo) of usage in Vue, React and Svelte or pure HTML.
 
 ⚠️ `pdfjs-viewer-element` requires PDF.js [prebuilt](http://mozilla.github.io/pdf.js/getting_started/), that includes the generic build of PDF.js and the viewer. To use the package you should [download](http://mozilla.github.io/pdf.js/getting_started/) and **place the prebuilt** files to some directory of your project. Then specify the path to this directory with `viewer-path` property (`/pdfjs` by default).
 
@@ -47,15 +47,15 @@ Using browser:
 <pdfjs-viewer-element src="/file.pdf" viewer-path="/path-to-viewer"></pdfjs-viewer-element>
 ```
 
-## Properties
+## Attributes
 
 `src` - PDF file URL, should refer to the [same origin](https://github.com/mozilla/pdf.js/wiki/Frequently-Asked-Questions#can-i-load-a-pdf-from-another-server-cross-domain-request) 
 
 `viewer-path` - Path to PDF.js [prebuilt](http://mozilla.github.io/pdf.js/getting_started/)
 
-`locale` -  Specifies which language to use in the viewer UI. For a list of the available locales, see [all l10n files](https://github.com/mozilla/pdf.js/tree/master/l10n)
+`locale` -  Specifies which language to use in the viewer UI `en-US | ...`. [Available locales](https://github.com/mozilla/pdf.js/tree/master/l10n)
 
-`text-layer` - Text layer, that is used for text selection
+`text-layer` - Text layer, that is used for text selection `off | visible | shadow | hover`
 
 `page` - Page number
 
@@ -67,11 +67,32 @@ Using browser:
 
 `pagemode` - Page mode
 
+`viewer-css-theme` - Apply automatic, light or dark theme `AUTOMATIC | LIGHT | DARK`. Default is `AUTOMATIC`
+
+`viewer-extra-styles` - Add your CSS rules to viewer application
+
 For more clarity, see the [Api docs page](https://alekswebnet.github.io/pdfjs-viewer-element/#api).
+
+## Viewer extra styles 
+
+You can add your own CSS rules to the viewer application using `viewer-extra-styles` attribute:
+
+```html
+<!-- Hide open file button -->
+<pdfjs-viewer-element 
+  src="/file.pdf" 
+  viewer-path="/path-to-viewer"
+  viewer-extra-styles="#openFile { display: none }">
+</pdfjs-viewer-element>
+```
 
 ## PDF.js Viewer Application
 
 `initialize` - using this method you can access PDFViewerApplication and use methods and events of PDF.js default viewer
+
+```html
+<pdfjs-viewer-element viewer-path="/path-to-viewer"></pdfjs-viewer-element>
+```
 
 ```javascript
 const viewer = document.querySelector('pdfjs-viewer-element')
