@@ -14,17 +14,21 @@
       style="height: min(500px, 50dvh)">
     </pdfjs-viewer-element>
     <pdfjs-viewer-element 
+      id="hideOpenFileViewer"
       src="/sample-pdf-with-images.pdf" 
       viewer-path="/pdfjs-3.9.179-dist"
       locale="de"
       page="2"
       style="height: min(500px, 50dvh)">
     </pdfjs-viewer-element>
+    <button onclick="document.querySelector('#hideOpenFileViewer').setAttribute('hide-open-file', true)">Hide open file</button>
+    <button onclick="document.querySelector('#hideOpenFileViewer').setAttribute('hide-open-file', false)">Show open file</button>
     <pdfjs-viewer-element 
       id="themedViewer"
       src="/sample-pdf-10MB.pdf" 
       viewer-path="/pdfjs-3.9.179-dist"
       viewer-css-theme="DARK"
+      locale="es"
       style="height: min(500px, 50dvh)">
     </pdfjs-viewer-element>
     <button onclick="document.querySelector('#themedViewer').setAttribute('viewer-css-theme', 'LIGHT')">Change theme</button>
@@ -37,9 +41,16 @@
       id="base-viewer"
       viewer-path="/pdfjs-3.9.179-dist"
       locale="uk"
+      viewer-extra-styles="#openFile { display: none; } #print { display: none } #download { display: none } #download + .verticalToolbarSeparator { display: none }"
       style="height: min(500px, 50dvh)">
     </pdfjs-viewer-element>
-    <button>Open file</button>
+    <button onclick="document.querySelector('#base-viewer').setAttribute('viewer-css-theme', 'DARK')">Change theme</button>
+    <button onclick="document.querySelector('#base-viewer').setAttribute('viewer-css-theme', 'AUTOMATIC')">Reset theme</button>
+    <button onclick="document.querySelector('#base-viewer').setAttribute('page', '2')">Change page</button>
+    <button onclick="document.querySelector('#base-viewer').setAttribute('page', '1')">Reset page</button>
+    <button onclick="document.querySelector('#base-viewer').setAttribute('locale', 'de')">Change locale</button>
+    <button onclick="document.querySelector('#base-viewer').setAttribute('locale', 'uk')">Reset locale</button>
+    <button onclick="document.querySelector('#base-viewer').setAttribute('viewer-extra-styles', '')">Remove extra styles</button>
   </body>
 
   <script>
@@ -61,9 +72,11 @@
 
     document.addEventListener('DOMContentLoaded', async () => {
       const viewer = document.querySelector('#base-viewer')
+      // viewer.addEventListener('loaded', () => {
+      //   console.log(viewer.iframe)
+      // })
       // Wait for the viewer initialization
       const viewerApp = await viewer.initialize()
-      console.log(viewerApp)
       // Open PDF file data using Uint8Array instead of URL
       viewerApp.open(pdfData)
     })

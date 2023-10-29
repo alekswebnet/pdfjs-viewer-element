@@ -67,4 +67,17 @@ describe('Basic tests', async () => {
     expect(getViewerElement()).exist
     expect(getComputedStyle(getViewerElement()!).getPropertyValue('--loading-icon')).toMatch('dark')
   })
+
+  it('should hide the open file button', async () => {
+    const viewerApp = await mountViewer(`
+      <pdfjs-viewer-element 
+        src="/sample-pdf-10MB.pdf" 
+        viewer-path="/pdfjs-3.9.179-dist"
+        viewer-extra-styles="#openFile { display: none }"
+      ></pdfjs-viewer-element>`
+    )
+
+    expect(getViewerElement()).exist
+    expect(getComputedStyle(getViewerElement('#openFile')!).display).eq('none')
+  })
 })
