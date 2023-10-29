@@ -1,5 +1,5 @@
 export const elementReady = (selector: string, document: Document | ShadowRoot) => {
-  return new Promise((resolve, _reject) => {
+  return new Promise((resolve) => {
     let el = document.querySelector(selector);
     if (el) {
       resolve(el); 
