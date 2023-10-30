@@ -22,8 +22,6 @@ export const ViewerCssTheme = {
   DARK: 2,
 } as const
 
-export type ToolbarButtonId = 'sidebarToggle' | ''
-
 export class PdfjsViewerElement extends HTMLElement {
   constructor() {
     super()
