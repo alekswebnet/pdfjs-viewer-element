@@ -1,15 +1,21 @@
+export declare const ViewerCssTheme: {
+    readonly AUTOMATIC: 0;
+    readonly LIGHT: 1;
+    readonly DARK: 2;
+};
 export declare class PdfjsViewerElement extends HTMLElement {
     constructor();
-    private iframe;
+    iframe: PdfjsViewerElementIframe;
     static get observedAttributes(): string[];
     connectedCallback(): void;
     attributeChangedCallback(): void;
     private onIframeReady;
     private getIframeSrc;
     private mountViewer;
-    private setEventListeners;
     private getFullPath;
-    initialize: () => Promise<unknown>;
+    private getCssThemeOption;
+    private setViewerExtraStyles;
+    initialize: () => Promise<PdfjsViewerElementIframeWindow['PDFViewerApplication']>;
 }
 declare global {
     interface Window {
@@ -27,7 +33,8 @@ export interface PdfjsViewerElementIframeWindow extends Window {
         eventBus: Record<string, any>;
     };
     PDFViewerApplicationOptions: {
-        set: (name: string, value: string | boolean) => void;
+        set: (name: string, value: string | boolean | number) => void;
+        getAll: () => Record<string, any>;
     };
 }
 export interface PdfjsViewerElementIframe extends HTMLIFrameElement {
