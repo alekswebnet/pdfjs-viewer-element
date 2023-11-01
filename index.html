@@ -10,13 +10,13 @@
   <body style="margin: 0">
     <pdfjs-viewer-element 
       src="/fake-file.pdf" 
-      viewer-path="/pdfjs-3.9.179-dist"
+      viewer-path="/pdfjs-3.10.111-dist"
       style="height: min(500px, 50dvh)">
     </pdfjs-viewer-element>
     <pdfjs-viewer-element 
       id="hideOpenFileViewer"
       src="/sample-pdf-with-images.pdf" 
-      viewer-path="/pdfjs-3.9.179-dist"
+      viewer-path="/pdfjs-3.10.111-dist"
       locale="de"
       page="2"
       style="height: min(500px, 50dvh)">
@@ -26,7 +26,7 @@
     <pdfjs-viewer-element 
       id="themedViewer"
       src="/sample-pdf-10MB.pdf" 
-      viewer-path="/pdfjs-3.9.179-dist"
+      viewer-path="/pdfjs-3.10.111-dist"
       viewer-css-theme="DARK"
       locale="es"
       style="height: min(500px, 50dvh)">
@@ -39,7 +39,7 @@
     <button onclick="document.querySelector('#themedViewer').setAttribute('locale', 'es')">Reset locale</button>
     <pdfjs-viewer-element
       id="base-viewer"
-      viewer-path="/pdfjs-3.9.179-dist"
+      viewer-path="/pdfjs-3.10.111-dist"
       locale="uk"
       viewer-extra-styles="#openFile { display: none; } #print { display: none } #download { display: none } #download + .verticalToolbarSeparator { display: none }"
       style="height: min(500px, 50dvh)">
