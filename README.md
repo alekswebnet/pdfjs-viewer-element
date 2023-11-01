@@ -1,10 +1,22 @@
 # pdfjs-viewer-element
 
-A custom element, based on [PDF.js default viewer](https://mozilla.github.io/pdf.js/web/viewer.html) and . Supported in all [major browsers](https://caniuse.com/custom-elementsv1) and works with most [JS frameworks](https://custom-elements-everywhere.com/). See [examples](https://alekswebnet.github.io/pdfjs-viewer-element/#demo) of usage in Vue, React and Svelte or pure HTML.
+A custom element, based on [PDF.js default viewer](https://mozilla.github.io/pdf.js/web/viewer.html) and supported in all [major browsers](https://caniuse.com/custom-elementsv1), works with most used [JS frameworks](https://custom-elements-everywhere.com/). 
 
-⚠️ `pdfjs-viewer-element` requires PDF.js [prebuilt](http://mozilla.github.io/pdf.js/getting_started/), that includes the generic build of PDF.js and the viewer. To use the package you should [download](http://mozilla.github.io/pdf.js/getting_started/) and **place the prebuilt** files to some directory of your project. Then specify the path to this directory with `viewer-path` property (`/pdfjs` by default).
+See [examples](https://alekswebnet.github.io/pdfjs-viewer-element/#demo) of usage in Vue, React and Svelte or static HTML page.
 
-You have full access to PDF.js viewer application using `initialize` method. 
+⚠️ `pdfjs-viewer-element` requires PDF.js [prebuilt](http://mozilla.github.io/pdf.js/getting_started/), that includes the generic build of PDF.js and the viewer.
+
+The prebuilt comes with each PDF.js release. Supported releases:
+
+🚧 [v3.11.174](https://github.com/mozilla/pdf.js/releases/tag/v3.11.174) (partial)
+
+✅ [v3.10.111](https://github.com/mozilla/pdf.js/releases/tag/v3.10.111)
+
+✅ [v3.9.179](https://github.com/mozilla/pdf.js/releases/tag/v3.9.179)
+
+To use the package you should download and **place the prebuilt** files to some directory of your project.
+
+Then specify the path to this directory with `viewer-path` property (`/pdfjs` by default).
 
 ## Status
 
@@ -65,7 +77,7 @@ Using browser:
 
 `zoom` - Zoom level
 
-`pagemode` - Page mode
+`pagemode` - Page mode `thumbs | bookmarks | attachments | layers | none`
 
 `viewer-css-theme` - Apply automatic, light or dark theme `AUTOMATIC | LIGHT | DARK`. Default is `AUTOMATIC`
 

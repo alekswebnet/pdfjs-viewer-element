@@ -21,8 +21,8 @@
       page="2"
       style="height: min(500px, 50dvh)">
     </pdfjs-viewer-element>
-    <button onclick="document.querySelector('#hideOpenFileViewer').setAttribute('hide-open-file', true)">Hide open file</button>
-    <button onclick="document.querySelector('#hideOpenFileViewer').setAttribute('hide-open-file', false)">Show open file</button>
+    <button onclick="document.querySelector('#hideOpenFileViewer').setAttribute('viewer-extra-styles', '#openFile { display: none }')">Hide open file</button>
+    <button onclick="document.querySelector('#hideOpenFileViewer').setAttribute('viewer-extra-styles', '')">Show open file</button>
     <pdfjs-viewer-element 
       id="themedViewer"
       src="/sample-pdf-10MB.pdf" 
