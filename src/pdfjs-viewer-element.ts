@@ -43,10 +43,9 @@ export class PdfjsViewerElement extends HTMLElement {
   connectedCallback() {
     this.iframe = this.shadowRoot!.querySelector('iframe') as PdfjsViewerElementIframe
     document.addEventListener('webviewerloaded', () => {
-      this.dispatchEvent(new Event('loaded'))
+      this.setCssTheme()
       this.setViewerExtraStyles(this.getAttribute('viewer-extra-styles'))
       if (this.getAttribute('src') !== DEFAULTS.src) this.iframe.contentWindow?.PDFViewerApplicationOptions?.set('defaultUrl', '')
-      this.iframe.contentWindow?.PDFViewerApplicationOptions?.set('viewerCssTheme', this.getCssThemeOption())
       this.iframe.contentWindow?.PDFViewerApplicationOptions?.set('disablePreferences', true)
       this.iframe.contentWindow?.PDFViewerApplicationOptions?.set('pdfBugEnabled', true)
       this.iframe.contentWindow?.PDFViewerApplicationOptions?.set('eventBusDispatchToDOM', true)
@@ -98,15 +97,33 @@ export class PdfjsViewerElement extends HTMLElement {
       : ViewerCssTheme[DEFAULTS.viewerCssTheme]
   }
 
-  private setViewerExtraStyles = (styles?: string | null) => {
+  setCssTheme() {
+    const cssTheme = this.getCssThemeOption()
+    if (cssTheme === ViewerCssTheme.DARK) {
+      const styleSheet = this.iframe.contentDocument?.styleSheets[0];
+      const cssRules = styleSheet?.cssRules || [];
+      const rules = Object.keys(cssRules)
+        .filter((key) => (cssRules[Number(key)] as CSSMediaRule)?.conditionText === "(prefers-color-scheme: dark)")
+        .map((key) => {
+          const rule = cssRules[Number(key)]
+          return rule.cssText.split('@media (prefers-color-scheme: dark) {\n')[1].split('\n}')[0]
+        })
+      this.setViewerExtraStyles(rules.join(''), 'theme')
+    }
+    else {
+      this.iframe.contentDocument?.head.querySelector('style[theme]')?.remove()
+    }
+  }
+
+  private setViewerExtraStyles = (styles?: string | null, id = 'extra') => {
     if (!styles) {
-      this.iframe.contentDocument?.head.querySelector('style[extra]')?.remove()
+      this.iframe.contentDocument?.head.querySelector(`style[${id}]`)?.remove()
       return
     }
-    if (this.iframe.contentDocument?.head.querySelector('style[extra]')?.innerHTML === styles) return
+    if (this.iframe.contentDocument?.head.querySelector(`style[${id}]`)?.innerHTML === styles) return
     const style = document.createElement('style')
     style.innerHTML = styles
-    style.setAttribute('extra', '')
+    style.setAttribute(id, '')
     this.iframe.contentDocument?.head.appendChild(style)
   }
 
@@ -135,6 +152,7 @@ export interface PdfjsViewerElementIframeWindow extends Window {
     initialized: boolean;
     open: (data: Uint8Array) => void;
     eventBus: Record<string, any>;
+    setCssTheme: () => void
   },
   PDFViewerApplicationOptions: {
     set: (name: string, value: string | boolean | number) => void,

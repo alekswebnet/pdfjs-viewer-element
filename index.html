@@ -78,7 +78,7 @@
       // Wait for the viewer initialization
       const viewerApp = await viewer.initialize()
       // Open PDF file data using Uint8Array instead of URL
-      viewerApp.open(pdfData)
+      viewerApp.open({ data: pdfData })
     })
   </script>
 </html>

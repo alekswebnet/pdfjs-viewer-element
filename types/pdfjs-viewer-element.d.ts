@@ -14,6 +14,7 @@ export declare class PdfjsViewerElement extends HTMLElement {
     private mountViewer;
     private getFullPath;
     private getCssThemeOption;
+    setCssTheme(): void;
     private setViewerExtraStyles;
     initialize: () => Promise<PdfjsViewerElementIframeWindow['PDFViewerApplication']>;
 }
@@ -31,6 +32,7 @@ export interface PdfjsViewerElementIframeWindow extends Window {
         initialized: boolean;
         open: (data: Uint8Array) => void;
         eventBus: Record<string, any>;
+        setCssTheme: () => void;
     };
     PDFViewerApplicationOptions: {
         set: (name: string, value: string | boolean | number) => void;

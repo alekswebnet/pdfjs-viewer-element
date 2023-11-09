@@ -6,13 +6,13 @@ See [examples](https://alekswebnet.github.io/pdfjs-viewer-element/#demo) of usag
 
 ⚠️ `pdfjs-viewer-element` requires PDF.js [prebuilt](http://mozilla.github.io/pdf.js/getting_started/), that includes the generic build of PDF.js and the viewer.
 
-The prebuilt comes with each PDF.js release. Supported releases:
+The prebuilt comes with each PDF.js release. Supported 3 latest releases:
 
-🚧 [v3.11.174](https://github.com/mozilla/pdf.js/releases/tag/v3.11.174) (partial)
+✅ [v4.0.189](https://github.com/mozilla/pdf.js/releases/tag/v4.0.189)
+
+✅ [v3.11.174](https://github.com/mozilla/pdf.js/releases/tag/v3.11.174)
 
 ✅ [v3.10.111](https://github.com/mozilla/pdf.js/releases/tag/v3.10.111)
-
-✅ [v3.9.179](https://github.com/mozilla/pdf.js/releases/tag/v3.9.179)
 
 To use the package you should download and **place the prebuilt** files to some directory of your project.
 
@@ -79,11 +79,23 @@ Using browser:
 
 `pagemode` - Page mode `thumbs | bookmarks | attachments | layers | none`
 
-`viewer-css-theme` - Apply automatic, light or dark theme `AUTOMATIC | LIGHT | DARK`. Default is `AUTOMATIC`
+`viewer-css-theme` - Apply automatic, light or dark theme `AUTOMATIC | LIGHT | DARK`
 
 `viewer-extra-styles` - Add your CSS rules to viewer application
 
 For more clarity, see the [Api docs page](https://alekswebnet.github.io/pdfjs-viewer-element/#api).
+
+## Viewer CSS theme
+
+Use `viewer-css-theme` attribute to set light or dark theme manually:
+
+```html
+<pdfjs-viewer-element 
+  src="/file.pdf" 
+  viewer-path="/path-to-viewer"
+  viewer-css-theme="DARK">
+</pdfjs-viewer-element>
+```
 
 ## Viewer extra styles 
 
@@ -111,7 +123,7 @@ const viewer = document.querySelector('pdfjs-viewer-element')
 // Wait for the viewer initialization, receive PDFViewerApplication
 const viewerApp = await viewer.initialize()
 // Open PDF file data using Uint8Array instead of URL
-viewerApp.open(pdfData)
+viewerApp.open({ data: pdfData })
 // Use event bus to handle viewer application events
 viewerApp.eventBus.on('pagesloaded', () => {
   console.log('Viewer pages loaded')
