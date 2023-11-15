@@ -10,13 +10,13 @@
   <body style="margin: 0">
     <pdfjs-viewer-element 
       src="/fake-file.pdf" 
-      viewer-path="/pdfjs-3.10.111-dist"
+      viewer-path="/pdfjs-4.0.189-dist"
       style="height: min(500px, 50dvh)">
     </pdfjs-viewer-element>
     <pdfjs-viewer-element 
       id="hideOpenFileViewer"
       src="/sample-pdf-with-images.pdf" 
-      viewer-path="/pdfjs-3.10.111-dist"
+      viewer-path="/pdfjs-4.0.189-dist"
       locale="de"
       page="2"
       style="height: min(500px, 50dvh)">
@@ -26,24 +26,33 @@
     <pdfjs-viewer-element 
       id="themedViewer"
       src="/sample-pdf-10MB.pdf" 
-      viewer-path="/pdfjs-3.10.111-dist"
+      viewer-path="/pdfjs-4.0.189-dist"
       viewer-css-theme="DARK"
       locale="es"
       style="height: min(500px, 50dvh)">
     </pdfjs-viewer-element>
+
     <button onclick="document.querySelector('#themedViewer').setAttribute('viewer-css-theme', 'LIGHT')">Change theme</button>
     <button onclick="document.querySelector('#themedViewer').setAttribute('viewer-css-theme', 'DARK')">Reset theme</button>
     <button onclick="document.querySelector('#themedViewer').setAttribute('page', '2')">Change page</button>
     <button onclick="document.querySelector('#themedViewer').setAttribute('page', '1')">Reset page</button>
     <button onclick="document.querySelector('#themedViewer').setAttribute('locale', 'de')">Change locale</button>
     <button onclick="document.querySelector('#themedViewer').setAttribute('locale', 'es')">Reset locale</button>
+    <button onclick="document.querySelector('#themedViewer').setAttribute('text-layer', 'visible')">Change text text layer</button>
+    <button onclick="document.querySelector('#themedViewer').setAttribute('text-layer', 'none')">Reset text layer</button>
+    <button onclick="document.querySelector('#themedViewer').setAttribute('search', 'iss')">Change search text</button>
+    <button onclick="document.querySelector('#themedViewer').setAttribute('search', '')">Reset search text</button>
+    <button onclick="document.querySelector('#themedViewer').setAttribute('phrase', 'true')">Change search phrase</button>
+    <button onclick="document.querySelector('#themedViewer').setAttribute('phrase', 'false')">Reset search phrase</button>
+
     <pdfjs-viewer-element
       id="base-viewer"
-      viewer-path="/pdfjs-3.10.111-dist"
+      viewer-path="/pdfjs-4.0.189-dist"
       locale="uk"
       viewer-extra-styles="#openFile { display: none; } #print { display: none } #download { display: none } #download + .verticalToolbarSeparator { display: none }"
       style="height: min(500px, 50dvh)">
     </pdfjs-viewer-element>
+
     <button onclick="document.querySelector('#base-viewer').setAttribute('viewer-css-theme', 'DARK')">Change theme</button>
     <button onclick="document.querySelector('#base-viewer').setAttribute('viewer-css-theme', 'AUTOMATIC')">Reset theme</button>
     <button onclick="document.querySelector('#base-viewer').setAttribute('page', '2')">Change page</button>
