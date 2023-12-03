@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://alekswebnet.github.io/pdfjs-viewer-element/logo.svg" width="64" alt="Floating Vue logo"/>
+<img src="https://alekswebnet.github.io/pdfjs-viewer-element/logo.svg" width="64"/>
 </p>
 <h1 align="center">pdfjs-viewer-element</h1>
 
@@ -9,7 +9,7 @@ See [examples](https://alekswebnet.github.io/pdfjs-viewer-element/#demo) of usag
 
 ⚠️ `pdfjs-viewer-element` requires PDF.js [prebuilt](http://mozilla.github.io/pdf.js/getting_started/), that includes the generic build of PDF.js and the viewer.
 
-The prebuilt comes with each PDF.js release. Supported 3 latest releases:
+The prebuilt comes with each PDF.js release. Supported releases:
 
 ✅ [v4.0.189](https://github.com/mozilla/pdf.js/releases/tag/v4.0.189)
 
