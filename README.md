@@ -1,4 +1,7 @@
-# pdfjs-viewer-element
+<p align="center">
+<img src="https://alekswebnet.github.io/pdfjs-viewer-element/logo.svg" width="64" alt="Floating Vue logo"/>
+</p>
+<h1 align="center">pdfjs-viewer-element</h1>
 
 A custom element, based on [PDF.js default viewer](https://mozilla.github.io/pdf.js/web/viewer.html) and supported in all [major browsers](https://caniuse.com/custom-elementsv1), works with most used [JS frameworks](https://custom-elements-everywhere.com/). 
 
