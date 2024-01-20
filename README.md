@@ -11,11 +11,12 @@ See [examples](https://alekswebnet.github.io/pdfjs-viewer-element/#demo) of usag
 
 The prebuilt comes with each PDF.js release. Supported releases:
 
+✅ [v4.0.379](https://github.com/mozilla/pdf.js/releases/tag/v4.0.379)
+
+✅ [v4.0.269](https://github.com/mozilla/pdf.js/releases/tag/v4.0.269)
+
 ✅ [v4.0.189](https://github.com/mozilla/pdf.js/releases/tag/v4.0.189)
 
-✅ [v3.11.174](https://github.com/mozilla/pdf.js/releases/tag/v3.11.174)
-
-✅ [v3.10.111](https://github.com/mozilla/pdf.js/releases/tag/v3.10.111)
 
 To use the package you should download and **place the prebuilt** files to some directory of your project.
 
@@ -105,11 +106,11 @@ Use `viewer-css-theme` attribute to set light or dark theme manually:
 You can add your own CSS rules to the viewer application using `viewer-extra-styles` attribute:
 
 ```html
-<!-- Hide open file button -->
+<!-- Remove download button from viewer toolbar -->
 <pdfjs-viewer-element 
   src="/file.pdf" 
   viewer-path="/path-to-viewer"
-  viewer-extra-styles="#openFile { display: none }">
+  viewer-extra-styles="#download { display: none }">
 </pdfjs-viewer-element>
 ```
 

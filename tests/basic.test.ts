@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { getFileData, getIframe, getViewerElement, mountViewer } from './utils'
+import { getFileData, getViewerElement, mountViewer } from './utils'
 import '../src/pdfjs-viewer-element'
 
 describe('Basic tests', async () => {
@@ -7,7 +7,7 @@ describe('Basic tests', async () => {
     const viewerApp = await mountViewer(`
       <pdfjs-viewer-element 
         src="/sample-pdf-10MB.pdf" 
-        viewer-path="/pdfjs-3.10.111-dist"
+        viewer-path="pdfjs-4.0.379-dist"
       ></pdfjs-viewer-element>`
     )
     expect(getViewerElement()).exist
@@ -21,7 +21,7 @@ describe('Basic tests', async () => {
     await mountViewer(`
       <pdfjs-viewer-element 
         src="/fake-file.pdf" 
-        viewer-path="/pdfjs-3.10.111-dist"
+        viewer-path="/pdfjs-4.0.379-dist"
       ></pdfjs-viewer-element>`
     )
     expect(getViewerElement()).exist
@@ -41,7 +41,7 @@ describe('Basic tests', async () => {
   it('should open the external file with base64 source', async () => {
     const viewerApp = await mountViewer(`
       <pdfjs-viewer-element 
-        viewer-path="/pdfjs-3.10.111-dist"
+        viewer-path="/pdfjs-4.0.379-dist"
       ></pdfjs-viewer-element>`
     )
 
@@ -56,28 +56,28 @@ describe('Basic tests', async () => {
   })
 
   it('should load the dark theme', async () => {
-    const viewerApp = await mountViewer(`
+    await mountViewer(`
       <pdfjs-viewer-element 
         src="/sample-pdf-10MB.pdf" 
-        viewer-path="/pdfjs-3.10.111-dist"
+        viewer-path="/pdfjs-4.0.379-dist"
         viewer-css-theme="DARK"
       ></pdfjs-viewer-element>`
     )
 
     expect(getViewerElement()).exist
-    expect(getComputedStyle(getViewerElement()!).getPropertyValue('--loading-icon')).toMatch('dark')
+    expect(getComputedStyle(getViewerElement()!).getPropertyValue('--body-bg-color')).toMatch('rgb(42 42 46)')
   })
 
-  it('should hide the open file button', async () => {
-    const viewerApp = await mountViewer(`
+  it('should hide the download button', async () => {
+    await mountViewer(`
       <pdfjs-viewer-element 
         src="/sample-pdf-10MB.pdf" 
-        viewer-path="/pdfjs-3.10.111-dist"
-        viewer-extra-styles="#openFile { display: none }"
+        viewer-path="/pdfjs-4.0.379-dist"
+        viewer-extra-styles="#download { display: none }"
       ></pdfjs-viewer-element>`
     )
 
     expect(getViewerElement()).exist
-    expect(getComputedStyle(getViewerElement('#openFile')!).display).eq('none')
+    expect(getComputedStyle(getViewerElement('#download')!).display).eq('none')
   })
 })

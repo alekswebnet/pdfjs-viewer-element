@@ -10,26 +10,26 @@
   <body style="margin: 0">
     <pdfjs-viewer-element 
       src="/fake-file.pdf" 
-      viewer-path="/pdfjs-4.0.189-dist"
-      style="height: min(500px, 50dvh)">
+      viewer-path="/pdfjs-4.0.379-dist"
+      style="height: clamp(600px, 600px, 80dvh)">
     </pdfjs-viewer-element>
     <pdfjs-viewer-element 
       id="hideOpenFileViewer"
       src="/sample-pdf-with-images.pdf" 
-      viewer-path="/pdfjs-4.0.189-dist"
+      viewer-path="/pdfjs-4.0.379-dist"
       locale="de"
       page="2"
-      style="height: min(500px, 50dvh)">
+      style="height: clamp(600px, 600px, 80dvh)">
     </pdfjs-viewer-element>
-    <button onclick="document.querySelector('#hideOpenFileViewer').setAttribute('viewer-extra-styles', '#openFile { display: none }')">Hide open file</button>
-    <button onclick="document.querySelector('#hideOpenFileViewer').setAttribute('viewer-extra-styles', '')">Show open file</button>
+    <button onclick="document.querySelector('#hideOpenFileViewer').setAttribute('viewer-extra-styles', '#download { display: none }')">Hide download button</button>
+    <button onclick="document.querySelector('#hideOpenFileViewer').setAttribute('viewer-extra-styles', '')">Show download button</button>
     <pdfjs-viewer-element 
       id="themedViewer"
       src="/sample-pdf-10MB.pdf" 
-      viewer-path="/pdfjs-4.0.189-dist"
+      viewer-path="/pdfjs-4.0.379-dist"
       viewer-css-theme="DARK"
       locale="es"
-      style="height: min(500px, 50dvh)">
+      style="height: clamp(600px, 600px, 80dvh)">
     </pdfjs-viewer-element>
 
     <button onclick="document.querySelector('#themedViewer').setAttribute('viewer-css-theme', 'LIGHT')">Change theme</button>
@@ -47,19 +47,10 @@
 
     <pdfjs-viewer-element
       id="base-viewer"
-      viewer-path="/pdfjs-4.0.189-dist"
+      viewer-path="/pdfjs-4.0.379-dist"
       locale="uk"
-      viewer-extra-styles="#openFile { display: none; } #print { display: none } #download { display: none } #download + .verticalToolbarSeparator { display: none }"
-      style="height: min(500px, 50dvh)">
+      style="height: clamp(600px, 600px, 80dvh)">
     </pdfjs-viewer-element>
-
-    <button onclick="document.querySelector('#base-viewer').setAttribute('viewer-css-theme', 'DARK')">Change theme</button>
-    <button onclick="document.querySelector('#base-viewer').setAttribute('viewer-css-theme', 'AUTOMATIC')">Reset theme</button>
-    <button onclick="document.querySelector('#base-viewer').setAttribute('page', '2')">Change page</button>
-    <button onclick="document.querySelector('#base-viewer').setAttribute('page', '1')">Reset page</button>
-    <button onclick="document.querySelector('#base-viewer').setAttribute('locale', 'de')">Change locale</button>
-    <button onclick="document.querySelector('#base-viewer').setAttribute('locale', 'uk')">Reset locale</button>
-    <button onclick="document.querySelector('#base-viewer').setAttribute('viewer-extra-styles', '')">Remove extra styles</button>
   </body>
 
   <script>
