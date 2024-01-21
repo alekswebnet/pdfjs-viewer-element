@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://alekswebnet.github.io/pdfjs-viewer-element/logo.svg" width="64"/>
+<img src="https://alekswebnet.github.io/pdfjs-viewer-element/logo.svg" width="60"/>
 </p>
 <h1 align="center">pdfjs-viewer-element</h1>
 
