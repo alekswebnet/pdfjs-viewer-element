@@ -3,9 +3,8 @@
 </p>
 <h1 align="center">pdfjs-viewer-element</h1>
 
-A custom element, based on [PDF.js default viewer](https://mozilla.github.io/pdf.js/web/viewer.html) and supported in all [major browsers](https://caniuse.com/custom-elementsv1), works with most used [JS frameworks](https://custom-elements-everywhere.com/). 
-
-See [examples](https://alekswebnet.github.io/pdfjs-viewer-element/#demo) of usage in Vue, React and Svelte or static HTML page.
+Probably the simplest integration of PDF.js viewer. 
+The package provide a custom element, based on [PDF.js default viewer](https://mozilla.github.io/pdf.js/web/viewer.html), supported in all [major browsers](https://caniuse.com/custom-elementsv1), and works with most [JS frameworks](https://custom-elements-everywhere.com/). 
 
 ⚠️ `pdfjs-viewer-element` requires PDF.js [prebuilt](http://mozilla.github.io/pdf.js/getting_started/), that includes the generic build of PDF.js and the viewer.
 
@@ -20,7 +19,9 @@ The prebuilt comes with each PDF.js release. Supported releases:
 
 To use the package you should download and **place the prebuilt** files to some directory of your project.
 
-Then specify the path to this directory with `viewer-path` property (`/pdfjs` by default).
+Then specify the path to the directory with `viewer-path` property (`/pdfjs` by default).
+
+See [examples](https://alekswebnet.github.io/pdfjs-viewer-element/#demo) of usage in Vue, React, Svelte or simple HTML page.
 
 ## Status
 
@@ -45,6 +46,8 @@ Using module bundlers:
 npm install pdfjs-viewer-element
 # With yarn
 yarn add pdfjs-viewer-element
+# With pnpm
+pnpm add pdfjs-viewer-element
 ```
 
 ```javascript
@@ -87,7 +90,7 @@ Using browser:
 
 `viewer-extra-styles` - Add your CSS rules to viewer application
 
-For more clarity, see the [Api docs page](https://alekswebnet.github.io/pdfjs-viewer-element/#api).
+Play with attributes on [Api docs page](https://alekswebnet.github.io/pdfjs-viewer-element/#api).
 
 ## Viewer CSS theme
 
