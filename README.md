@@ -63,7 +63,7 @@ Using browser:
 ## Usage
 
 ```html
-<pdfjs-viewer-element src="/file.pdf" viewer-path="/path-to-viewer"></pdfjs-viewer-element>
+<pdfjs-viewer-element src="/pdf-file.pdf" viewer-path="/pdfjs-4.0.379-dist"></pdfjs-viewer-element>
 ```
 
 ## Attributes
