@@ -3,8 +3,10 @@
 </p>
 <h1 align="center">pdfjs-viewer-element</h1>
 
-Probably the simplest integration of PDF.js viewer. 
-The package provide a custom element, based on [PDF.js default viewer](https://mozilla.github.io/pdf.js/web/viewer.html), supported in all [major browsers](https://caniuse.com/custom-elementsv1), and works with most [JS frameworks](https://custom-elements-everywhere.com/). 
+The simplest integration of PDF.js viewer using the `iframe` element and web component. 
+The package provides a custom element, based on [PDF.js default viewer](https://mozilla.github.io/pdf.js/web/viewer.html), supported in all [major browsers](https://caniuse.com/custom-elementsv1), and works with most [JS frameworks](https://custom-elements-everywhere.com/).
+
+See [examples](https://alekswebnet.github.io/pdfjs-viewer-element/#demo) of usage in Vue, React, Svelte, or simple HTML pages.
 
 ⚠️ `pdfjs-viewer-element` requires PDF.js [prebuilt](http://mozilla.github.io/pdf.js/getting_started/), that includes the generic build of PDF.js and the viewer.
 
@@ -17,11 +19,9 @@ The prebuilt comes with each PDF.js release. Supported releases:
 ✅ [v4.0.189](https://github.com/mozilla/pdf.js/releases/tag/v4.0.189)
 
 
-To use the package you should download and **place the prebuilt** files to some directory of your project.
+To use the package you should download and **place the prebuilt** files in the project.
 
-Then specify the path to the directory with `viewer-path` property (`/pdfjs` by default).
-
-See [examples](https://alekswebnet.github.io/pdfjs-viewer-element/#demo) of usage in Vue, React, Svelte or simple HTML page.
+Then specify the path to the directory with the `viewer-path` property (`/pdfjs` by default).
 
 ## Status
 
@@ -86,9 +86,9 @@ Using browser:
 
 `pagemode` - Page mode `thumbs | bookmarks | attachments | layers | none`
 
-`viewer-css-theme` - Apply automatic, light or dark theme `AUTOMATIC | LIGHT | DARK`
+`viewer-css-theme` - Apply automatic, light, or dark theme `AUTOMATIC | LIGHT | DARK`
 
-`viewer-extra-styles` - Add your CSS rules to viewer application
+`viewer-extra-styles` - Add your CSS rules to the viewer application
 
 Play with attributes on [Api docs page](https://alekswebnet.github.io/pdfjs-viewer-element/#api).
 
