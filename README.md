@@ -3,8 +3,9 @@
 </p>
 <h1 align="center">pdfjs-viewer-element</h1>
 
-The simplest integration of PDF.js viewer using the `iframe` element and web component. 
-The package provides a custom element, based on [PDF.js default viewer](https://mozilla.github.io/pdf.js/web/viewer.html), supported in all [major browsers](https://caniuse.com/custom-elementsv1), and works with most [JS frameworks](https://custom-elements-everywhere.com/).
+The simplest integration of [PDF.js default viewer](https://mozilla.github.io/pdf.js/web/viewer.html) using the `iframe` element and web component. 
+The package provides a custom element, based on PDF.js (viewer options)[https://github.com/mozilla/pdf.js/wiki/Viewer-options] and (URL parameters)[https://github.com/mozilla/pdf.js/wiki/Debugging-PDF.js#url-parameters] API. 
+Supported in all [major browsers](https://caniuse.com/custom-elementsv1), and works with most [JS frameworks](https://custom-elements-everywhere.com/).
 
 See [examples](https://alekswebnet.github.io/pdfjs-viewer-element/#demo) of usage in Vue, React, Svelte, or simple HTML pages.
 
