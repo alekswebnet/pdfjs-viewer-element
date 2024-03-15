@@ -3,18 +3,19 @@ export declare const ViewerCssTheme: {
     readonly LIGHT: 1;
     readonly DARK: 2;
 };
+export declare const hardRefreshAttributes: string[];
 export declare class PdfjsViewerElement extends HTMLElement {
     constructor();
     iframe: PdfjsViewerElementIframe;
     static get observedAttributes(): string[];
     connectedCallback(): void;
-    attributeChangedCallback(): void;
+    attributeChangedCallback(name: string): void;
     private onIframeReady;
     private getIframeSrc;
     private mountViewer;
     private getFullPath;
     private getCssThemeOption;
-    setCssTheme(): void;
+    private setCssTheme;
     private setViewerExtraStyles;
     initialize: () => Promise<PdfjsViewerElementIframeWindow['PDFViewerApplication']>;
 }
