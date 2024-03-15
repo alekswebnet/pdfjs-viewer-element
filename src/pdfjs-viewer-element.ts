@@ -8,7 +8,7 @@ const DEFAULTS = {
   page: '',
   search: '',
   phrase: '',
-  zoom: 'auto',
+  zoom: '',
   pagemode: 'none',
   locale: '',
   textLayer: '',
@@ -21,6 +21,8 @@ export const ViewerCssTheme = {
   LIGHT: 1,
   DARK: 2,
 } as const
+
+export const hardRefreshAttributes = ['src', 'viewer-path', 'locale', 'viewer-css-theme', 'viewer-extra-styles']
 
 export class PdfjsViewerElement extends HTMLElement {
   constructor() {
@@ -42,8 +44,8 @@ export class PdfjsViewerElement extends HTMLElement {
 
   connectedCallback() {
     this.iframe = this.shadowRoot!.querySelector('iframe') as PdfjsViewerElementIframe
-    document.addEventListener('webviewerloaded', () => {
-      this.setCssTheme()
+    document.addEventListener('webviewerloaded', async () => {
+      this.setCssTheme(this.getCssThemeOption())
       this.setViewerExtraStyles(this.getAttribute('viewer-extra-styles'))
       if (this.getAttribute('src') !== DEFAULTS.src) this.iframe.contentWindow?.PDFViewerApplicationOptions?.set('defaultUrl', '')
       this.iframe.contentWindow?.PDFViewerApplicationOptions?.set('disablePreferences', true)
@@ -52,7 +54,13 @@ export class PdfjsViewerElement extends HTMLElement {
     });
   }
 
-  attributeChangedCallback() {
+  attributeChangedCallback(name: string) {
+    if (!hardRefreshAttributes.includes(name)) {
+      this.onIframeReady(() => {
+        this.iframe.src = this.getIframeSrc()
+      })
+      return
+    }
     this.onIframeReady(() => this.mountViewer(this.getIframeSrc()))
   }
 
@@ -74,9 +82,7 @@ export class PdfjsViewerElement extends HTMLElement {
     const viewerCssTheme = this.getAttribute('viewer-css-theme') || DEFAULTS.viewerCssTheme
     const viewerExtraStyles = Boolean(this.getAttribute('viewer-extra-styles') || DEFAULTS.viewerExtraStyles)
 
-    const updatedSrc = `${viewerPath}${DEFAULTS.viewerEntry}?file=${encodeURIComponent(src)}#page=${page}&zoom=${zoom}&pagemode=${pagemode}&search=${search}&phrase=${phrase}&textLayer=${textLayer}${locale ? '&locale='+locale : ''}&viewerCssTheme=${viewerCssTheme}&viewerExtraStyles=${viewerExtraStyles}`
-    if (updatedSrc !== this.iframe.getAttribute('src')) return updatedSrc
-    return ''
+    return `${viewerPath}${DEFAULTS.viewerEntry}?file=${encodeURIComponent(src)}#page=${page}&zoom=${zoom}&pagemode=${pagemode}&search=${search}&phrase=${phrase}&textLayer=${textLayer}${locale ? '&locale='+locale : ''}&viewerCssTheme=${viewerCssTheme}&viewerExtraStyles=${viewerExtraStyles}`
   }
 
   private mountViewer(src: string) {
@@ -97,9 +103,8 @@ export class PdfjsViewerElement extends HTMLElement {
       : ViewerCssTheme[DEFAULTS.viewerCssTheme]
   }
 
-  setCssTheme() {
-    const cssTheme = this.getCssThemeOption()
-    if (cssTheme === ViewerCssTheme.DARK) {
+  private setCssTheme(theme: 0 | 1 | 2) {
+    if (theme === ViewerCssTheme.DARK) {
       const styleSheet = this.iframe.contentDocument?.styleSheets[0];
       const cssRules = styleSheet?.cssRules || [];
       const rules = Object.keys(cssRules)

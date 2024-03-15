@@ -11,7 +11,7 @@
     <pdfjs-viewer-element 
       src="/fake-file.pdf" 
       viewer-path="/pdfjs-4.0.379-dist"
-      style="height: clamp(600px, 600px, 80dvh)">
+      style="height: 600px">
     </pdfjs-viewer-element>
     <pdfjs-viewer-element 
       id="hideOpenFileViewer"
@@ -19,7 +19,7 @@
       viewer-path="/pdfjs-4.0.379-dist"
       locale="de"
       page="2"
-      style="height: clamp(600px, 600px, 80dvh)">
+      style="height: 600px">
     </pdfjs-viewer-element>
     <button onclick="document.querySelector('#hideOpenFileViewer').setAttribute('viewer-extra-styles', '#download { display: none }')">Hide download button</button>
     <button onclick="document.querySelector('#hideOpenFileViewer').setAttribute('viewer-extra-styles', '')">Show download button</button>
@@ -29,7 +29,7 @@
       viewer-path="/pdfjs-4.0.379-dist"
       viewer-css-theme="DARK"
       locale="es"
-      style="height: clamp(600px, 600px, 80dvh)">
+      style="height: 600px">
     </pdfjs-viewer-element>
 
     <button onclick="document.querySelector('#themedViewer').setAttribute('viewer-css-theme', 'LIGHT')">Change theme</button>
@@ -38,7 +38,7 @@
     <button onclick="document.querySelector('#themedViewer').setAttribute('page', '1')">Reset page</button>
     <button onclick="document.querySelector('#themedViewer').setAttribute('locale', 'de')">Change locale</button>
     <button onclick="document.querySelector('#themedViewer').setAttribute('locale', 'es')">Reset locale</button>
-    <button onclick="document.querySelector('#themedViewer').setAttribute('text-layer', 'visible')">Change text text layer</button>
+    <button onclick="document.querySelector('#themedViewer').setAttribute('text-layer', 'visible')">Change text layer</button>
     <button onclick="document.querySelector('#themedViewer').setAttribute('text-layer', 'none')">Reset text layer</button>
     <button onclick="document.querySelector('#themedViewer').setAttribute('search', 'iss')">Change search text</button>
     <button onclick="document.querySelector('#themedViewer').setAttribute('search', '')">Reset search text</button>
