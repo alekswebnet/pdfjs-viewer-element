@@ -64,7 +64,7 @@ Using browser:
 ## Usage
 
 ```html
-<pdfjs-viewer-element src="/pdf-file.pdf" viewer-path="/pdfjs-4.0.379-dist"></pdfjs-viewer-element>
+<pdfjs-viewer-element src="/file.pdf" viewer-path="/pdfjs-4.0.379-dist"></pdfjs-viewer-element>
 ```
 
 ## Attributes
@@ -100,7 +100,7 @@ Use `viewer-css-theme` attribute to set light or dark theme manually:
 ```html
 <pdfjs-viewer-element 
   src="/file.pdf" 
-  viewer-path="/path-to-viewer"
+  viewer-path="/pdfjs-4.0.379-dist"
   viewer-css-theme="DARK">
 </pdfjs-viewer-element>
 ```
@@ -113,7 +113,7 @@ You can add your own CSS rules to the viewer application using `viewer-extra-sty
 <!-- Remove download button from viewer toolbar -->
 <pdfjs-viewer-element 
   src="/file.pdf" 
-  viewer-path="/path-to-viewer"
+  viewer-path="/pdfjs-4.0.379-dist"
   viewer-extra-styles="#download { display: none }">
 </pdfjs-viewer-element>
 ```
@@ -123,7 +123,7 @@ You can add your own CSS rules to the viewer application using `viewer-extra-sty
 `initialize` - using this method you can access PDFViewerApplication and use methods and events of PDF.js default viewer
 
 ```html
-<pdfjs-viewer-element viewer-path="/path-to-viewer"></pdfjs-viewer-element>
+<pdfjs-viewer-element viewer-path="/pdfjs-4.0.379-dist"></pdfjs-viewer-element>
 ```
 
 ```javascript
@@ -132,10 +132,6 @@ const viewer = document.querySelector('pdfjs-viewer-element')
 const viewerApp = await viewer.initialize()
 // Open PDF file data using Uint8Array instead of URL
 viewerApp.open({ data: pdfData })
-// Use event bus to handle viewer application events
-viewerApp.eventBus.on('pagesloaded', () => {
-  console.log('Viewer pages loaded')
-})
 ```
 
 ## License

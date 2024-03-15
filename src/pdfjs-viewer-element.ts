@@ -22,7 +22,7 @@ export const ViewerCssTheme = {
   DARK: 2,
 } as const
 
-export const hardRefreshAttributes = ['src', 'viewer-path', 'locale', 'viewer-css-theme', 'viewer-extra-styles']
+export const hardRefreshAttributes = ['src', 'viewer-path', 'locale', 'text-layer', 'viewer-css-theme', 'viewer-extra-styles']
 
 export class PdfjsViewerElement extends HTMLElement {
   constructor() {
@@ -155,9 +155,8 @@ export interface PdfjsViewerElementIframeWindow extends Window {
   PDFViewerApplication: {
     initializedPromise: Promise<void>;
     initialized: boolean;
-    open: (data: Uint8Array) => void;
     eventBus: Record<string, any>;
-    setCssTheme: () => void
+    open: (data: Uint8Array) => void;
   },
   PDFViewerApplicationOptions: {
     set: (name: string, value: string | boolean | number) => void,

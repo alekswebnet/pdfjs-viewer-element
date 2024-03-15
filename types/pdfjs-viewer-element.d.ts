@@ -31,9 +31,8 @@ export interface PdfjsViewerElementIframeWindow extends Window {
     PDFViewerApplication: {
         initializedPromise: Promise<void>;
         initialized: boolean;
-        open: (data: Uint8Array) => void;
         eventBus: Record<string, any>;
-        setCssTheme: () => void;
+        open: (data: Uint8Array) => void;
     };
     PDFViewerApplicationOptions: {
         set: (name: string, value: string | boolean | number) => void;
