@@ -91,6 +91,8 @@ Using browser:
 
 `viewer-extra-styles` - Add your CSS rules to the viewer application
 
+`viewer-extra-styles-urls` - Add external CSS files to the viewer application
+
 Play with attributes on [Api docs page](https://alekswebnet.github.io/pdfjs-viewer-element/#api).
 
 ## Viewer CSS theme
