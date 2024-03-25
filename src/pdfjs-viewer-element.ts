@@ -13,7 +13,8 @@ const DEFAULTS = {
   locale: '',
   textLayer: '',
   viewerCssTheme: 'AUTOMATIC',
-  viewerExtraStyles: ''
+  viewerExtraStyles: '',
+  viewerExtraStylesUrls: ''
 } as const
 
 export const ViewerCssTheme = {
@@ -22,7 +23,7 @@ export const ViewerCssTheme = {
   DARK: 2,
 } as const
 
-export const hardRefreshAttributes = ['src', 'viewer-path', 'locale', 'text-layer', 'viewer-css-theme', 'viewer-extra-styles']
+export const hardRefreshAttributes = ['src', 'viewer-path', 'locale', 'text-layer', 'viewer-css-theme', 'viewer-extra-styles', 'viewer-extra-styles-urls']
 
 export class PdfjsViewerElement extends HTMLElement {
   constructor() {
@@ -39,14 +40,15 @@ export class PdfjsViewerElement extends HTMLElement {
   public iframe!: PdfjsViewerElementIframe
 
   static get observedAttributes() {
-    return ['src', 'viewer-path', 'locale', 'page', 'search', 'phrase', 'zoom', 'pagemode', 'text-layer', 'viewer-css-theme', 'viewer-extra-styles']
+    return ['src', 'viewer-path', 'locale', 'page', 'search', 'phrase', 'zoom', 'pagemode', 'text-layer', 'viewer-css-theme', 'viewer-extra-styles', 'viewer-extra-styles-urls']
   }
 
   connectedCallback() {
     this.iframe = this.shadowRoot!.querySelector('iframe') as PdfjsViewerElementIframe
     document.addEventListener('webviewerloaded', async () => {
       this.setCssTheme(this.getCssThemeOption())
-      this.setViewerExtraStyles(this.getAttribute('viewer-extra-styles'))
+      this.injectExtraStylesLinks(this.getAttribute('viewer-extra-styles-urls') ?? DEFAULTS.viewerExtraStylesUrls)
+      this.setViewerExtraStyles(this.getAttribute('viewer-extra-styles') ?? DEFAULTS.viewerExtraStyles)
       if (this.getAttribute('src') !== DEFAULTS.src) this.iframe.contentWindow?.PDFViewerApplicationOptions?.set('defaultUrl', '')
       this.iframe.contentWindow?.PDFViewerApplicationOptions?.set('disablePreferences', true)
       this.iframe.contentWindow?.PDFViewerApplicationOptions?.set('pdfBugEnabled', true)
@@ -130,6 +132,19 @@ export class PdfjsViewerElement extends HTMLElement {
     style.innerHTML = styles
     style.setAttribute(id, '')
     this.iframe.contentDocument?.head.appendChild(style)
+  }
+
+  private injectExtraStylesLinks = (rawLinks?: string) => {
+    if (!rawLinks) return
+    const linksArray = rawLinks.replace(/'|]|\[/g, '').split(',').map((link) => link.trim())
+    linksArray.forEach((url) => {
+      const linkExists = this.iframe.contentDocument?.head.querySelector(`link[href="${url}"]`);
+      if (linkExists) return
+      const linkEl = document.createElement('link')
+      linkEl.rel = 'stylesheet'
+      linkEl.href = url
+      this.iframe.contentDocument?.head.appendChild(linkEl)
+    })
   }
 
   public initialize = (): Promise<PdfjsViewerElementIframeWindow['PDFViewerApplication']> => new Promise(async (resolve) => {

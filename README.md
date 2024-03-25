@@ -107,14 +107,14 @@ Use `viewer-css-theme` attribute to set light or dark theme manually:
 
 ## Viewer extra styles 
 
-You can add your own CSS rules to the viewer application using `viewer-extra-styles` attribute:
+You can add your own CSS rules to the viewer application using `viewer-extra-styles` or `viewer-extra-styles-urls` attribute:
 
 ```html
-<!-- Remove download button from viewer toolbar -->
 <pdfjs-viewer-element 
   src="/file.pdf" 
   viewer-path="/pdfjs-4.0.379-dist"
-  viewer-extra-styles="#download { display: none }">
+  viewer-extra-styles="#toolbarViewerMiddle { display: none; }"
+  viewer-extra-styles-urls="['/demo/extra-styles-one.css', '/demo/extra-styles-two.css']">
 </pdfjs-viewer-element>
 ```
 
