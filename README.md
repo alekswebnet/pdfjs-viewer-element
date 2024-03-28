@@ -116,8 +116,30 @@ You can add your own CSS rules to the viewer application using `viewer-extra-sty
   src="/file.pdf" 
   viewer-path="/pdfjs-4.0.379-dist"
   viewer-extra-styles="#toolbarViewerMiddle { display: none; }"
-  viewer-extra-styles-urls="['/demo/extra-styles-one.css', '/demo/extra-styles-two.css']">
+  viewer-extra-styles-urls="['/demo/viewer-custom-theme.css']">
 </pdfjs-viewer-element>
+```
+Build your own theme with viewer's custom variables and `viewer-extra-styles-urls` attribute: 
+
+```css
+:root {
+  --main-color: #5755FE;
+  --toolbar-icon-bg-color: #0200a8;
+  --field-color: #5755FE;
+  --separator-color: #5755FE;
+  --toolbar-border-color: #5755FE;
+  --field-border-color: #5755FE;
+  --toolbar-bg-color: rgba(139, 147, 255, .1);
+  --body-bg-color: rgba(255, 247, 252, .7);
+  --button-hover-color: rgba(139, 147, 255, .1);
+  --toolbar-icon-hover-bg-color: #0200a8;
+  --toggled-btn-color: #0200a8;
+  --toggled-btn-bg-color: rgba(139, 147, 255, .1);
+  --toggled-hover-active-btn-color: #5755FE;
+  --doorhanger-hover-bg-color: rgba(139, 147, 255, .1);
+  --doorhanger-hover-color: #0200a8;
+  --dropdown-btn-bg-color: rgba(139, 147, 255, .1);
+}
 ```
 
 ## PDF.js Viewer Application
