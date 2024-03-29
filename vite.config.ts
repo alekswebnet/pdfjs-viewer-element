@@ -9,7 +9,8 @@ export default defineConfig({
       fileName: 'pdfjs-viewer-element',
       entry: 'src/pdfjs-viewer-element.ts',
       formats: ['es']
-    }
+    },
+    copyPublicDir: false
   },
   test: {
     browser: {
