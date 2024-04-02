@@ -20,7 +20,7 @@ export default defineConfig({
     },
   },
   optimizeDeps: {
-    // Prevent resolve external deps of the prebuild v.4.0.189 
+    // Prevent resolve external deps of the prebuild from v.4.0.189 
     exclude: ['canvas', 'path2d-polyfill']
   }
 })

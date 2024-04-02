@@ -7,7 +7,8 @@ The simplest integration of [PDF.js default viewer](https://mozilla.github.io/pd
 The package provides a custom element, based on PDF.js [viewer options](https://github.com/mozilla/pdf.js/wiki/Viewer-options) and [URL parameters](https://github.com/mozilla/pdf.js/wiki/Debugging-PDF.js#url-parameters) API. 
 Supported in all [major browsers](https://caniuse.com/custom-elementsv1), and works with most [JS frameworks](https://custom-elements-everywhere.com/).
 
-See [examples](https://alekswebnet.github.io/pdfjs-viewer-element/#demo) of usage in Vue, React, Svelte, or simple HTML pages.
+See [demo pages](https://github.com/alekswebnet/pdfjs-viewer-element/tree/master/demo) for various usecases.
+See [live examples](https://alekswebnet.github.io/pdfjs-viewer-element/#demo) of usage with frameworks.
 
 ⚠️ `pdfjs-viewer-element` requires PDF.js [prebuilt](http://mozilla.github.io/pdf.js/getting_started/), that includes the generic build of PDF.js and the viewer.
 
@@ -34,9 +35,11 @@ Then specify the path to the directory with the `viewer-path` property (`/pdfjs`
 
 [Getting started](https://alekswebnet.github.io/pdfjs-viewer-element/)
 
-[API](https://alekswebnet.github.io/pdfjs-viewer-element/#api)
+[API playground](https://alekswebnet.github.io/pdfjs-viewer-element/#api)
 
 [Live examples](https://alekswebnet.github.io/pdfjs-viewer-element/#demo)
+
+[Demo pages](https://github.com/alekswebnet/pdfjs-viewer-element/tree/master/demo)
 
 ## Install
 
@@ -78,6 +81,8 @@ Using browser:
 `text-layer` - Text layer, that is used for text selection `off | visible | shadow | hover`
 
 `page` - Page number
+
+`nameddest` -  Go to a named destination
 
 `search` - Search text
 

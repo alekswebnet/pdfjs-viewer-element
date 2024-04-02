@@ -43,9 +43,4 @@ export interface PdfjsViewerElementIframeWindow extends Window {
 export interface PdfjsViewerElementIframe extends HTMLIFrameElement {
     contentWindow: PdfjsViewerElementIframeWindow;
 }
-export interface PdfjsViewerLoadedEvent extends Event {
-    detail: {
-        source: PdfjsViewerElementIframeWindow;
-    };
-}
 export default PdfjsViewerElement;

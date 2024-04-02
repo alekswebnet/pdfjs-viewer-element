@@ -14,7 +14,8 @@ const DEFAULTS = {
   textLayer: '',
   viewerCssTheme: 'AUTOMATIC',
   viewerExtraStyles: '',
-  viewerExtraStylesUrls: ''
+  viewerExtraStylesUrls: '',
+  nameddest: ''
 } as const
 
 export const ViewerCssTheme = {
@@ -40,7 +41,7 @@ export class PdfjsViewerElement extends HTMLElement {
   public iframe!: PdfjsViewerElementIframe
 
   static get observedAttributes() {
-    return ['src', 'viewer-path', 'locale', 'page', 'search', 'phrase', 'zoom', 'pagemode', 'text-layer', 'viewer-css-theme', 'viewer-extra-styles', 'viewer-extra-styles-urls']
+    return ['src', 'viewer-path', 'locale', 'page', 'search', 'phrase', 'zoom', 'pagemode', 'text-layer', 'viewer-css-theme', 'viewer-extra-styles', 'viewer-extra-styles-urls', 'nameddest']
   }
 
   connectedCallback() {
@@ -83,8 +84,9 @@ export class PdfjsViewerElement extends HTMLElement {
     const textLayer = this.getAttribute('text-layer') || DEFAULTS.textLayer
     const viewerCssTheme = this.getAttribute('viewer-css-theme') || DEFAULTS.viewerCssTheme
     const viewerExtraStyles = Boolean(this.getAttribute('viewer-extra-styles') || DEFAULTS.viewerExtraStyles)
+    const nameddest = this.getAttribute('nameddest') || DEFAULTS.nameddest
 
-    return `${viewerPath}${DEFAULTS.viewerEntry}?file=${encodeURIComponent(src)}#page=${page}&zoom=${zoom}&pagemode=${pagemode}&search=${search}&phrase=${phrase}&textLayer=${textLayer}${locale ? '&locale='+locale : ''}&viewerCssTheme=${viewerCssTheme}&viewerExtraStyles=${viewerExtraStyles}`
+    return `${viewerPath}${DEFAULTS.viewerEntry}?file=${encodeURIComponent(src)}#page=${page}&zoom=${zoom}&pagemode=${pagemode}&search=${search}&phrase=${phrase}&textLayer=${textLayer}${locale ? '&locale='+locale : ''}&viewerCssTheme=${viewerCssTheme}&viewerExtraStyles=${viewerExtraStyles}&nameddest=${nameddest}`
   }
 
   private mountViewer(src: string) {
@@ -181,12 +183,6 @@ export interface PdfjsViewerElementIframeWindow extends Window {
 
 export interface PdfjsViewerElementIframe extends HTMLIFrameElement {
   contentWindow: PdfjsViewerElementIframeWindow
-}
-
-export interface PdfjsViewerLoadedEvent extends Event {
-  detail: {
-    source: PdfjsViewerElementIframeWindow
-  }
 }
 
 export default PdfjsViewerElement
