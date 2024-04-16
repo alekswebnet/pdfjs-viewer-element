@@ -16,7 +16,7 @@ export default defineConfig({
     browser: {
       enabled: true,
       name: 'firefox',
-      headless: true
+      headless: false
     },
   },
   optimizeDeps: {

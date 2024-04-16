@@ -7,7 +7,7 @@ describe('Basic tests', async () => {
     const viewerApp = await mountViewer(`
       <pdfjs-viewer-element 
         src="/sample-pdf-10MB.pdf" 
-        viewer-path="pdfjs-4.0.379-dist"
+        viewer-path="/pdfjs-4.0.379-dist"
       ></pdfjs-viewer-element>`
     )
     expect(getViewerElement()).exist
