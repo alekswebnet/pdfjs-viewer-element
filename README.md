@@ -12,7 +12,7 @@ See [live examples](https://alekswebnet.github.io/pdfjs-viewer-element/#demo) of
 
 ⚠️ `pdfjs-viewer-element` requires PDF.js [prebuilt](http://mozilla.github.io/pdf.js/getting_started/), that includes the generic build of PDF.js and the viewer.
 
-The prebuilt comes with each PDF.js release. Supported all v4 and v3 [releases](https://github.com/mozilla/pdf.js/releases):
+The prebuilt comes with each PDF.js release. Supported all v4 and v3 [releases](https://github.com/mozilla/pdf.js/releases).
 
 To use the package you should download and **place the prebuilt** files in the project.
 
