@@ -12,14 +12,7 @@ See [live examples](https://alekswebnet.github.io/pdfjs-viewer-element/#demo) of
 
 ⚠️ `pdfjs-viewer-element` requires PDF.js [prebuilt](http://mozilla.github.io/pdf.js/getting_started/), that includes the generic build of PDF.js and the viewer.
 
-The prebuilt comes with each PDF.js release. Supported releases:
-
-✅ [v4.0.379](https://github.com/mozilla/pdf.js/releases/tag/v4.0.379)
-
-✅ [v4.0.269](https://github.com/mozilla/pdf.js/releases/tag/v4.0.269)
-
-✅ [v4.0.189](https://github.com/mozilla/pdf.js/releases/tag/v4.0.189)
-
+The prebuilt comes with each PDF.js release. Supported all v4 and v3 [releases](https://github.com/mozilla/pdf.js/releases):
 
 To use the package you should download and **place the prebuilt** files in the project.
 
@@ -67,7 +60,7 @@ Using browser:
 ## Usage
 
 ```html
-<pdfjs-viewer-element src="/file.pdf" viewer-path="/pdfjs-4.0.379-dist"></pdfjs-viewer-element>
+<pdfjs-viewer-element src="/file.pdf" viewer-path="/pdfjs-4.1.392-dist"></pdfjs-viewer-element>
 ```
 
 ## Attributes
@@ -107,7 +100,7 @@ Use `viewer-css-theme` attribute to set light or dark theme manually:
 ```html
 <pdfjs-viewer-element 
   src="/file.pdf" 
-  viewer-path="/pdfjs-4.0.379-dist"
+  viewer-path="/pdfjs-4.1.392-dist"
   viewer-css-theme="DARK">
 </pdfjs-viewer-element>
 ```
@@ -119,7 +112,7 @@ You can add your own CSS rules to the viewer application using `viewer-extra-sty
 ```html
 <pdfjs-viewer-element 
   src="/file.pdf" 
-  viewer-path="/pdfjs-4.0.379-dist"
+  viewer-path="/pdfjs-4.1.392-dist"
   viewer-extra-styles="#toolbarViewerMiddle { display: none; }"
   viewer-extra-styles-urls="['/demo/viewer-custom-theme.css']">
 </pdfjs-viewer-element>
@@ -152,7 +145,7 @@ Build your own theme with viewer's custom variables and `viewer-extra-styles-url
 `initialize` - using this method you can access PDFViewerApplication and use methods and events of PDF.js default viewer
 
 ```html
-<pdfjs-viewer-element viewer-path="/pdfjs-4.0.379-dist"></pdfjs-viewer-element>
+<pdfjs-viewer-element viewer-path="/pdfjs-4.1.392-dist"></pdfjs-viewer-element>
 ```
 
 ```javascript

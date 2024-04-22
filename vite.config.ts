@@ -16,11 +16,11 @@ export default defineConfig({
     browser: {
       enabled: true,
       name: 'firefox',
-      headless: false
+      headless: true
     },
   },
   optimizeDeps: {
     // Prevent resolve external deps of the prebuild from v.4.0.189 
-    exclude: ['canvas', 'path2d-polyfill']
+    exclude: ['canvas', 'path2d-polyfill', 'path2d']
   }
 })
