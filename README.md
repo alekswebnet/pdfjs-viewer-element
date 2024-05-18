@@ -10,13 +10,17 @@ Supported in all [major browsers](https://caniuse.com/custom-elementsv1), and wo
 See [demo pages](https://github.com/alekswebnet/pdfjs-viewer-element/tree/master/demo) for various usecases.
 See [live examples](https://alekswebnet.github.io/pdfjs-viewer-element/#demo) of usage with frameworks.
 
-⚠️ `pdfjs-viewer-element` requires PDF.js [prebuilt](http://mozilla.github.io/pdf.js/getting_started/), that includes the generic build of PDF.js and the viewer.
+## How it works
+
+**⚠️ This is an important part !!!**
+
+ **You should download and place the PDF.js prebuilt files in the project.**
+
+`pdfjs-viewer-element` requires PDF.js [prebuilt](http://mozilla.github.io/pdf.js/getting_started/), that includes the generic build of PDF.js and the viewer.
 
 The prebuilt comes with each PDF.js release. Supported all v4 and v3 [releases](https://github.com/mozilla/pdf.js/releases).
 
-To use the package you should download and **place the prebuilt** files in the project.
-
-Then specify the path to the directory with the `viewer-path` property (`/pdfjs` by default).
+Then specify the path to the directory with the `viewer-path` property (`/pdfjs` by default) and PDF file URL with `src` property (should refer to the [same origin](https://github.com/mozilla/pdf.js/wiki/Frequently-Asked-Questions#can-i-load-a-pdf-from-another-server-cross-domain-request)).
 
 ## Status
 
