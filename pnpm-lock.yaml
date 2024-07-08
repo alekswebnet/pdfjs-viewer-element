@@ -8,6 +8,9 @@ importers:
 
   .:
     devDependencies:
+      '@awlsn/pdfjs-full':
+        specifier: ^4.2.392
+        version: 4.2.392
       '@types/node':
         specifier: ^18.19.31
         version: 18.19.31
@@ -34,6 +37,9 @@ importers:
         version: 8.36.1(@promptbook/core@0.44.0-14)(typescript@4.9.5)
 
 packages:
+
+  '@awlsn/pdfjs-full@4.2.392':
+    resolution: {integrity: sha512-8vVqhzUWatKYZ805k1zXBFtQKW7rW/L3qHmYDscnjoIDp8IJj6FbdK5mJ87H9sZyedJ3//e78FI9jHjjGSjtHA==}
 
   '@esbuild/aix-ppc64@0.20.2':
     resolution: {integrity: sha512-D+EBOJHXdNZcLJRBkhENNG8Wji2kgc9AZ9KiPr1JuZjsNtyHzrsfLRrY0tk2H2aoFu6RANO1y1iPPUCDYWkb5g==}
@@ -1726,6 +1732,8 @@ packages:
     engines: {node: '>= 14'}
 
 snapshots:
+
+  '@awlsn/pdfjs-full@4.2.392': {}
 
   '@esbuild/aix-ppc64@0.20.2':
     optional: true
