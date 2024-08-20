@@ -160,5 +160,31 @@ const viewerApp = await viewer.initialize()
 viewerApp.open({ data: pdfData })
 ```
 
+## Server configuration
+
+Since v4 PDF.js requires `.mjs` files support, make sure your server has it.
+
+In case of `nginx` this may causes to errors, see https://github.com/mozilla/pdf.js/issues/17296
+
+Add `.mjs` files support for `nginx` example:
+
+```bash
+server {
+    # ...
+
+    location / {
+        root   /usr/share/nginx/html;
+        index  index.html;
+
+        location ~* \.mjs$ {
+            types {
+                text/javascript mjs;
+            }
+        }
+    }
+}
+```
+
+
 ## License
 [MIT](http://opensource.org/licenses/MIT)
