@@ -64,7 +64,7 @@ Using browser:
 ## Usage
 
 ```html
-<pdfjs-viewer-element src="/file.pdf" viewer-path="/pdfjs-4.3.136-dist"></pdfjs-viewer-element>
+<pdfjs-viewer-element src="/file.pdf" viewer-path="/pdfjs-4.5.136-dist"></pdfjs-viewer-element>
 ```
 
 ## Attributes
@@ -104,7 +104,7 @@ Use `viewer-css-theme` attribute to set light or dark theme manually:
 ```html
 <pdfjs-viewer-element 
   src="/file.pdf" 
-  viewer-path="/pdfjs-4.3.136-dist"
+  viewer-path="/pdfjs-4.5.136-dist"
   viewer-css-theme="DARK">
 </pdfjs-viewer-element>
 ```
@@ -116,7 +116,7 @@ You can add your own CSS rules to the viewer application using `viewer-extra-sty
 ```html
 <pdfjs-viewer-element 
   src="/file.pdf" 
-  viewer-path="/pdfjs-4.3.136-dist"
+  viewer-path="/pdfjs-4.5.136-dist"
   viewer-extra-styles="#toolbarViewerMiddle { display: none; }"
   viewer-extra-styles-urls="['/demo/viewer-custom-theme.css']">
 </pdfjs-viewer-element>
@@ -149,7 +149,7 @@ Build your own theme with viewer's custom variables and `viewer-extra-styles-url
 `initialize` - using this method you can access PDFViewerApplication and use methods and events of PDF.js default viewer
 
 ```html
-<pdfjs-viewer-element viewer-path="/pdfjs-4.3.136-dist"></pdfjs-viewer-element>
+<pdfjs-viewer-element viewer-path="/pdfjs-4.5.136-dist"></pdfjs-viewer-element>
 ```
 
 ```javascript
