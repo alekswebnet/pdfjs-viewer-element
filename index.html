@@ -10,23 +10,23 @@
   <body style="margin: 0">
     <pdfjs-viewer-element 
       src="/fake-file.pdf" 
-      viewer-path="/pdfjs-4.5.136-dist"
+      viewer-path="/pdfjs-4.10.38-dist"
       style="height: 600px">
     </pdfjs-viewer-element>
     <pdfjs-viewer-element 
       id="hideOpenFileViewer"
       src="/sample-pdf-with-images.pdf" 
-      viewer-path="/pdfjs-4.5.136-dist"
+      viewer-path="/pdfjs-4.10.38-dist"
       locale="de"
       page="2"
       style="height: 600px">
     </pdfjs-viewer-element>
-    <button onclick="document.querySelector('#hideOpenFileViewer').setAttribute('viewer-extra-styles', '#download { display: none }')">Hide download button</button>
+    <button onclick="document.querySelector('#hideOpenFileViewer').setAttribute('viewer-extra-styles', '#downloadButton { display: none }')">Hide download button</button>
     <button onclick="document.querySelector('#hideOpenFileViewer').setAttribute('viewer-extra-styles', '')">Show download button</button>
     <pdfjs-viewer-element 
       id="themedViewer"
       src="/sample-pdf-10MB.pdf" 
-      viewer-path="/pdfjs-4.5.136-dist"
+      viewer-path="/pdfjs-4.10.38-dist"
       viewer-css-theme="DARK"
       locale="es"
       style="height: 600px">
@@ -47,7 +47,7 @@
 
     <pdfjs-viewer-element
       id="base-viewer"
-      viewer-path="/pdfjs-4.5.136-dist"
+      viewer-path="/pdfjs-4.10.38-dist"
       locale="uk"
       style="height: clamp(600px, 600px, 80dvh)">
     </pdfjs-viewer-element>

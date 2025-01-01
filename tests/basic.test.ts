@@ -7,7 +7,7 @@ describe('Basic tests', async () => {
     const viewerApp = await mountViewer(`
       <pdfjs-viewer-element 
         src="/sample-pdf-10MB.pdf" 
-        viewer-path="/pdfjs-4.5.136-dist"
+        viewer-path="/pdfjs-4.10.38-dist"
       ></pdfjs-viewer-element>`
     )
     expect(getViewerElement()).exist
@@ -21,7 +21,7 @@ describe('Basic tests', async () => {
     await mountViewer(`
       <pdfjs-viewer-element 
         src="/fake-file.pdf" 
-        viewer-path="/pdfjs-4.5.136-dist"
+        viewer-path="/pdfjs-4.10.38-dist"
       ></pdfjs-viewer-element>`
     )
     expect(getViewerElement()).exist
@@ -41,7 +41,7 @@ describe('Basic tests', async () => {
   it('should open the external file with base64 source', async () => {
     const viewerApp = await mountViewer(`
       <pdfjs-viewer-element 
-        viewer-path="/pdfjs-4.5.136-dist"
+        viewer-path="/pdfjs-4.10.38-dist"
       ></pdfjs-viewer-element>`
     )
 
@@ -59,7 +59,7 @@ describe('Basic tests', async () => {
     await mountViewer(`
       <pdfjs-viewer-element 
         src="/sample-pdf-10MB.pdf" 
-        viewer-path="/pdfjs-4.5.136-dist"
+        viewer-path="/pdfjs-4.10.38-dist"
         viewer-css-theme="DARK"
       ></pdfjs-viewer-element>`
     )
@@ -72,12 +72,12 @@ describe('Basic tests', async () => {
     await mountViewer(`
       <pdfjs-viewer-element 
         src="/sample-pdf-10MB.pdf" 
-        viewer-path="/pdfjs-4.5.136-dist"
-        viewer-extra-styles="#download { display: none }"
+        viewer-path="/pdfjs-4.10.38-dist"
+        viewer-extra-styles="#downloadButton { display: none }"
       ></pdfjs-viewer-element>`
     )
 
     expect(getViewerElement()).exist
-    expect(getComputedStyle(getViewerElement('#download')!).display).eq('none')
+    expect(getComputedStyle(getViewerElement('#downloadButton')!).display).eq('none')
   })
 })

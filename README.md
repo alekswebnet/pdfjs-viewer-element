@@ -10,15 +10,22 @@ Supported in all [major browsers](https://caniuse.com/custom-elementsv1), and wo
 See [demo pages](https://github.com/alekswebnet/pdfjs-viewer-element/tree/master/demo) for various usecases.
 See [live examples](https://alekswebnet.github.io/pdfjs-viewer-element/#demo) of usage with frameworks.
 
+# Features
+
+- Simple PDF.js viewer integration to any web application
+- PDF.js viewer options and parameters support, access to the viewer application instance
+- Ability to customize viewer styles and themes
+
 ## How it works
 
-**⚠️ This is an important part !!!**
+**⚠️ This is an important part, please read this firstly !!!**
 
  **You should download and place the PDF.js prebuilt files in the project.**
 
 `pdfjs-viewer-element` requires PDF.js [prebuilt](http://mozilla.github.io/pdf.js/getting_started/), that includes the generic build of PDF.js and the viewer.
 
-The prebuilt comes with each PDF.js release. Supported all v4 and v3 [releases](https://github.com/mozilla/pdf.js/releases).
+The prebuilt comes with each PDF.js release. 
+All v4 and v3 [releases](https://github.com/mozilla/pdf.js/releases) are supported.
 
 Then specify the path to the directory with the `viewer-path` property (`/pdfjs` by default) and PDF file URL with `src` property (should refer to the [same origin](https://github.com/mozilla/pdf.js/wiki/Frequently-Asked-Questions#can-i-load-a-pdf-from-another-server-cross-domain-request)).
 
@@ -64,7 +71,7 @@ Using browser:
 ## Usage
 
 ```html
-<pdfjs-viewer-element src="/file.pdf" viewer-path="/pdfjs-4.5.136-dist"></pdfjs-viewer-element>
+<pdfjs-viewer-element src="/file.pdf" viewer-path="/pdfjs-4.10.38-dist"></pdfjs-viewer-element>
 ```
 
 ## Attributes
@@ -73,27 +80,39 @@ Using browser:
 
 `viewer-path` - Path to PDF.js [prebuilt](http://mozilla.github.io/pdf.js/getting_started/)
 
-`locale` -  Specifies which language to use in the viewer UI `en-US | ...`. [Available locales](https://github.com/mozilla/pdf.js/tree/master/l10n)
+`page` - Page number.
 
-`text-layer` - Text layer, that is used for text selection `off | visible | shadow | hover`
+`nameddest` -  Go to a named destination.
 
-`page` - Page number
+`search` - Search text.
 
-`nameddest` -  Go to a named destination
+`phrase` - Search by phrase, `true` to enable.
 
-`search` - Search text
+`zoom` - Zoom level.
 
-`phrase` - Search by phrase
+`pagemode` - Page mode, `thumbs | bookmarks | attachments | layers | none`.
 
-`zoom` - Zoom level
+`disable-worker` - Disables the worker, `true` to enable.
 
-`pagemode` - Page mode `thumbs | bookmarks | attachments | layers | none`
+`text-layer` - Disables or reveals the text layer that is used for text selection, `off | visible | shadow | hover`.
 
-`viewer-css-theme` - Apply automatic, light, or dark theme `AUTOMATIC | LIGHT | DARK`
+`disable-font-face` - Disables standard `@font-face` font loading and uses the internal font renderer instead, `true` to enable.
 
-`viewer-extra-styles` - Add your CSS rules to the viewer application
+`disable-range` - Disables HTTP range requests when fetching the document, `true` to enable.
 
-`viewer-extra-styles-urls` - Add external CSS files to the viewer application
+`disable-stream` - Disables streaming when fetching the document, `true` to enable.
+
+`disable-auto-fetch`- Disables auto fetching of the document; only gets necessary data to display the current view. Note: streaming also needs to be disabled for this to have any effect, `true` to enable.
+
+`verbosity`- Specifies the verbosity level of console messages. `0` - only errors, `1` - warnings and errors, `5` - warnings, errors and information messages.
+
+`locale` -  Specifies which language to use in the viewer UI, `en-US | ...`. [Available locales](https://github.com/mozilla/pdf.js/tree/master/l10n)
+
+`viewer-css-theme` - Apply automatic, light, or dark theme, `AUTOMATIC | LIGHT | DARK`
+
+`viewer-extra-styles` - Add your CSS rules to the viewer application, pass a string with styles.
+
+`viewer-extra-styles-urls` - Add external CSS files to the viewer application, pass an array with URLs.
 
 Play with attributes on [Api docs page](https://alekswebnet.github.io/pdfjs-viewer-element/#api).
 
@@ -104,19 +123,19 @@ Use `viewer-css-theme` attribute to set light or dark theme manually:
 ```html
 <pdfjs-viewer-element 
   src="/file.pdf" 
-  viewer-path="/pdfjs-4.5.136-dist"
+  viewer-path="/pdfjs-4.10.38-dist"
   viewer-css-theme="DARK">
 </pdfjs-viewer-element>
 ```
 
-## Viewer extra styles 
+## Viewer custom styles 
 
 You can add your own CSS rules to the viewer application using `viewer-extra-styles` or `viewer-extra-styles-urls` attribute:
 
 ```html
 <pdfjs-viewer-element 
   src="/file.pdf" 
-  viewer-path="/pdfjs-4.5.136-dist"
+  viewer-path="/pdfjs-4.10.38-dist"
   viewer-extra-styles="#toolbarViewerMiddle { display: none; }"
   viewer-extra-styles-urls="['/demo/viewer-custom-theme.css']">
 </pdfjs-viewer-element>
@@ -149,7 +168,7 @@ Build your own theme with viewer's custom variables and `viewer-extra-styles-url
 `initialize` - using this method you can access PDFViewerApplication and use methods and events of PDF.js default viewer
 
 ```html
-<pdfjs-viewer-element viewer-path="/pdfjs-4.5.136-dist"></pdfjs-viewer-element>
+<pdfjs-viewer-element viewer-path="/pdfjs-4.10.38-dist"></pdfjs-viewer-element>
 ```
 
 ```javascript

@@ -1,6 +1,6 @@
 {
   "name": "pdfjs-viewer-element",
-  "version": "2.6.5",
+  "version": "2.7.0",
   "license": "MIT",
   "author": {
     "name": "Oleksandr Shevchuk",
@@ -11,7 +11,9 @@
     "pdfjs",
     "pdf viewer",
     "pdfjs viewer",
-    "web component"
+    "web component",
+    "pdfjs viewer element",
+    "pdf"
   ],
   "main": "./dist/pdfjs-viewer-element.js",
   "module": "./dist/pdfjs-viewer-element.js",
@@ -37,14 +39,17 @@
   },
   "devDependencies": {
     "@awlsn/pdfjs-full": "^4.2.392",
+    "@rollup/plugin-terser": "^0.4.4",
     "@types/node": "^18.19.31",
     "@vitest/browser": "^1.5.0",
     "jsdom": "^22.1.0",
-    "perfect-debounce": "^1.0.0",
     "typescript": "^4.9.5",
     "vite": "^5.2.9",
     "vitest": "^1.5.0",
     "webdriverio": "^8.36.1"
   },
-  "packageManager": "pnpm@9.7.0+sha512.dc09430156b427f5ecfc79888899e1c39d2d690f004be70e05230b72cb173d96839587545d09429b55ac3c429c801b4dc3c0e002f653830a420fa2dd4e3cf9cf"
+  "packageManager": "pnpm@9.7.0+sha512.dc09430156b427f5ecfc79888899e1c39d2d690f004be70e05230b72cb173d96839587545d09429b55ac3c429c801b4dc3c0e002f653830a420fa2dd4e3cf9cf",
+  "dependencies": {
+    "perfect-debounce": "^1.0.0"
+  }
 }

@@ -11,7 +11,13 @@ const DEFAULTS = {
   zoom: '',
   pagemode: 'none',
   locale: '',
+  disableWorker: '',
   textLayer: '',
+  disableFontFace: '',
+  disableRange: '',
+  disableStream: '',
+  disableAutoFetch: '',
+  verbosity: '',
   viewerCssTheme: 'AUTOMATIC',
   viewerExtraStyles: '',
   viewerExtraStylesUrls: '',
@@ -24,7 +30,11 @@ export const ViewerCssTheme = {
   DARK: 2,
 } as const
 
-export const hardRefreshAttributes = ['src', 'viewer-path', 'locale', 'text-layer', 'viewer-css-theme', 'viewer-extra-styles', 'viewer-extra-styles-urls']
+export const hardRefreshAttributes = [
+  'src', 'viewer-path', 
+  'disable-worker', 'text-layer', 'disable-font-face', 'disable-range', 'disable-stream', 'disable-auto-fetch', 'verbosity', 'locale',
+  'viewer-css-theme', 'viewer-extra-styles', 'viewer-extra-styles-urls'
+]
 
 export class PdfjsViewerElement extends HTMLElement {
   constructor() {
@@ -41,7 +51,11 @@ export class PdfjsViewerElement extends HTMLElement {
   public iframe!: PdfjsViewerElementIframe
 
   static get observedAttributes() {
-    return ['src', 'viewer-path', 'locale', 'page', 'search', 'phrase', 'zoom', 'pagemode', 'text-layer', 'viewer-css-theme', 'viewer-extra-styles', 'viewer-extra-styles-urls', 'nameddest']
+    return [
+      'src', 'viewer-path', 'page', 'search', 'phrase', 'zoom', 'pagemode', 
+      'disable-worker', 'text-layer', 'disable-font-face', 'disable-range', 'disable-stream', 'disable-auto-fetch', 'verbosity', 'locale',
+      'viewer-css-theme', 'viewer-extra-styles', 'viewer-extra-styles-urls', 'nameddest'
+    ]
   }
 
   connectedCallback() {
@@ -80,13 +94,34 @@ export class PdfjsViewerElement extends HTMLElement {
     const phrase = this.getAttribute('phrase') || DEFAULTS.phrase
     const zoom = this.getAttribute('zoom') || DEFAULTS.zoom
     const pagemode = this.getAttribute('pagemode') || DEFAULTS.pagemode
-    const locale = this.getAttribute('locale') || DEFAULTS.locale
+
+    const disableWorker = this.getAttribute('disable-worker') || DEFAULTS.disableWorker
     const textLayer = this.getAttribute('text-layer') || DEFAULTS.textLayer
+    const disableFontFace = this.getAttribute('disable-font-face') || DEFAULTS.disableFontFace
+    const disableRange = this.getAttribute('disable-range') || DEFAULTS.disableRange
+    const disableStream = this.getAttribute('disable-stream') || DEFAULTS.disableStream
+    const disableAutoFetch = this.getAttribute('disable-auto-fetch') || DEFAULTS.disableAutoFetch
+    const verbosity = this.getAttribute('verbosity') || DEFAULTS.verbosity
+    const locale = this.getAttribute('locale') || DEFAULTS.locale
+
     const viewerCssTheme = this.getAttribute('viewer-css-theme') || DEFAULTS.viewerCssTheme
     const viewerExtraStyles = Boolean(this.getAttribute('viewer-extra-styles') || DEFAULTS.viewerExtraStyles)
     const nameddest = this.getAttribute('nameddest') || DEFAULTS.nameddest
 
-    return `${viewerPath}${DEFAULTS.viewerEntry}?file=${encodeURIComponent(src)}#page=${page}&zoom=${zoom}&pagemode=${pagemode}&search=${search}&phrase=${phrase}&textLayer=${textLayer}${locale ? '&locale='+locale : ''}&viewerCssTheme=${viewerCssTheme}&viewerExtraStyles=${viewerExtraStyles}${nameddest ? '&nameddest=' + nameddest : ''}`
+    return `
+${viewerPath}${DEFAULTS.viewerEntry}?file=
+${encodeURIComponent(src)}#page=${page}&zoom=${zoom}&pagemode=${pagemode}&search=${search}&phrase=${phrase}&textLayer=
+${textLayer}&disableWorker=
+${disableWorker}&disableFontFace=
+${disableFontFace}&disableRange=
+${disableRange}&disableStream=
+${disableStream}&disableAutoFetch=
+${disableAutoFetch}&verbosity=
+${verbosity}
+${locale ? '&locale='+locale : ''}&viewerCssTheme=
+${viewerCssTheme}&viewerExtraStyles=
+${viewerExtraStyles}
+${nameddest ? '&nameddest=' + nameddest : ''}`
   }
 
   private mountViewer(src: string) {

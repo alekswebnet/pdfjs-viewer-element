@@ -1,5 +1,6 @@
 /// <reference types="vitest" />
 import { defineConfig } from 'vite'
+import terser from '@rollup/plugin-terser'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -10,7 +11,10 @@ export default defineConfig({
       entry: 'src/pdfjs-viewer-element.ts',
       formats: ['es']
     },
-    copyPublicDir: false
+    copyPublicDir: false,
+    rollupOptions: {
+      plugins: [terser()]
+    }
   },
   test: {
     browser: {
@@ -22,5 +26,5 @@ export default defineConfig({
   optimizeDeps: {
     // Prevent resolve external deps of the prebuild from v.4.0.189 
     exclude: ['canvas', 'path2d-polyfill', 'path2d']
-  }
+  },
 })
