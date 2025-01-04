@@ -10,7 +10,7 @@ Supported in all [major browsers](https://caniuse.com/custom-elementsv1), and wo
 See [demo pages](https://github.com/alekswebnet/pdfjs-viewer-element/tree/master/demo) for various usecases.
 See [live examples](https://alekswebnet.github.io/pdfjs-viewer-element/#demo) of usage with frameworks.
 
-# Features
+## Features
 
 - Simple PDF.js viewer integration to any web application
 - PDF.js viewer options and parameters support, access to the viewer application instance
