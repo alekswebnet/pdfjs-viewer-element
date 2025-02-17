@@ -18,7 +18,7 @@ See [live examples](https://alekswebnet.github.io/pdfjs-viewer-element/#demo) of
 
 ## How it works
 
-**⚠️ This is an important part, please read this firstly !!!**
+**⚠️ This is an important part, please read this FIRST !!!**
 
  **You should download and place the PDF.js prebuilt files in the project.**
 
