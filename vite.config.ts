@@ -18,10 +18,13 @@ export default defineConfig({
   },
   test: {
     browser: {
+      provider: 'webdriverio',
       enabled: true,
-      name: 'firefox',
-      headless: true
-    },
+      // at least one instance is required
+      instances: [
+        { browser: 'chrome' }
+      ]
+    }
   },
   optimizeDeps: {
     // Prevent resolve external deps of the prebuild from v.4.0.189 

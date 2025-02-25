@@ -179,7 +179,9 @@ const viewerApp = await viewer.initialize()
 viewerApp.open({ data: pdfData })
 ```
 
-## Server configuration
+## Known issues
+
+### The `.mjs` files support
 
 Since v4 PDF.js requires `.mjs` files support, make sure your server has it.
 
@@ -203,6 +205,13 @@ server {
     }
 }
 ```
+
+### Problem with range requests / streaming
+
+Sometimes a PDF file fails to load when working with range requests / streaming.
+If you encounter this issue, you can try disabling the broken functionality of PDF.js:
+
+`disable-range="true"`
 
 
 ## License
