@@ -18,7 +18,7 @@ export declare class PdfjsViewerElement extends HTMLElement {
     private setCssTheme;
     private setViewerExtraStyles;
     private injectExtraStylesLinks;
-    initialize: () => Promise<PdfjsViewerElementIframeWindow['PDFViewerApplication']>;
+    initialize: () => Promise<PdfjsViewerElementIframeWindow["PDFViewerApplication"]>;
 }
 declare global {
     interface Window {
