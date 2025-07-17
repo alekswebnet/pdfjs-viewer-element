@@ -35,9 +35,9 @@ Then specify the path to the directory with the `viewer-path` property (`/pdfjs`
 [![Package Quality](https://packagequality.com/shield/pdfjs-viewer-element.svg)](https://packagequality.com/#?package=pdfjs-viewer-element)
 [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/pdfjs-viewer-element)
 
-# Support project
+## Support project
 
-[![Backers on Open Collective](https://opencollective.com/yourprojectname/backers/badge.svg)](https://opencollective.com/oleksandr-shevchuk)
+[![Backers on Open Collective](https://opencollective.com/oleksandr-shevchuk/backers/badge.svg)](https://opencollective.com/oleksandr-shevchuk)
 
 ## Docs
 
