@@ -35,9 +35,13 @@ Then specify the path to the directory with the `viewer-path` property (`/pdfjs`
 [![Package Quality](https://packagequality.com/shield/pdfjs-viewer-element.svg)](https://packagequality.com/#?package=pdfjs-viewer-element)
 [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/pdfjs-viewer-element)
 
-## Support project
+## Support via Ko-fi
 
-[![Backers on Open Collective](https://opencollective.com/oleksandr-shevchuk/backers/badge.svg)](https://opencollective.com/oleksandr-shevchuk)
+If you find `pdfjs-viewer-element` useful and want to support its development, consider making a donation via Ko-fi:
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/oleksandrshevchuk)
+
+> ❤️ Your support helps with maintenance, bug fixes, and long-term improvements.
 
 ## Docs
 
