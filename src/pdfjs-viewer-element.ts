@@ -144,15 +144,19 @@ ${nameddest ? '&nameddest=' + nameddest : ''}`
 
   private setCssTheme(theme: 0 | 1 | 2) {
     if (theme === ViewerCssTheme.DARK) {
-      const styleSheet = this.iframe.contentDocument?.styleSheets[0];
-      const cssRules = styleSheet?.cssRules || [];
-      const rules = Object.keys(cssRules)
-        .filter((key) => (cssRules[Number(key)] as CSSMediaRule)?.conditionText === "(prefers-color-scheme: dark)")
-        .map((key) => {
-          const rule = cssRules[Number(key)]
-          return rule.cssText.split('@media (prefers-color-scheme: dark) {\n')[1].split('\n}')[0]
-        })
-      this.setViewerExtraStyles(rules.join(''), 'theme')
+      if (!this.iframe.contentDocument?.styleSheets.length) return
+      for (const styleSheet of Array.from(this.iframe.contentDocument.styleSheets)) {
+        if (styleSheet.href?.includes('/web/viewer.css')) {
+          const cssRules = styleSheet?.cssRules || []
+          const rules = Object.keys(cssRules)
+            .filter((key) => (cssRules[Number(key)] as CSSMediaRule)?.conditionText === "(prefers-color-scheme: dark)")
+            .map((key) => {
+              const rule = cssRules[Number(key)]
+              return rule.cssText.split('@media (prefers-color-scheme: dark) {\n')[1].split('\n}')[0]
+            })
+          this.setViewerExtraStyles(rules.join(''), 'theme')
+        }
+      }
     }
     else {
       this.iframe.contentDocument?.head.querySelector('style[theme]')?.remove()

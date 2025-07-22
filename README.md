@@ -1,20 +1,40 @@
-<p align="center">
-<img src="https://alekswebnet.github.io/pdfjs-viewer-element/logo.svg" width="60"/>
-</p>
-<h1 align="center">pdfjs-viewer-element</h1>
+# pdfjs-viewer-element
 
-The simplest integration of [PDF.js default viewer](https://mozilla.github.io/pdf.js/web/viewer.html) using the `iframe` element and web component. 
+Custom element that embeds [PDF.js default viewer](https://mozilla.github.io/pdf.js/web/viewer.html) using the `iframe`.
+
 The package provides a custom element, based on PDF.js [viewer options](https://github.com/mozilla/pdf.js/wiki/Viewer-options) and [URL parameters](https://github.com/mozilla/pdf.js/wiki/Debugging-PDF.js#url-parameters) API. 
+
 Supported in all [major browsers](https://caniuse.com/custom-elementsv1), and works with most [JS frameworks](https://custom-elements-everywhere.com/).
 
-See [demo pages](https://github.com/alekswebnet/pdfjs-viewer-element/tree/master/demo) for various usecases.
-See [live examples](https://alekswebnet.github.io/pdfjs-viewer-element/#demo) of usage with frameworks.
+[![npm version](https://img.shields.io/npm/v/pdfjs-viewer-element?logo=npm&logoColor=fff)](https://www.npmjs.com/package/pdfjs-viewer-element)
+[![Package Quality](https://packagequality.com/shield/pdfjs-viewer-element.svg)](https://packagequality.com/#?package=pdfjs-viewer-element)
+[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/pdfjs-viewer-element)
+
+![PDF.js viewer](image.webp)
 
 ## Features
 
 - Simple PDF.js viewer integration to any web application
-- PDF.js viewer options and parameters support, access to the viewer application instance
-- Ability to customize viewer styles and themes
+- PDF.js viewer options and parameters support, access the viewer application instance
+- Customize viewer styles and themes
+
+## Docs
+
+[Getting started](https://alekswebnet.github.io/pdfjs-viewer-element/)
+
+[API playground](https://alekswebnet.github.io/pdfjs-viewer-element/#api)
+
+[Usage with frameworks](https://alekswebnet.github.io/pdfjs-viewer-element/#demo)
+
+[Various usecases](https://github.com/alekswebnet/pdfjs-viewer-element/tree/master/demo)
+
+## Support via Ko-fi
+
+If you find `pdfjs-viewer-element` useful and want to support its development, consider making a donation via Ko-fi:
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/oleksandrshevchuk)
+
+> ❤️ Your support helps with maintenance, bug fixes, and long-term improvements.
 
 ## How it works
 
@@ -29,33 +49,9 @@ All v4 and v3 [releases](https://github.com/mozilla/pdf.js/releases) are support
 
 Then specify the path to the directory with the `viewer-path` property (`/pdfjs` by default) and PDF file URL with `src` property (should refer to the [same origin](https://github.com/mozilla/pdf.js/wiki/Frequently-Asked-Questions#can-i-load-a-pdf-from-another-server-cross-domain-request)).
 
-## Status
-
-[![npm version](https://img.shields.io/npm/v/pdfjs-viewer-element?logo=npm&logoColor=fff)](https://www.npmjs.com/package/pdfjs-viewer-element)
-[![Package Quality](https://packagequality.com/shield/pdfjs-viewer-element.svg)](https://packagequality.com/#?package=pdfjs-viewer-element)
-[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/pdfjs-viewer-element)
-
-## Support via Ko-fi
-
-If you find `pdfjs-viewer-element` useful and want to support its development, consider making a donation via Ko-fi:
-
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/oleksandrshevchuk)
-
-> ❤️ Your support helps with maintenance, bug fixes, and long-term improvements.
-
-## Docs
-
-[Getting started](https://alekswebnet.github.io/pdfjs-viewer-element/)
-
-[API playground](https://alekswebnet.github.io/pdfjs-viewer-element/#api)
-
-[Live examples](https://alekswebnet.github.io/pdfjs-viewer-element/#demo)
-
-[Demo pages](https://github.com/alekswebnet/pdfjs-viewer-element/tree/master/demo)
-
 ## Install
 
-Using module bundlers:
+### Using module bundlers:
 
 ```bash
 # With npm
@@ -70,7 +66,7 @@ pnpm add pdfjs-viewer-element
 import 'pdfjs-viewer-element'
 ```
 
-Using browser:
+### Using browser and CDN:
 
 ```html
 <script type="module" src="https://cdn.skypack.dev/pdfjs-viewer-element"></script>
