@@ -161,6 +161,7 @@ ${nameddest ? '&nameddest=' + nameddest : ''}`
     else {
       this.iframe.contentDocument?.head.querySelector('style[theme]')?.remove()
     }
+    this.iframe.contentWindow?.PDFViewerApplicationOptions.set('viewerCssTheme', theme)
   }
 
   private setViewerExtraStyles = (styles?: string | null, id = 'extra') => {
