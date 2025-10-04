@@ -46,9 +46,7 @@ If you find `pdfjs-viewer-element` useful and want to support its development, c
 
 The prebuilt comes with each PDF.js release. [PDF.JS releases](https://github.com/mozilla/pdf.js/releases)
 
-✅ All v4 and v3 releases are fully supported.
-
-🚧 For v5 releases - there are some breaking changes that affects styles injecting, and theme changing not work anymore.
+✅ All v3, v5 and v5 releases are fully supported.
 
 After placing the prebuild specify the path to the directory with the `viewer-path` property (`/pdfjs` by default) and PDF file URL with `src` property (should refer to the [same origin](https://github.com/mozilla/pdf.js/wiki/Frequently-Asked-Questions#can-i-load-a-pdf-from-another-server-cross-domain-request)).
 
