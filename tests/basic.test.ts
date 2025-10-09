@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { getFileData, getViewerElement, mountViewer } from './utils'
+import { getFileData, getViewerElement, mountViewer, getIframe } from './utils'
 import '../src/pdfjs-viewer-element'
 
 describe('Basic tests', async () => {
@@ -79,5 +79,17 @@ describe('Basic tests', async () => {
 
     expect(getViewerElement()).exist
     expect(getComputedStyle(getViewerElement('#downloadButton')!).display).eq('none')
+  })
+
+  it('should add a title attribute to the iframe', async () => {
+    const viewerApp = await mountViewer(`
+      <pdfjs-viewer-element 
+        src="/sample-pdf-10MB.pdf" 
+        viewer-path="/pdfjs-5.3.93-dist"
+        iframe-title="Custom title"
+      ></pdfjs-viewer-element>`
+    )
+    expect(getViewerElement()).exist
+    expect(getIframe().title).eq('Custom title')
   })
 })

@@ -1,10 +1,11 @@
-import { elementReady } from "./elementReady";
+import { elementReady } from './elementReady'
 import { debounce } from 'perfect-debounce'
 
 const DEFAULTS = {
   viewerPath: '/pdfjs',
   viewerEntry: '/web/viewer.html',
   src: '',
+  iframeTitle: 'PDF viewer window',
   page: '',
   search: '',
   phrase: '',
@@ -43,7 +44,7 @@ export class PdfjsViewerElement extends HTMLElement {
     const template = document.createElement('template')
     template.innerHTML = `
       <style>:host{width:100%;display:block;overflow:hidden}:host iframe{height:100%}</style>
-      <iframe frameborder="0" width="100%" loading="lazy"></iframe>
+      <iframe frameborder="0" width="100%" loading="lazy" title="${this.getAttribute('iframe-title') || DEFAULTS.iframeTitle}"></iframe>
     `
     shadowRoot.appendChild(template.content.cloneNode(true))
   }
@@ -54,12 +55,12 @@ export class PdfjsViewerElement extends HTMLElement {
     return [
       'src', 'viewer-path', 'page', 'search', 'phrase', 'zoom', 'pagemode', 
       'disable-worker', 'text-layer', 'disable-font-face', 'disable-range', 'disable-stream', 'disable-auto-fetch', 'verbosity', 'locale',
-      'viewer-css-theme', 'viewer-extra-styles', 'viewer-extra-styles-urls', 'nameddest'
+      'viewer-css-theme', 'viewer-extra-styles', 'viewer-extra-styles-urls', 'nameddest', 'iframe-title'
     ]
   }
 
   connectedCallback() {
-    this.iframe = this.shadowRoot!.querySelector('iframe') as PdfjsViewerElementIframe
+    this.iframe = this.shadowRoot?.querySelector('iframe') as PdfjsViewerElementIframe
     document.addEventListener('webviewerloaded', async () => {
       this.setCssTheme(this.getCssThemeOption())
       this.injectExtraStylesLinks(this.getAttribute('viewer-extra-styles-urls') ?? DEFAULTS.viewerExtraStylesUrls)
@@ -68,7 +69,7 @@ export class PdfjsViewerElement extends HTMLElement {
       this.iframe.contentWindow?.PDFViewerApplicationOptions?.set('disablePreferences', true)
       this.iframe.contentWindow?.PDFViewerApplicationOptions?.set('pdfBugEnabled', true)
       this.iframe.contentWindow?.PDFViewerApplicationOptions?.set('eventBusDispatchToDOM', true)
-    });
+    })
   }
 
   attributeChangedCallback(name: string) {
@@ -126,9 +127,10 @@ ${nameddest ? '&nameddest=' + nameddest : ''}`
 
   private mountViewer(src: string) {
     if (!src || !this.iframe) return
-    this.shadowRoot!.replaceChild(this.iframe.cloneNode(), this.iframe)
-    this.iframe = this.shadowRoot!.querySelector('iframe') as PdfjsViewerElementIframe
+    this.shadowRoot?.replaceChild(this.iframe.cloneNode(), this.iframe)
+    this.iframe = this.shadowRoot?.querySelector('iframe') as PdfjsViewerElementIframe
     this.iframe.src = src
+    this.iframe.setAttribute('title', this.getAttribute('iframe-title') || DEFAULTS.iframeTitle)
   }
 
   private getFullPath(path: string) {
@@ -161,7 +163,7 @@ ${nameddest ? '&nameddest=' + nameddest : ''}`
     else {
       this.iframe.contentDocument?.head.querySelector('style[theme]')?.remove()
     }
-    this.iframe.contentWindow?.PDFViewerApplicationOptions.set('viewerCssTheme', theme)
+    this.iframe.contentWindow?.PDFViewerApplicationOptions?.set('viewerCssTheme', theme)
   }
 
   private setViewerExtraStyles = (styles?: string | null, id = 'extra') => {
@@ -190,7 +192,7 @@ ${nameddest ? '&nameddest=' + nameddest : ''}`
   }
 
   public initialize = (): Promise<PdfjsViewerElementIframeWindow['PDFViewerApplication']> => new Promise(async (resolve) => {
-    await elementReady('iframe', this.shadowRoot!)
+    await elementReady('iframe', this.shadowRoot as ShadowRoot)
     this.iframe?.addEventListener('load', async () => {
       await this.iframe.contentWindow?.PDFViewerApplication?.initializedPromise
       resolve(this.iframe.contentWindow?.PDFViewerApplication)

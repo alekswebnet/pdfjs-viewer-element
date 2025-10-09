@@ -22,7 +22,7 @@ export default defineConfig({
       enabled: true,
       // at least one instance is required
       instances: [
-        { browser: 'chrome' }
+        { browser: 'firefox' }
       ]
     }
   },

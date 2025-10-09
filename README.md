@@ -85,6 +85,8 @@ import 'pdfjs-viewer-element'
 
 `viewer-path` - Path to PDF.js [prebuilt](http://mozilla.github.io/pdf.js/getting_started/)
 
+`iframe-title` - The title of the `iframe` element, required for better accessibility
+
 `page` - Page number.
 
 `nameddest` -  Go to a named destination.
@@ -183,6 +185,10 @@ const viewerApp = await viewer.initialize()
 // Open PDF file data using Uint8Array instead of URL
 viewerApp.open({ data: pdfData })
 ```
+
+## Accessablity
+
+Use `iframe-title` to add a title to the `iframe` element and improve accessibility.
 
 ## Known issues
 
