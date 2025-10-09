@@ -186,7 +186,7 @@ const viewerApp = await viewer.initialize()
 viewerApp.open({ data: pdfData })
 ```
 
-## Accessablity
+## Accessiblity
 
 Use `iframe-title` to add a title to the `iframe` element and improve accessibility.
 
