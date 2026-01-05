@@ -28,14 +28,6 @@ Supported in all [major browsers](https://caniuse.com/custom-elementsv1), and wo
 
 [Various usecases](https://github.com/alekswebnet/pdfjs-viewer-element/tree/master/demo)
 
-## Support via Ko-fi
-
-If you find `pdfjs-viewer-element` useful and want to support its development, consider making a donation via Ko-fi:
-
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/oleksandrshevchuk)
-
-> ❤️ Your support helps with maintenance, bug fixes, and long-term improvements.
-
 ## How it works
 
 **⚠️ This is an important part, please read this FIRST !!!**
@@ -224,6 +216,13 @@ If you encounter this issue, you can try disabling the broken functionality of P
 
 `disable-range="true"`
 
+## Support via Ko-fi
+
+If you find `pdfjs-viewer-element` useful and want to support its development, consider making a donation via Ko-fi:
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/oleksandrshevchuk)
+
+> ❤️ Your support helps with maintenance, bug fixes, and long-term improvements.
 
 ## License
 [MIT](http://opensource.org/licenses/MIT)
