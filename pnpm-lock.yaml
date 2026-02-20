@@ -15,6 +15,9 @@ importers:
       '@awlsn/pdfjs-full':
         specifier: ^4.3.1
         version: 4.3.1
+      '@minify-html/node':
+        specifier: ^0.18.1
+        version: 0.18.1
       '@rollup/plugin-terser':
         specifier: ^0.4.4
         version: 0.4.4(rollup@4.52.4)
@@ -307,6 +310,36 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
+
+  '@minify-html/node-darwin-arm64@0.18.1':
+    resolution: {integrity: sha512-sc/VJHRcHtEk0IQP2hRA/TWkAQntaYH3RCw8n750NbfzliQqkyrDqNAGiKBOli7UlhFtG/H2aWqGjtOjIM/dZA==}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@minify-html/node-darwin-x64@0.18.1':
+    resolution: {integrity: sha512-0bff2ng4Vgp3+kdC8zgjd5dMN04zkM4nGuYEVP4dLR7J5NCD/Ka4XD4CKNSDZ9goLYQ8BjtKD6AeDTfJ8KBjrA==}
+    cpu: [x64]
+    os: [darwin]
+
+  '@minify-html/node-linux-arm64@0.18.1':
+    resolution: {integrity: sha512-CVGu5XVmmDrGFuA9/b/695rJBFvfTZFwKJJYA1ZXAsBZrqlKVO4bfXPq9DVNmhQ76ky3LFtVZ/+UsU7xpyK5Qw==}
+    cpu: [arm64]
+    os: [linux]
+
+  '@minify-html/node-linux-x64@0.18.1':
+    resolution: {integrity: sha512-qmIv4kRyhZTKO3nXDXHlFrhnmwIKTM57ZRomlYRYdZTWiFW3CbJ4Ggg57qIgx7D/t4dgyS7/O8OTetrWvmEg9w==}
+    cpu: [x64]
+    os: [linux]
+
+  '@minify-html/node-win32-x64@0.18.1':
+    resolution: {integrity: sha512-SNRE/NvcKXvh4UwXTRrujNSWaCj/3E+FFN+FLOBaN4FY+dZG83h6nWxGHJ5+LAoJxVTU7Al1e8toi4JjHpzv2w==}
+    cpu: [x64]
+    os: [win32]
+
+  '@minify-html/node@0.18.1':
+    resolution: {integrity: sha512-pNOv6z9zUDrjTU1+VcPOnDzGeaaqd6m9kbyHU+sg9O35450uzfke8ahx8gKlFdp/kQFrRn2rFIGAoANUZ62nSw==}
+    engines: {node: '>= 8.6.0'}
+    hasBin: true
 
   '@mswjs/interceptors@0.37.6':
     resolution: {integrity: sha512-wK+5pLK5XFmgtH3aQ2YVvA3HohS3xqV/OxuVOdNx9Wpnz7VE/fnC+e1A7ln6LFYeck7gOJ/dsZV6OLplOtAJ2w==}
@@ -1988,6 +2021,29 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
+
+  '@minify-html/node-darwin-arm64@0.18.1':
+    optional: true
+
+  '@minify-html/node-darwin-x64@0.18.1':
+    optional: true
+
+  '@minify-html/node-linux-arm64@0.18.1':
+    optional: true
+
+  '@minify-html/node-linux-x64@0.18.1':
+    optional: true
+
+  '@minify-html/node-win32-x64@0.18.1':
+    optional: true
+
+  '@minify-html/node@0.18.1':
+    optionalDependencies:
+      '@minify-html/node-darwin-arm64': 0.18.1
+      '@minify-html/node-darwin-x64': 0.18.1
+      '@minify-html/node-linux-arm64': 0.18.1
+      '@minify-html/node-linux-x64': 0.18.1
+      '@minify-html/node-win32-x64': 0.18.1
 
   '@mswjs/interceptors@0.37.6':
     dependencies:

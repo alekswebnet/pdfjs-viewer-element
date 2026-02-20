@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>pdfjs-viewer-element</title>
     <meta name="description" content="A web component for viewing pdf files in the browser, based on PDF.js">
-    <script type="module" src="/src/pdfjs-viewer-element.ts"></script>
+    <script type="module" src="/src/web/pdfjs-viewer-element.ts"></script>
   </head>
   <body style="margin: 0">
-    <pdfjs-viewer-element 
+    <!-- <pdfjs-viewer-element 
       src="/fake-file.pdf" 
       viewer-path="/pdfjs-5.3.93-dist"
       style="height: 600px">
@@ -23,13 +23,12 @@
       style="height: 600px">
     </pdfjs-viewer-element>
     <button onclick="document.querySelector('#hideOpenFileViewer').setAttribute('viewer-extra-styles', '#downloadButton { display: none }')">Hide download button</button>
-    <button onclick="document.querySelector('#hideOpenFileViewer').setAttribute('viewer-extra-styles', '')">Show download button</button>
+    <button onclick="document.querySelector('#hideOpenFileViewer').setAttribute('viewer-extra-styles', '')">Show download button</button> -->
     <pdfjs-viewer-element 
       id="themedViewer"
       src="/sample-pdf-10MB.pdf" 
-      viewer-path="/pdfjs-5.3.93-dist"
       viewer-css-theme="DARK"
-      locale="es"
+      locale="es-AR"
       style="height: 600px">
     </pdfjs-viewer-element>
 
@@ -38,7 +37,7 @@
     <button onclick="document.querySelector('#themedViewer').setAttribute('page', '2')">Change page</button>
     <button onclick="document.querySelector('#themedViewer').setAttribute('page', '1')">Reset page</button>
     <button onclick="document.querySelector('#themedViewer').setAttribute('locale', 'de')">Change locale</button>
-    <button onclick="document.querySelector('#themedViewer').setAttribute('locale', 'es')">Reset locale</button>
+    <button onclick="document.querySelector('#themedViewer').setAttribute('locale', 'es-AR')">Reset locale</button>
     <button onclick="document.querySelector('#themedViewer').setAttribute('text-layer', 'visible')">Change text layer</button>
     <button onclick="document.querySelector('#themedViewer').setAttribute('text-layer', 'none')">Reset text layer</button>
     <button onclick="document.querySelector('#themedViewer').setAttribute('search', 'iss')">Change search text</button>
@@ -46,12 +45,12 @@
     <button onclick="document.querySelector('#themedViewer').setAttribute('phrase', 'true')">Change search phrase</button>
     <button onclick="document.querySelector('#themedViewer').setAttribute('phrase', 'false')">Reset search phrase</button>
 
-    <pdfjs-viewer-element
+    <!-- <pdfjs-viewer-element
       id="base-viewer"
       viewer-path="/pdfjs-5.3.93-dist"
       locale="uk"
       style="height: clamp(600px, 600px, 80dvh)">
-    </pdfjs-viewer-element>
+    </pdfjs-viewer-element> -->
   </body>
 
   <script>
@@ -71,15 +70,15 @@
     'dCAxIDAgUgo+PgpzdGFydHhyZWYKNDkyCiUlRU9G'), (m) => m.codePointAt(0));
 
 
-    document.addEventListener('DOMContentLoaded', async () => {
-      const viewer = document.querySelector('#base-viewer')
-      // viewer.addEventListener('loaded', () => {
-      //   console.log(viewer.iframe)
-      // })
-      // Wait for the viewer initialization
-      const viewerApp = await viewer.initialize()
-      // Open PDF file data using Uint8Array instead of URL
-      viewerApp.open({ data: pdfData })
-    })
+    // document.addEventListener('DOMContentLoaded', async () => {
+    //   const viewer = document.querySelector('#base-viewer')
+    //   // viewer.addEventListener('loaded', () => {
+    //   //   console.log(viewer.iframe)
+    //   // })
+    //   // Wait for the viewer initialization
+    //   const viewerApp = await viewer.initialize()
+    //   // Open PDF file data using Uint8Array instead of URL
+    //   viewerApp.open({ data: pdfData })
+    // })
   </script>
 </html>

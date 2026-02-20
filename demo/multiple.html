@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pdfjs-viewer-element | Multiple demo</title>
+    <script type="module" src="./../dist/pdfjs-viewer-element.js"></script>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <pdfjs-viewer-element
+      src="/public/sample-pdf-with-images.pdf"
+      viewer-css-theme="DARK"
+      locale="de"
+      style="height: 50dvh">
+    </pdfjs-viewer-element>
+    <pdfjs-viewer-element
+      src="/public/sample-pdf-with-images.pdf"
+      locale="pl"
+      style="height: 50dvh">
+    </pdfjs-viewer-element>
+  </body>
+</html>
