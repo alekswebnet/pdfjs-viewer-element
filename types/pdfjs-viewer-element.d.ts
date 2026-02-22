@@ -10,7 +10,8 @@ export declare class PdfjsViewerElement extends HTMLElement {
     iframe: PdfjsViewerElementIframe;
     iframeLocationHash: string;
     static get observedAttributes(): string[];
-    private handleWebviewerLoaded;
+    private applyViewerOptions;
+    private handleViewerLoaded;
     connectedCallback(): Promise<void>;
     attributeChangedCallback(name: string): Promise<void>;
     private getIframeLocationHash;
@@ -20,11 +21,6 @@ export declare class PdfjsViewerElement extends HTMLElement {
     private setCssTheme;
     private setViewerExtraStyles;
     private injectExtraStylesLinks;
-}
-declare global {
-    interface Window {
-        PdfjsViewerElement: typeof PdfjsViewerElement;
-    }
 }
 export interface PdfjsViewerElementIframeWindow extends Window {
     PDFViewerApplication: {

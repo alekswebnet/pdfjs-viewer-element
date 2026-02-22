@@ -37,11 +37,10 @@
 
 
       document.addEventListener('DOMContentLoaded', async () => {
-        const viewer = document.querySelector('#viewer')
-        // Wait for the viewer initialization
-        const viewerApp = await viewer.initialize()
-        // Open PDF file data using Uint8Array instead of URL
-        viewerApp.open({ data: pdfData })
+        document.querySelector('#viewer').addEventListener('initialized', (event) => {
+          const { viewerApp } = event.detail
+          viewerApp.open({ data: pdfData })
+        })
       })
     </script>
   </body>

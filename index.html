@@ -8,10 +8,10 @@
     <script type="module" src="/src/web/pdfjs-viewer-element.ts"></script>
   </head>
   <body style="margin: 0">
-    <!-- <pdfjs-viewer-element 
+    <pdfjs-viewer-element 
       src="/fake-file.pdf" 
       style="height: 600px">
-    </pdfjs-viewer-element> -->
+    </pdfjs-viewer-element>
     <pdfjs-viewer-element 
       id="hideOpenFileViewer"
       iframe-title="Custom title"
@@ -36,18 +36,20 @@
     <button onclick="document.querySelector('#themedViewer').setAttribute('page', '1')">Reset page</button>
     <button onclick="document.querySelector('#themedViewer').setAttribute('locale', 'de')">Change locale</button>
     <button onclick="document.querySelector('#themedViewer').setAttribute('locale', 'pl')">Reset locale</button>
-    <button onclick="document.querySelector('#themedViewer').setAttribute('text-layer', 'visible')">Change text layer</button>
-    <button onclick="document.querySelector('#themedViewer').setAttribute('text-layer', 'none')">Reset text layer</button>
     <button onclick="document.querySelector('#themedViewer').setAttribute('search', 'iss')">Change search text</button>
     <button onclick="document.querySelector('#themedViewer').setAttribute('search', '')">Reset search text</button>
     <button onclick="document.querySelector('#themedViewer').setAttribute('phrase', 'true')">Change search phrase</button>
     <button onclick="document.querySelector('#themedViewer').setAttribute('phrase', 'false')">Reset search phrase</button>
+    <button onclick="document.querySelector('#themedViewer').setAttribute('zoom', '200%')">Change zoom</button>
+    <button onclick="document.querySelector('#themedViewer').setAttribute('zoom', 'auto')">Reset zoom</button>
+    <button onclick="document.querySelector('#themedViewer').setAttribute('pagemode', 'thumbs')">Change page mode</button>
+    <button onclick="document.querySelector('#themedViewer').setAttribute('pagemode', 'none')">Reset page mode</button>
     <hr>
 
     <pdfjs-viewer-element
       id="base-viewer"
       locale="uk"
-      style="height: clamp(600px, 600px, 80dvh)">
+      style="height: clamp(400px, 80dvh, 600px)">
     </pdfjs-viewer-element>
   </body>
 
@@ -69,12 +71,8 @@
 
 
     document.addEventListener('DOMContentLoaded', async () => {
-      document.querySelector('#themedViewer').addEventListener('initialized', (event) => {
-        const viewerApp = event.detail.PDFViewerApplication
-        console.log('Viewer initialized', viewerApp.eventBus)
-      })
       document.querySelector('#base-viewer').addEventListener('initialized', (event) => {
-        const viewerApp = event.detail.PDFViewerApplication
+        const { viewerApp } = event.detail
         viewerApp.open({ data: pdfData })
       })
     })

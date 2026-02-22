@@ -1,4 +1,4 @@
-const PDFJS_VERSION = '5.4.624' // Keep in sync with the version used in the viewer
+const PDFJS_VERSION = '5.4.624'
 
 const DEFAULTS = {
   src: '',
@@ -9,13 +9,6 @@ const DEFAULTS = {
   zoom: '',
   pagemode: 'none',
   locale: '',
-  disableWorker: '',
-  textLayer: '',
-  disableFontFace: '',
-  disableRange: '',
-  disableStream: '',
-  disableAutoFetch: '',
-  verbosity: '',
   viewerCssTheme: 'AUTOMATIC',
   viewerExtraStyles: '',
   viewerExtraStylesUrls: '',
@@ -24,11 +17,11 @@ const DEFAULTS = {
 
 export const ViewerCssTheme = { AUTOMATIC: 0, LIGHT: 1, DARK: 2 } as const
 export const hardRefreshAttributes = [
-  'src', 'disable-worker', 'text-layer', 'disable-font-face', 'disable-range', 'disable-stream', 'disable-auto-fetch', 'verbosity', 'locale', 'viewer-css-theme', 'viewer-extra-styles', 'viewer-extra-styles-urls'
+  'src', 'locale', 'viewer-css-theme', 'viewer-extra-styles', 'viewer-extra-styles-urls'
 ]
 export const allAttributes = [
   ...hardRefreshAttributes, 
-  'page', 'search', 'phrase', 'zoom', 'pagemode', 'nameddest', 'iframe-title'
+  'page', 'search', 'phrase', 'zoom', 'pagemode', 'iframe-title'
 ]
 
 export class PdfjsViewerElement extends HTMLElement {
@@ -37,7 +30,7 @@ export class PdfjsViewerElement extends HTMLElement {
     const shadowRoot = this.attachShadow({ mode: 'open' })
     shadowRoot.innerHTML = `
       <style>:host{width:100%;display:block;overflow:hidden}:host iframe{height:100%}</style>
-      <iframe frameborder="0" width="100%" loading="lazy" title="${this.getAttribute('iframe-title') || DEFAULTS.iframeTitle}"></iframe>
+      <iframe frameborder="0" width="100%" loading="lazy"></iframe>
     `
   }
 
@@ -48,32 +41,36 @@ export class PdfjsViewerElement extends HTMLElement {
     return allAttributes
   }
 
-  private handleWebviewerLoaded = async () => {
-    this.iframe.contentWindow?.PDFViewerApplicationOptions?.set('workerSrc', `https://cdn.jsdelivr.net/npm/pdfjs-dist@${PDFJS_VERSION}/build/pdf.worker.min.mjs`)
+  private applyViewerOptions() {
+    const viewerOptions = this.iframe.contentWindow?.PDFViewerApplicationOptions
+    viewerOptions?.set('workerSrc', `https://cdn.jsdelivr.net/npm/pdfjs-dist@${PDFJS_VERSION}/build/pdf.worker.min.mjs`)
     this.setCssTheme(this.getCssThemeOption())
     this.injectExtraStylesLinks(this.getAttribute('viewer-extra-styles-urls') ?? DEFAULTS.viewerExtraStylesUrls)
     this.setViewerExtraStyles(this.getAttribute('viewer-extra-styles') ?? DEFAULTS.viewerExtraStyles)
-    if (this.getAttribute('src') !== DEFAULTS.src) this.iframe.contentWindow?.PDFViewerApplicationOptions?.set(
-      'defaultUrl',
-      this.getFullPath(this.getAttribute('src') || DEFAULTS.src)
-    )
-    this.iframe.contentWindow?.PDFViewerApplicationOptions?.set('disablePreferences', true)
-    this.iframe.contentWindow?.PDFViewerApplicationOptions?.set('pdfBugEnabled', false)
-    this.iframe.contentWindow?.PDFViewerApplicationOptions?.set('eventBusDispatchToDOM', true)
-    this.iframe.contentWindow?.PDFViewerApplicationOptions?.set('localeProperties', { lang: this.getAttribute('locale') || DEFAULTS.locale })
-
-    if (this.iframe.contentWindow?.PDFViewerApplication) {
-      await this.iframe.contentWindow?.PDFViewerApplication?.initializedPromise
-      this.dispatchEvent(new CustomEvent('initialized', { 
-        detail: { PDFViewerApplication: this.iframe.contentWindow.PDFViewerApplication }, 
-        bubbles: true,
-        composed: true 
-      }))
+    if (this.getAttribute('src') !== DEFAULTS.src) {
+      viewerOptions?.set(
+        'defaultUrl',
+        this.getFullPath(this.getAttribute('src') || DEFAULTS.src)
+      )
     }
+    viewerOptions?.set('disablePreferences', true)
+    viewerOptions?.set('pdfBugEnabled', true)
+    viewerOptions?.set('eventBusDispatchToDOM', true)
+    viewerOptions?.set('localeProperties', { lang: this.getAttribute('locale') || DEFAULTS.locale })
+    return viewerOptions
+  }
+
+  private handleViewerLoaded = async (viewerApp: PdfjsViewerElementIframeWindow['PDFViewerApplication']) => {
+    const viewerOptions = this.applyViewerOptions()
+    await viewerApp.initializedPromise
+    this.dispatchEvent(new CustomEvent('initialized', { 
+      detail: { viewerApp, viewerOptions }, 
+      bubbles: true,
+      composed: true 
+    }))
   }
 
   async connectedCallback() {
-    console.log('Connecting viewer element', this)
     this.iframe = this.shadowRoot?.querySelector('iframe') as PdfjsViewerElementIframe
     this.iframe.setAttribute('title', this.getAttribute('iframe-title') || DEFAULTS.iframeTitle)
     this.iframeLocationHash = this.getIframeLocationHash()
@@ -82,15 +79,14 @@ export class PdfjsViewerElement extends HTMLElement {
       await this.loadViewerResources()
     }
     this.iframe.addEventListener('load', () => {
-      console.log('Viewer iframe loaded')
-      const callback = this.handleWebviewerLoaded
+      const loadedCallback = this.handleViewerLoaded
       Object.defineProperty(this.iframe.contentWindow, 'PDFViewerApplication', {
-        async set() {
+        async set(value: PdfjsViewerElementIframeWindow['PDFViewerApplication']) {
           await this.PDFViewerApplication?.initializedPromise
-          await callback()
-          return true;
+          await loadedCallback(value)
+          return true
         },
-        configurable: true,
+        configurable: true
       });
     });
   }
@@ -107,31 +103,19 @@ export class PdfjsViewerElement extends HTMLElement {
   }
 
   private getIframeLocationHash() {
-  const params: Record<string, string> = {
-    page: this.getAttribute('page') || DEFAULTS.page,
-    zoom: this.getAttribute('zoom') || DEFAULTS.zoom,
-    pagemode: this.getAttribute('pagemode') || DEFAULTS.pagemode,
-    search: this.getAttribute('search') || DEFAULTS.search,
-    phrase: this.getAttribute('phrase') || DEFAULTS.phrase,
-    textLayer: this.getAttribute('text-layer') || DEFAULTS.textLayer,
-    disableWorker: this.getAttribute('disable-worker') || DEFAULTS.disableWorker,
-    disableFontFace: this.getAttribute('disable-font-face') || DEFAULTS.disableFontFace,
-    disableRange: this.getAttribute('disable-range') || DEFAULTS.disableRange,
-    disableStream: this.getAttribute('disable-stream') || DEFAULTS.disableStream,
-    disableAutoFetch: this.getAttribute('disable-auto-fetch') || DEFAULTS.disableAutoFetch,
-    verbosity: this.getAttribute('verbosity') || DEFAULTS.verbosity,
-    viewerCssTheme: this.getAttribute('viewer-css-theme') || DEFAULTS.viewerCssTheme,
-    viewerExtraStyles: String(Boolean(this.getAttribute('viewer-extra-styles') || DEFAULTS.viewerExtraStyles)),
+    const params: Record<string, string> = {
+      page: this.getAttribute('page') || DEFAULTS.page,
+      zoom: this.getAttribute('zoom') || DEFAULTS.zoom,
+      pagemode: this.getAttribute('pagemode') || DEFAULTS.pagemode,
+      search: this.getAttribute('search') || DEFAULTS.search,
+      phrase: this.getAttribute('phrase') || DEFAULTS.phrase,
+      viewerCssTheme: this.getAttribute('viewer-css-theme') || DEFAULTS.viewerCssTheme,
+      viewerExtraStyles: String(Boolean(this.getAttribute('viewer-extra-styles') || DEFAULTS.viewerExtraStyles)),
+    }
+    const locale = this.getAttribute('locale')
+    if (locale) params.locale = locale
+    return '#' + Object.entries(params).map(([k, v]) => `${k}=${v}`).join('&')
   }
-
-  const locale = this.getAttribute('locale')
-  const nameddest = this.getAttribute('nameddest')
-
-  if (locale) params.locale = locale
-  if (nameddest) params.nameddest = nameddest
-
-  return '#' + Object.entries(params).map(([k, v]) => `${k}=${v}`).join('&')
-}
 
   private async loadViewerResources() {
     return new Promise<void>(async (resolve) => {
@@ -141,18 +125,14 @@ export class PdfjsViewerElement extends HTMLElement {
         import('../build/pdf.min.mjs?raw'),
         import('./viewer.min.mjs?raw')
       ])
-
       const completeHtml = viewerEntry.default
         .replace('</head>', `
           <style>${viewerCss.default}</style>
         </head>`)
-
       this.iframe.srcdoc = completeHtml
-
       this.iframe.addEventListener('load', async () => {
         const doc = this.iframe.contentDocument as Document;
         const locale = this.getAttribute('locale')
-
         if (locale) {
           const localesData = await import('../web/locale/locale.json?raw')
           const supportedLocales = Object.keys(JSON.parse(localesData.default))
@@ -167,17 +147,14 @@ export class PdfjsViewerElement extends HTMLElement {
             doc.head.appendChild(localeLink)
           }
         }
-
         const pdfjsScript = doc.createElement('script');
         pdfjsScript.type = 'module';
         pdfjsScript.textContent = pdfjsBuild.default;
         doc.head.appendChild(pdfjsScript);
-
         const viewerScript = doc.createElement('script');
         viewerScript.type = 'module';
         viewerScript.textContent = viewerBuild.default;
         doc.head.appendChild(viewerScript);
-
         resolve()
       })
     }), { once: true }
@@ -242,12 +219,6 @@ export class PdfjsViewerElement extends HTMLElement {
   }
 }
 
-declare global {
-  interface Window {
-    PdfjsViewerElement: typeof PdfjsViewerElement
-  }
-}
-
 export interface PdfjsViewerElementIframeWindow extends Window {
   PDFViewerApplication: {
     initializedPromise: Promise<void>;
@@ -268,6 +239,5 @@ export interface PdfjsViewerElementIframe extends HTMLIFrameElement {
 export default PdfjsViewerElement
 
 if (!window.customElements.get('pdfjs-viewer-element')) {
-  window.PdfjsViewerElement = PdfjsViewerElement
   window.customElements.define('pdfjs-viewer-element', PdfjsViewerElement)
 }
