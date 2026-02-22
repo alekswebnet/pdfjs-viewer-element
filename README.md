@@ -14,9 +14,13 @@ Supported in all [major browsers](https://caniuse.com/custom-elementsv1), and wo
 
 ## Features
 
-- Simple PDF.js viewer integration to any web application
-- PDF.js viewer options and parameters support, access the viewer application instance
-- Customize viewer styles and themes
+- Standalone web component with no runtime dependencies
+- Drop-in, iframe-based PDF.js default viewer for any web app
+- Configure via attributes and URL parameters (page, zoom, search, pagemode, locale, named destination)
+- Programmatic access to `PDFViewerApplication` and `PDFViewerApplicationOptions` via the `initialized` event
+- Theme control (automatic/light/dark) plus custom CSS injection or external stylesheets
+- Locale override support using PDF.js viewer locales
+- Works in modern browsers and most JS frameworks
 
 ## Docs
 
@@ -24,23 +28,7 @@ Supported in all [major browsers](https://caniuse.com/custom-elementsv1), and wo
 
 [API playground](https://alekswebnet.github.io/pdfjs-viewer-element/#api)
 
-[Usage with frameworks](https://alekswebnet.github.io/pdfjs-viewer-element/#demo)
-
-[Various usecases](https://github.com/alekswebnet/pdfjs-viewer-element/tree/master/demo)
-
-## How it works
-
-**⚠️ This is an important part, please read this FIRST !!!**
-
- **You should download and place the PDF.js prebuilt files in the project.**
-
-`pdfjs-viewer-element` requires [PDF.js prebuilt](http://mozilla.github.io/pdf.js/getting_started/), that includes the generic build of PDF.js and the viewer.
-
-The prebuilt comes with each PDF.js release. [PDF.JS releases](https://github.com/mozilla/pdf.js/releases)
-
-✅ All v3, v4 and v5 releases are fully supported.
-
-After placing the prebuild specify the path to the directory with the `viewer-path` property (`/pdfjs` by default) and PDF file URL with `src` property (should refer to the [same origin](https://github.com/mozilla/pdf.js/wiki/Frequently-Asked-Questions#can-i-load-a-pdf-from-another-server-cross-domain-request)).
+[Various use cases](https://github.com/alekswebnet/pdfjs-viewer-element/tree/master/demo)
 
 ## Install
 
@@ -49,8 +37,6 @@ After placing the prebuild specify the path to the directory with the `viewer-pa
 ```bash
 # With npm
 npm install pdfjs-viewer-element
-# With yarn
-yarn add pdfjs-viewer-element
 # With pnpm
 pnpm add pdfjs-viewer-element
 ```
@@ -68,20 +54,16 @@ import 'pdfjs-viewer-element'
 ## Usage
 
 ```html
-<pdfjs-viewer-element src="/file.pdf" viewer-path="/pdfjs-5.3.93-dist"></pdfjs-viewer-element>
+<pdfjs-viewer-element src="path-to/file.pdf"></pdfjs-viewer-element>
 ```
 
 ## Attributes
 
 `src` - PDF file URL, should refer to the [same origin](https://github.com/mozilla/pdf.js/wiki/Frequently-Asked-Questions#can-i-load-a-pdf-from-another-server-cross-domain-request) 
 
-`viewer-path` - Path to PDF.js [prebuilt](http://mozilla.github.io/pdf.js/getting_started/)
-
 `iframe-title` - The title of the `iframe` element, required for better accessibility
 
 `page` - Page number.
-
-`nameddest` -  Go to a named destination.
 
 `search` - Search text.
 
@@ -91,20 +73,6 @@ import 'pdfjs-viewer-element'
 
 `pagemode` - Page mode, `thumbs | bookmarks | attachments | layers | none`.
 
-`disable-worker` - Disables the worker, `true` to enable.
-
-`text-layer` - Disables or reveals the text layer that is used for text selection, `off | visible | shadow | hover`.
-
-`disable-font-face` - Disables standard `@font-face` font loading and uses the internal font renderer instead, `true` to enable.
-
-`disable-range` - Disables HTTP range requests when fetching the document, `true` to enable.
-
-`disable-stream` - Disables streaming when fetching the document, `true` to enable.
-
-`disable-auto-fetch`- Disables auto fetching of the document; only gets necessary data to display the current view. Note: streaming also needs to be disabled for this to have any effect, `true` to enable.
-
-`verbosity`- Specifies the verbosity level of console messages. `0` - only errors, `1` - warnings and errors, `5` - warnings, errors and information messages.
-
 `locale` -  Specifies which language to use in the viewer UI, `en-US | ...`. [Available locales](https://github.com/mozilla/pdf.js/tree/master/l10n)
 
 `viewer-css-theme` - Apply automatic, light, or dark theme, `AUTOMATIC | LIGHT | DARK`
@@ -113,7 +81,7 @@ import 'pdfjs-viewer-element'
 
 `viewer-extra-styles-urls` - Add external CSS files to the viewer application, pass an array with URLs.
 
-Play with attributes on [Api docs page](https://alekswebnet.github.io/pdfjs-viewer-element/#api).
+Play with attributes on [API docs page](https://alekswebnet.github.io/pdfjs-viewer-element/#api).
 
 ## Viewer CSS theme
 
@@ -122,7 +90,6 @@ Use `viewer-css-theme` attribute to set light or dark theme manually:
 ```html
 <pdfjs-viewer-element 
   src="/file.pdf" 
-  viewer-path="/pdfjs-5.3.93-dist"
   viewer-css-theme="DARK">
 </pdfjs-viewer-element>
 ```
@@ -134,7 +101,6 @@ You can add your own CSS rules to the viewer application using `viewer-extra-sty
 ```html
 <pdfjs-viewer-element 
   src="/file.pdf" 
-  viewer-path="/pdfjs-5.3.93-dist"
   viewer-extra-styles="#toolbarViewerMiddle { display: none; }"
   viewer-extra-styles-urls="['/demo/viewer-custom-theme.css']">
 </pdfjs-viewer-element>
@@ -162,23 +128,30 @@ Build your own theme with viewer's custom variables and `viewer-extra-styles-url
 }
 ```
 
-## PDF.js Viewer Application
-
-`initialize` - using this method you can access PDFViewerApplication and use methods and events of PDF.js default viewer
+## PDF.js Viewer Application and Options
 
 ```html
-<pdfjs-viewer-element viewer-path="/pdfjs-5.3.93-dist"></pdfjs-viewer-element>
+<pdfjs-viewer-element></pdfjs-viewer-element>
 ```
 
 ```javascript
-const viewer = document.querySelector('pdfjs-viewer-element')
-// Wait for the viewer initialization, receive PDFViewerApplication
-const viewerApp = await viewer.initialize()
-// Open PDF file data using Uint8Array instead of URL
-viewerApp.open({ data: pdfData })
+// Open PDF file programmatically accessing the viewer application
+document.addEventListener('DOMContentLoaded', async () => {
+  document.querySelector('pdfjs-viewer-element').addEventListener('initialized', (event) => {
+    const { viewerApp, viewerOptions } = event.detail
+    viewerApp.open({ data: pdfData })
+  })
+})
 ```
 
-## Accessiblity
+## Events
+
+`initialized` - Fired after the PDF.js viewer is ready (after `PDFViewerApplication.initializedPromise` resolves). The event `detail` contains:
+
+- `viewerApp` (`PDFViewerApplication`)
+- `viewerOptions` (`PDFViewerApplicationOptions`)
+
+## Accessibility
 
 Use `iframe-title` to add a title to the `iframe` element and improve accessibility.
 
@@ -188,7 +161,7 @@ Use `iframe-title` to add a title to the `iframe` element and improve accessibil
 
 Since v4 PDF.js requires `.mjs` files support, make sure your server has it.
 
-In case of `nginx` this may causes to errors, see https://github.com/mozilla/pdf.js/issues/17296
+In case of `nginx` this may cause errors, see https://github.com/mozilla/pdf.js/issues/17296
 
 Add `.mjs` files support for `nginx` example:
 
@@ -208,13 +181,6 @@ server {
     }
 }
 ```
-
-### Problem with range requests / streaming
-
-Sometimes a PDF file fails to load when working with range requests / streaming.
-If you encounter this issue, you can try disabling the broken functionality of PDF.js:
-
-`disable-range="true"`
 
 ## Support via Ko-fi
 
