@@ -1,4 +1,4 @@
-import { IPdfjsViewerElement, PdfjsViewerElementIframe } from "../src/pdfjs-viewer-element"
+import { PdfjsViewerElementIframe } from "../src/web/pdfjs-viewer-element"
 
 export const getIframe = (): PdfjsViewerElementIframe => {
   return document.body.querySelector('pdfjs-viewer-element')?.shadowRoot?.querySelector('iframe') as PdfjsViewerElementIframe
@@ -13,7 +13,12 @@ export const mountViewer = async (template: string) => {
   document.body.innerHTML = template
 
   const viewer = document.body.querySelector('pdfjs-viewer-element')
-  return await (viewer as IPdfjsViewerElement).initialize()
+  return await new Promise<PdfjsViewerElementIframe['contentWindow']['PDFViewerApplication']>((resolve) => {
+    viewer?.addEventListener('initialized', (event) => {
+      const viewerApp = (event as CustomEvent).detail.PDFViewerApplication
+      resolve(viewerApp)
+    })
+  })
 }
 
 export const getFileData = () => {

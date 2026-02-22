@@ -10,47 +10,45 @@
   <body style="margin: 0">
     <!-- <pdfjs-viewer-element 
       src="/fake-file.pdf" 
-      viewer-path="/pdfjs-5.3.93-dist"
       style="height: 600px">
-    </pdfjs-viewer-element>
+    </pdfjs-viewer-element> -->
     <pdfjs-viewer-element 
       id="hideOpenFileViewer"
       iframe-title="Custom title"
       src="/sample-pdf-with-images.pdf" 
-      viewer-path="/pdfjs-5.3.93-dist"
       locale="de"
       page="2"
       style="height: 600px">
     </pdfjs-viewer-element>
     <button onclick="document.querySelector('#hideOpenFileViewer').setAttribute('viewer-extra-styles', '#downloadButton { display: none }')">Hide download button</button>
-    <button onclick="document.querySelector('#hideOpenFileViewer').setAttribute('viewer-extra-styles', '')">Show download button</button> -->
-    <pdfjs-viewer-element 
+    <button onclick="document.querySelector('#hideOpenFileViewer').setAttribute('viewer-extra-styles', '')">Show download button</button>
+     
+    <pdfjs-viewer-element
       id="themedViewer"
       src="/sample-pdf-10MB.pdf" 
-      viewer-css-theme="DARK"
-      locale="es-AR"
       style="height: 600px">
     </pdfjs-viewer-element>
 
-    <button onclick="document.querySelector('#themedViewer').setAttribute('viewer-css-theme', 'LIGHT')">Change theme</button>
-    <button onclick="document.querySelector('#themedViewer').setAttribute('viewer-css-theme', 'DARK')">Reset theme</button>
+    <hr>
+    <button onclick="document.querySelector('#themedViewer').setAttribute('viewer-css-theme', 'DARK')">Change theme</button>
+    <button onclick="document.querySelector('#themedViewer').setAttribute('viewer-css-theme', 'AUTOMATIC')">Reset theme</button>
     <button onclick="document.querySelector('#themedViewer').setAttribute('page', '2')">Change page</button>
     <button onclick="document.querySelector('#themedViewer').setAttribute('page', '1')">Reset page</button>
     <button onclick="document.querySelector('#themedViewer').setAttribute('locale', 'de')">Change locale</button>
-    <button onclick="document.querySelector('#themedViewer').setAttribute('locale', 'es-AR')">Reset locale</button>
+    <button onclick="document.querySelector('#themedViewer').setAttribute('locale', 'pl')">Reset locale</button>
     <button onclick="document.querySelector('#themedViewer').setAttribute('text-layer', 'visible')">Change text layer</button>
     <button onclick="document.querySelector('#themedViewer').setAttribute('text-layer', 'none')">Reset text layer</button>
     <button onclick="document.querySelector('#themedViewer').setAttribute('search', 'iss')">Change search text</button>
     <button onclick="document.querySelector('#themedViewer').setAttribute('search', '')">Reset search text</button>
     <button onclick="document.querySelector('#themedViewer').setAttribute('phrase', 'true')">Change search phrase</button>
     <button onclick="document.querySelector('#themedViewer').setAttribute('phrase', 'false')">Reset search phrase</button>
+    <hr>
 
-    <!-- <pdfjs-viewer-element
+    <pdfjs-viewer-element
       id="base-viewer"
-      viewer-path="/pdfjs-5.3.93-dist"
       locale="uk"
       style="height: clamp(600px, 600px, 80dvh)">
-    </pdfjs-viewer-element> -->
+    </pdfjs-viewer-element>
   </body>
 
   <script>
@@ -70,15 +68,15 @@
     'dCAxIDAgUgo+PgpzdGFydHhyZWYKNDkyCiUlRU9G'), (m) => m.codePointAt(0));
 
 
-    // document.addEventListener('DOMContentLoaded', async () => {
-    //   const viewer = document.querySelector('#base-viewer')
-    //   // viewer.addEventListener('loaded', () => {
-    //   //   console.log(viewer.iframe)
-    //   // })
-    //   // Wait for the viewer initialization
-    //   const viewerApp = await viewer.initialize()
-    //   // Open PDF file data using Uint8Array instead of URL
-    //   viewerApp.open({ data: pdfData })
-    // })
+    document.addEventListener('DOMContentLoaded', async () => {
+      document.querySelector('#themedViewer').addEventListener('initialized', (event) => {
+        const viewerApp = event.detail.PDFViewerApplication
+        console.log('Viewer initialized', viewerApp.eventBus)
+      })
+      document.querySelector('#base-viewer').addEventListener('initialized', (event) => {
+        const viewerApp = event.detail.PDFViewerApplication
+        viewerApp.open({ data: pdfData })
+      })
+    })
   </script>
 </html>
