@@ -7,14 +7,7 @@ settings:
 importers:
 
   .:
-    dependencies:
-      perfect-debounce:
-        specifier: ^1.0.0
-        version: 1.0.0
     devDependencies:
-      '@awlsn/pdfjs-full':
-        specifier: ^4.3.1
-        version: 4.3.1
       '@rollup/plugin-terser':
         specifier: ^0.4.4
         version: 0.4.4(rollup@4.52.4)
@@ -44,9 +37,6 @@ packages:
 
   '@asamuzakjp/css-color@3.2.0':
     resolution: {integrity: sha512-K1A6z8tS3XsmCMM86xoWdn7Fkdn9m6RSVtocUrJYIwZnFVkng/PvkEoWtOWmP+Scc6saYWHWZYbndEEXxl24jw==}
-
-  '@awlsn/pdfjs-full@4.3.1':
-    resolution: {integrity: sha512-YQ1jw9fbEcq9Lo4e9q/N2ueDPxChyGMhBS+qMLARxkq4vkS6DEwHTqpju5gUt/ZIi0saGdGRhxcL3PSEQoXIPw==}
 
   '@babel/code-frame@7.27.1':
     resolution: {integrity: sha512-cjQ7ZlQ0Mv3b47hABuTevyTuYN4i+loJKGeV9flcCgIK37cCXRh+L1bd3iBHlynerhQ7BhCkn2BPbQUL+rGqFg==}
@@ -1271,9 +1261,6 @@ packages:
   pend@1.2.0:
     resolution: {integrity: sha512-F3asv42UuXchdzt+xXqfW1OGlVBe+mxa2mqI0pg5yAHZPvFmY3Y6drSf/GQ1A86WgWEN9Kzh/WrgKa6iGcHXLg==}
 
-  perfect-debounce@1.0.0:
-    resolution: {integrity: sha512-xCy9V055GLEqoFaHoC1SoLIaLmWctgCUaBaWxDZ7/Zx4CTyX7cJQLJOok/orfjZAh9kEYpjJa4d0KcJmCbctZA==}
-
   picocolors@1.1.1:
     resolution: {integrity: sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==}
 
@@ -1801,8 +1788,6 @@ snapshots:
       '@csstools/css-parser-algorithms': 3.0.5(@csstools/css-tokenizer@3.0.4)
       '@csstools/css-tokenizer': 3.0.4
       lru-cache: 10.4.3
-
-  '@awlsn/pdfjs-full@4.3.1': {}
 
   '@babel/code-frame@7.27.1':
     dependencies:
@@ -3009,8 +2994,6 @@ snapshots:
   pathval@2.0.1: {}
 
   pend@1.2.0: {}
-
-  perfect-debounce@1.0.0: {}
 
   picocolors@1.1.1: {}
 

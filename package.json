@@ -1,6 +1,6 @@
 {
   "name": "pdfjs-viewer-element",
-  "version": "2.7.4",
+  "version": "3.0.0",
   "license": "MIT",
   "author": {
     "name": "Oleksandr Shevchuk",
@@ -38,7 +38,6 @@
     "coverage": "vitest run --coverage"
   },
   "devDependencies": {
-    "@awlsn/pdfjs-full": "^4.3.1",
     "@rollup/plugin-terser": "^0.4.4",
     "@types/node": "^22.18.8",
     "@vitest/browser": "^3.2.4",
@@ -47,9 +46,5 @@
     "vite": "^6.3.6",
     "vitest": "^3.2.4",
     "webdriverio": "^9.20.0"
-  },
-  "packageManager": "pnpm@9.7.0+sha512.dc09430156b427f5ecfc79888899e1c39d2d690f004be70e05230b72cb173d96839587545d09429b55ac3c429c801b4dc3c0e002f653830a420fa2dd4e3cf9cf",
-  "dependencies": {
-    "perfect-debounce": "^1.0.0"
   }
 }

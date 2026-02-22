@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>pdfjs-viewer-element | Opened find bar demo</title>
-    <script type="module" src="https://cdn.skypack.dev/pdfjs-viewer-element"></script>
+    <script type="module" src="../dist/pdfjs-viewer-element.js"></script>
     <style>
       body {
         margin: 0;
@@ -17,21 +17,19 @@
     <pdfjs-viewer-element
       id="viewer"
       src="/public/sample-pdf-with-images.pdf"
-      viewer-path="/public/pdfjs-5.3.93-dist"
       style="height: 100dvh">
     </pdfjs-viewer-element>
 
     <script>
       document.addEventListener('DOMContentLoaded', async () => {
-        const viewer = document.querySelector('#viewer')
-        // Wait for the viewer initialization
-        const viewerApp = await viewer.initialize()
-        // Wait for pages loaded, open find bar and search
-        viewerApp.eventBus.on('pagesloaded', () => {
-          viewerApp.findBar.open()
-          viewerApp.findBar.findField.value = 'na' 
-          viewerApp.findBar.highlightAll.checked = true
-          viewerApp.findBar.findNextButton.click()
+        document.querySelector('#viewer').addEventListener('initialized', (event) => {
+          const { viewerApp } = event.detail
+          viewerApp.eventBus.on('pagesloaded', () => {
+            viewerApp.findBar.open()
+            viewerApp.findBar.findField.value = 'na' 
+            viewerApp.findBar.highlightAll.checked = true
+            viewerApp.findBar.findNextButton.click()
+          })
         })
       })
     </script>

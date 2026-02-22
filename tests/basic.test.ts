@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { getFileData, getViewerElement, mountViewer, getIframe } from './utils'
-import '../src/pdfjs-viewer-element'
+import '../src/web/pdfjs-viewer-element'
 
 describe('Basic tests', async () => {
   it('should render the PDF file', async () => {
@@ -13,7 +13,7 @@ describe('Basic tests', async () => {
     expect(getViewerElement()).exist
 
     viewerApp.eventBus.on('pagesloaded', () => {
-      expect(getViewerElement('#numPages')?.textContent).contain('37')
+      expect(getViewerElement('#viewer .page')).exist
     })
   })
 
@@ -21,28 +21,15 @@ describe('Basic tests', async () => {
     await mountViewer(`
       <pdfjs-viewer-element 
         src="/fake-file.pdf" 
-        viewer-path="/pdfjs-5.3.93-dist"
       ></pdfjs-viewer-element>`
     )
     expect(getViewerElement()).exist
     expect(getViewerElement('#viewer .page')).not.exist
   })
 
-  it('should not render the viewer with wrong viewer path', async () => {
-    await mountViewer(`
-      <pdfjs-viewer-element 
-        src="/sample-pdf-10MB.pdf" 
-        viewer-path="/fake-dist"
-      ></pdfjs-viewer-element>`
-    )
-    expect(getViewerElement()).not.exist
-  })
-
   it('should open the external file with base64 source', async () => {
     const viewerApp = await mountViewer(`
-      <pdfjs-viewer-element 
-        viewer-path="/pdfjs-5.3.93-dist"
-      ></pdfjs-viewer-element>`
+      <pdfjs-viewer-element></pdfjs-viewer-element>`
     )
 
     expect(getViewerElement()).exist
@@ -59,7 +46,6 @@ describe('Basic tests', async () => {
     await mountViewer(`
       <pdfjs-viewer-element 
         src="/sample-pdf-10MB.pdf" 
-        viewer-path="/pdfjs-5.3.93-dist"
         viewer-css-theme="DARK"
       ></pdfjs-viewer-element>`
     )
@@ -72,7 +58,6 @@ describe('Basic tests', async () => {
     await mountViewer(`
       <pdfjs-viewer-element 
         src="/sample-pdf-10MB.pdf" 
-        viewer-path="/pdfjs-5.3.93-dist"
         viewer-extra-styles="#downloadButton { display: none }"
       ></pdfjs-viewer-element>`
     )
@@ -85,7 +70,6 @@ describe('Basic tests', async () => {
     const viewerApp = await mountViewer(`
       <pdfjs-viewer-element 
         src="/sample-pdf-10MB.pdf" 
-        viewer-path="/pdfjs-5.3.93-dist"
         iframe-title="Custom title"
       ></pdfjs-viewer-element>`
     )
