@@ -48,7 +48,7 @@ import 'pdfjs-viewer-element'
 ### Using browser and CDN:
 
 ```html
-<script type="module" src="https://cdn.skypack.dev/pdfjs-viewer-element"></script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/pdfjs-viewer-element"></script>
 ```
 
 ## Usage

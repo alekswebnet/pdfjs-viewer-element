@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>pdfjs-viewer-element</title>
     <meta name="description" content="A web component for viewing pdf files in the browser, based on PDF.js">
-    <script type="module" src="/src/web/pdfjs-viewer-element.ts"></script>
+    <script type="module" src="./src/pdfjs-viewer-element.ts"></script>
   </head>
   <body style="margin: 0">
     <pdfjs-viewer-element 
@@ -22,7 +22,7 @@
     </pdfjs-viewer-element>
     <button onclick="document.querySelector('#hideOpenFileViewer').setAttribute('viewer-extra-styles', '#downloadButton { display: none }')">Hide download button</button>
     <button onclick="document.querySelector('#hideOpenFileViewer').setAttribute('viewer-extra-styles', '')">Show download button</button>
-     
+
     <pdfjs-viewer-element
       id="themedViewer"
       src="/sample-pdf-10MB.pdf" 

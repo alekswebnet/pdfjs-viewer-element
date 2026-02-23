@@ -1,6 +1,6 @@
 {
   "name": "pdfjs-viewer-element",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "license": "MIT",
   "author": {
     "name": "Oleksandr Shevchuk",
@@ -19,6 +19,10 @@
   "module": "./dist/pdfjs-viewer-element.js",
   "types": "types/pdfjs-viewer-element.d.ts",
   "type": "module",
+  "exports": {
+    ".": "./dist/pdfjs-viewer-element.js",
+    "./dist/*": "./dist/*"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alekswebnet/pdfjs-viewer-element.git"

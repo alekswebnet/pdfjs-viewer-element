@@ -1,3 +1,6 @@
+import * as viewerEntry from './web/viewer-min.html?raw'
+import * as viewerCss from './web/viewer.css?inline'
+
 const PDFJS_VERSION = '5.4.624'
 
 const DEFAULTS = {
@@ -119,11 +122,9 @@ export class PdfjsViewerElement extends HTMLElement {
 
   private async loadViewerResources() {
     return new Promise<void>(async (resolve) => {
-      const [viewerEntry, viewerCss, pdfjsBuild, viewerBuild] = await Promise.all([
-        import('../web/viewer-min.html?raw'),
-        import('../web/viewer.css?inline'),
-        import('../build/pdf.min.mjs?raw'),
-        import('./viewer.min.mjs?raw')
+      const [pdfjsBuild, viewerBuild] = await Promise.all([
+        import('./build/pdf.min.mjs?raw'),
+        import('./web/viewer.min.mjs?raw')
       ])
       const completeHtml = viewerEntry.default
         .replace('</head>', `
@@ -134,7 +135,7 @@ export class PdfjsViewerElement extends HTMLElement {
         const doc = this.iframe.contentDocument as Document;
         const locale = this.getAttribute('locale')
         if (locale) {
-          const localesData = await import('../web/locale/locale.json?raw')
+          const localesData = await import('./web/locale/locale.json?raw')
           const supportedLocales = Object.keys(JSON.parse(localesData.default))
           if (supportedLocales.includes(locale as string)) {
             const localeObject = {

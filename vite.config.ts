@@ -7,7 +7,7 @@ export default defineConfig({
     lib: {
       name: 'PdfjsViewerElement',
       fileName: 'pdfjs-viewer-element',
-      entry: 'src/web/pdfjs-viewer-element.ts',
+      entry: 'src/pdfjs-viewer-element.ts',
       formats: ['es']
     },
     copyPublicDir: false
