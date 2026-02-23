@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { getFileData, getViewerElement, mountViewer, getIframe } from './utils'
-import '../src/web/pdfjs-viewer-element'
+import '../src/pdfjs-viewer-element'
 
 describe('Basic tests', async () => {
   it('should render the PDF file', async () => {
