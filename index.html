@@ -6,6 +6,7 @@
     <title>pdfjs-viewer-element</title>
     <meta name="description" content="A web component for viewing pdf files in the browser, based on PDF.js">
     <script type="module" src="./src/pdfjs-viewer-element.ts"></script>
+    <script type="module" src="./index.js"></script>
   </head>
   <body style="margin: 0">
     <pdfjs-viewer-element 
@@ -20,8 +21,7 @@
       page="2"
       style="height: 600px">
     </pdfjs-viewer-element>
-    <button onclick="document.querySelector('#hideOpenFileViewer').setAttribute('viewer-extra-styles', '#downloadButton { display: none }')">Hide download button</button>
-    <button onclick="document.querySelector('#hideOpenFileViewer').setAttribute('viewer-extra-styles', '')">Show download button</button>
+    <button onclick="toggleDownloadButton(document.querySelector('#hideOpenFileViewer'))">Toggle download button</button>
 
     <pdfjs-viewer-element
       id="themedViewer"
@@ -52,29 +52,4 @@
       style="height: clamp(400px, 80dvh, 600px)">
     </pdfjs-viewer-element>
   </body>
-
-  <script>
-    const pdfData = Uint8Array.from(atob(
-    'JVBERi0xLjcKCjEgMCBvYmogICUgZW50cnkgcG9pbnQKPDwKICAvVHlwZSAvQ2F0YWxvZwog' +
-    'IC9QYWdlcyAyIDAgUgo+PgplbmRvYmoKCjIgMCBvYmoKPDwKICAvVHlwZSAvUGFnZXMKICAv' +
-    'TWVkaWFCb3ggWyAwIDAgMjAwIDIwMCBdCiAgL0NvdW50IDEKICAvS2lkcyBbIDMgMCBSIF0K' +
-    'Pj4KZW5kb2JqCgozIDAgb2JqCjw8CiAgL1R5cGUgL1BhZ2UKICAvUGFyZW50IDIgMCBSCiAg' +
-    'L1Jlc291cmNlcyA8PAogICAgL0ZvbnQgPDwKICAgICAgL0YxIDQgMCBSIAogICAgPj4KICA+' +
-    'PgogIC9Db250ZW50cyA1IDAgUgo+PgplbmRvYmoKCjQgMCBvYmoKPDwKICAvVHlwZSAvRm9u' +
-    'dAogIC9TdWJ0eXBlIC9UeXBlMQogIC9CYXNlRm9udCAvVGltZXMtUm9tYW4KPj4KZW5kb2Jq' +
-    'Cgo1IDAgb2JqICAlIHBhZ2UgY29udGVudAo8PAogIC9MZW5ndGggNDQKPj4Kc3RyZWFtCkJU' +
-    'CjcwIDUwIFRECi9GMSAxMiBUZgooSGVsbG8sIHdvcmxkISkgVGoKRVQKZW5kc3RyZWFtCmVu' +
-    'ZG9iagoKeHJlZgowIDYKMDAwMDAwMDAwMCA2NTUzNSBmIAowMDAwMDAwMDEwIDAwMDAwIG4g' +
-    'CjAwMDAwMDAwNzkgMDAwMDAgbiAKMDAwMDAwMDE3MyAwMDAwMCBuIAowMDAwMDAwMzAxIDAw' +
-    'MDAwIG4gCjAwMDAwMDAzODAgMDAwMDAgbiAKdHJhaWxlcgo8PAogIC9TaXplIDYKICAvUm9v' +
-    'dCAxIDAgUgo+PgpzdGFydHhyZWYKNDkyCiUlRU9G'), (m) => m.codePointAt(0));
-
-
-    document.addEventListener('DOMContentLoaded', async () => {
-      document.querySelector('#base-viewer').addEventListener('initialized', (event) => {
-        const { viewerApp } = event.detail
-        viewerApp.open({ data: pdfData })
-      })
-    })
-  </script>
 </html>

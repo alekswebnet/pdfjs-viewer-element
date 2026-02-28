@@ -1,9 +1,22 @@
 /// <reference types="vitest" />
 import { defineConfig } from 'vite'
+import terser from '@rollup/plugin-terser'
 
 // https://vitejs.dev/config/
 export default defineConfig({
   build: {
+    minify: 'terser',
+    rollupOptions: {
+      output: {
+        plugins: [
+          terser({
+            compress: true,
+            mangle: true,
+            format: { comments: false }
+          })
+        ]
+      }
+    },
     lib: {
       name: 'PdfjsViewerElement',
       fileName: 'pdfjs-viewer-element',
