@@ -19,7 +19,7 @@ Supported in all [major browsers](https://caniuse.com/custom-elementsv1), and wo
 - Works with same-origin and cross-origin PDF documents
 - Configure via attributes and URL parameters (page, zoom, search, pagemode, locale)
 - Programmatic access to `PDFViewerApplication` and `PDFViewerApplicationOptions` via the `initialized` event
-- Theme control (automatic/light/dark) plus custom CSS injection or external stylesheets
+- Theme control (automatic/light/dark) plus custom CSS injection
 - Locale override support using PDF.js viewer locales
 - Supports all modern browsers and most JS frameworks
 
@@ -28,6 +28,8 @@ Supported in all [major browsers](https://caniuse.com/custom-elementsv1), and wo
 [Getting started](https://alekswebnet.github.io/pdfjs-viewer-element/)
 
 [API playground](https://alekswebnet.github.io/pdfjs-viewer-element/#api)
+
+[CodePen demo](https://codepen.io/redrobot753/pen/bNwVVvp)
 
 [Various use cases](https://github.com/alekswebnet/pdfjs-viewer-element/tree/master/demo)
 
@@ -55,34 +57,40 @@ import 'pdfjs-viewer-element'
 ## Usage
 
 ```html
-<pdfjs-viewer-element src="path-to/file.pdf"></pdfjs-viewer-element>
+<pdfjs-viewer-element
+  src="/sample.pdf"
+  style="height: 100dvh">
+</pdfjs-viewer-element>
 ```
+
+The element is block-level and needs an explicit height.
 
 ## Attributes
 
-`src` - PDF file URL
-
-`iframe-title` - The title of the `iframe` element, required for better accessibility
-
-`page` - Page number.
-
-`search` - Search text.
-
-`phrase` - Search by phrase, `true` to enable.
-
-`zoom` - Zoom level.
-
-`pagemode` - Page mode, `thumbs | bookmarks | attachments | layers | none`.
-
-`locale` -  Specifies which language to use in the viewer UI, `en-US | ...`. [Available locales](https://github.com/mozilla/pdf.js/tree/master/l10n)
-
-`viewer-css-theme` - Apply automatic, light, or dark theme, `AUTOMATIC | LIGHT | DARK`
-
-`viewer-extra-styles` - Add your CSS rules to the viewer application, pass a string with styles.
-
-`viewer-extra-styles-urls` - Add external CSS files to the viewer application, pass an array with URLs.
+| Attribute | Description | Default |
+| --- | --- | --- |
+| `src` | PDF file URL. | `''` |
+| `iframe-title` | Title for the internal `iframe` (recommended for accessibility). | `PDF viewer window` |
+| `page` | Page number. | `''` |
+| `search` | Search query text. | `''` |
+| `phrase` | Phrase search mode, set to `true` to enable phrase matching. | `''` |
+| `zoom` | Zoom level (for example `auto`, `page-width`, `200%`). | `''` |
+| `pagemode` | Sidebar mode: `thumbs`, `bookmarks`, `attachments`, `layers`, `none`. | `none` |
+| `locale` | Viewer UI locale (for example `en-US`, `de`, `uk`). [Available locales](https://github.com/mozilla/pdf.js/tree/master/l10n) | `''` |
+| `viewer-css-theme` | Viewer theme: `AUTOMATIC`, `LIGHT`, `DARK`. | `AUTOMATIC` |
+| `worker-src` | PDF.js worker URL override. | `https://cdn.jsdelivr.net/npm/pdfjs-dist@5.4.624/build/pdf.worker.min.mjs` |
 
 Play with attributes on [API docs page](https://alekswebnet.github.io/pdfjs-viewer-element/#api).
+
+## Runtime updates
+
+Most attributes can be updated dynamically:
+
+- `src` updates by calling PDF.js `open({ url })` without rebuilding the viewer.
+- `page`, `search`, `phrase`, `zoom`, `pagemode` update via hash parameters.
+- `viewer-css-theme` updates the viewer theme at runtime.
+- `worker-src` updates viewer options for subsequent document loads.
+- `locale` rebuilds the viewer so localization resources can be applied.
 
 ## Viewer CSS theme
 
@@ -95,18 +103,33 @@ Use `viewer-css-theme` attribute to set light or dark theme manually:
 </pdfjs-viewer-element>
 ```
 
-## Viewer custom styles 
+Runtime example:
 
-You can add your own CSS rules to the viewer application using `viewer-extra-styles` or `viewer-extra-styles-urls` attribute:
+```javascript
+const viewer = document.querySelector('pdfjs-viewer-element')
+viewer.setAttribute('viewer-css-theme', 'DARK')
+viewer.setAttribute('viewer-css-theme', 'AUTOMATIC')
+```
+
+## Viewer custom styles
+
+You can add your own CSS rules to the viewer application using `injectViewerStyles(styles: string)`:
 
 ```html
-<pdfjs-viewer-element 
-  src="/file.pdf" 
-  viewer-extra-styles="#toolbarViewerMiddle { display: none; }"
-  viewer-extra-styles-urls="['/demo/viewer-custom-theme.css']">
+<pdfjs-viewer-element id="viewer" src="/file.pdf">
 </pdfjs-viewer-element>
 ```
-Build your own theme with viewer's custom variables and `viewer-extra-styles-urls` attribute: 
+
+```javascript
+const viewer = document.querySelector('#viewer')
+viewer.injectViewerStyles(`
+  #toolbarViewerMiddle, #toolbarViewerRight { display: none; }
+`)
+```
+
+`injectViewerStyles(...)` applies styles immediately when the viewer document is ready, and keeps them for future rebuilds.
+
+Build your own theme with viewer custom variables and inject it via `injectViewerStyles(...)`:
 
 ```css
 :root {
@@ -129,7 +152,11 @@ Build your own theme with viewer's custom variables and `viewer-extra-styles-url
 }
 ```
 
-## PDF.js Viewer Application and Options
+## Methods
+
+`injectViewerStyles(styles: string)` - Adds custom CSS to the viewer now (when ready) and for future rebuilds.
+
+## Programmatic access to PDF.js
 
 ```html
 <pdfjs-viewer-element></pdfjs-viewer-element>
@@ -145,12 +172,30 @@ document.addEventListener('DOMContentLoaded', async () => {
 })
 ```
 
+You can also react to source changes dynamically:
+
+```javascript
+const viewer = document.querySelector('pdfjs-viewer-element')
+viewer.setAttribute('src', '/another-file.pdf')
+```
+
 ## Events
 
 `initialized` - Fired after the PDF.js viewer is ready (after `PDFViewerApplication.initializedPromise` resolves). The event `detail` contains:
 
 - `viewerApp` (`PDFViewerApplication`)
 - `viewerOptions` (`PDFViewerApplicationOptions`)
+
+The event is emitted each time the internal viewer is rebuilt (for example after changing `locale`).
+
+## Migration notes
+
+If you are upgrading from an older version:
+
+- `viewer-extra-styles` and `viewer-extra-styles-urls` attributes are removed.
+- Use `injectViewerStyles(styles)` instead of style attributes.
+- Use the `initialized` event for `viewerApp` / `viewerOptions` access.
+- Runtime `src` updates are supported with `setAttribute('src', ...)`.
 
 ## Accessibility
 
