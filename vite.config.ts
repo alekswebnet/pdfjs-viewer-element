@@ -11,7 +11,7 @@ export default defineConfig({
         plugins: [
           terser({
             compress: true,
-            mangle: true,
+            mangle: false,
             format: { comments: false }
           })
         ]

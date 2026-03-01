@@ -14,13 +14,6 @@ const DEFAULTS = {
 } as const
 
 export const ViewerCssTheme = { AUTOMATIC: 0, LIGHT: 1, DARK: 2 } as const
-export const hardRefreshAttributes = [
-  'src', 'locale', 'viewer-css-theme', 'worker-src'
-]
-export const allAttributes = [
-  ...hardRefreshAttributes, 
-  'page', 'search', 'phrase', 'zoom', 'pagemode', 'iframe-title'
-]
 
 export class PdfjsViewerElement extends HTMLElement {
   constructor() {
@@ -30,19 +23,18 @@ export class PdfjsViewerElement extends HTMLElement {
       <style>:host{width:100%;display:block;overflow:hidden}:host iframe{height:100%}</style>
       <iframe frameborder="0" width="100%" loading="lazy"></iframe>
     `
-    this.resetInitializedPromise()
   }
 
   public iframe!: PdfjsViewerElementIframe
-  public iframeLocationHash = ''
-  public initPromise!: Promise<InitializationData>
-  private initResolver?: (data: InitializationData) => void
-  private initRejecter?: (reason?: unknown) => void
   private localeResourceUrl?: string
   private localeResourceLink?: HTMLLinkElement
+  private viewerStyles = new Set<string>()
 
   static get observedAttributes() {
-    return allAttributes
+    return[
+      'src', 'locale', 'viewer-css-theme', 'worker-src', 
+      'page', 'search', 'phrase', 'zoom', 'pagemode', 'iframe-title'
+    ]
   }
 
   private getFullPath(path: string) {
@@ -56,43 +48,65 @@ export class PdfjsViewerElement extends HTMLElement {
       : ViewerCssTheme[DEFAULTS.viewerCssTheme]
   }
 
+  private applyIframeHash() {
+    if (!this.iframe?.contentWindow) return
+    this.iframe.contentWindow.location.hash = this.getIframeLocationHash()
+  }
+
+  private applyViewerTheme() {
+    const theme = this.getCssThemeOption()
+    const viewerOptions = this.iframe.contentWindow?.PDFViewerApplicationOptions
+    viewerOptions?.set('viewerCssTheme', theme)
+
+    const doc = this.iframe.contentDocument
+    if (!doc?.documentElement) return
+    const mode = theme === ViewerCssTheme.LIGHT ? 'light' : theme === ViewerCssTheme.DARK ? 'dark' : ''
+    if (mode) {
+      doc.documentElement.style.setProperty('color-scheme', mode)
+    } else {
+      doc.documentElement.style.removeProperty('color-scheme')
+    }
+  }
+
   private injectScript(value: string, type = 'module') {
+    const doc = this.iframe.contentDocument
+    if (!doc) return
+    if (!doc.head) {
+      const head = doc.createElement('head')
+      doc.documentElement?.prepend(head)
+    }
     const script = document.createElement('script')
     script.type = type
     script.textContent = value
-    this.iframe.contentDocument?.head.appendChild(script)
+    doc.head?.appendChild(script)
   }
 
   private injectLocaleData = async () => {
-    const doc = this.iframe.contentDocument as Document;
+    const doc = this.iframe.contentDocument as Document
     const locale = this.getAttribute('locale')
     if (!locale) {
       this.cleanupLocaleResource()
       return
     }
-    if (locale) {
-      const localesData = await import('./web/locale/locale.json?raw')
-      const supportedLocales = Object.keys(JSON.parse(localesData.default))
-      if (!supportedLocales.includes(locale as string)) {
-        this.cleanupLocaleResource()
-        return
-      }
-      if (supportedLocales.includes(locale as string)) {
-        const localeObject = {
-          [String(locale)]: `https://raw.githubusercontent.com/mozilla-l10n/firefox-l10n/main/${locale}/toolkit/toolkit/pdfviewer/viewer.ftl`
-        }
-        const localeLink = doc.createElement('link')
-        localeLink.rel = 'resource'
-        localeLink.type = 'application/l10n'
-        this.cleanupLocaleResource()
-        this.localeResourceUrl = URL.createObjectURL(
-          new Blob([JSON.stringify(localeObject)], { type: 'application/json' })
-        )
-        localeLink.href = this.localeResourceUrl
-        this.iframe.contentDocument?.head.appendChild(localeLink)
-        this.localeResourceLink = localeLink
-      }
+    const localesData = await import('./web/locale/locale.json?raw')
+    const supportedLocales = Object.keys(JSON.parse(localesData.default))
+    if (!supportedLocales.includes(locale as string)) {
+      this.cleanupLocaleResource()
+      return
     }
+    const localeObject = {
+      [String(locale)]: `https://raw.githubusercontent.com/mozilla-l10n/firefox-l10n/main/${locale}/toolkit/toolkit/pdfviewer/viewer.ftl`
+    }
+    const localeLink = doc.createElement('link')
+    localeLink.rel = 'resource'
+    localeLink.type = 'application/l10n'
+    this.cleanupLocaleResource()
+    this.localeResourceUrl = URL.createObjectURL(
+      new Blob([JSON.stringify(localeObject)], { type: 'application/json' })
+    )
+    localeLink.href = this.localeResourceUrl
+    this.iframe.contentDocument?.head.appendChild(localeLink)
+    this.localeResourceLink = localeLink
   }
 
   private cleanupLocaleResource() {
@@ -106,54 +120,68 @@ export class PdfjsViewerElement extends HTMLElement {
     }
   }
 
-  private resetInitializedPromise(reason?: unknown) {
-    if (this.initRejecter) {
-      this.initRejecter(reason || new Error('[pdfjs-viewer-element] Initialization was reseted'))
-    }
-    if (this.initPromise) {
-      this.initPromise.catch(() => undefined)
-    }
-    this.initPromise = new Promise((resolve, reject) => {
-      this.initResolver = resolve
-      this.initRejecter = reject
-    })
-  }
+  private onViewerAppCreated = () =>
+    new Promise<IframeWindow['PDFViewerApplication']>((resolve) => {
+      const contentWindow = this.iframe.contentWindow as IframeWindow
+      if (contentWindow.PDFViewerApplication) return resolve(contentWindow.PDFViewerApplication)
 
-  private onViewerAppLoaded = async () => {
-    const callback = this.handleViewerLoaded
-    if (this.iframe.contentWindow?.PDFViewerApplication !== undefined) {
-      await this.iframe.contentWindow.PDFViewerApplication?.initializedPromise
-      await callback(this.iframe.contentWindow['PDFViewerApplication']);
-    }
-    Object.defineProperty(this.iframe.contentWindow, 'PDFViewerApplication', {
-      async set(value: IframeWindow['PDFViewerApplication']) {
-        await this.PDFViewerApplication?.initializedPromise
-        await callback(value)
-      },
-      configurable: true
-    })
-  }
+      let appValue: IframeWindow['PDFViewerApplication'] | undefined
 
-  private applyViewerOptions() {
+      Object.defineProperty(contentWindow, 'PDFViewerApplication', {
+        get() { return appValue },
+        set(value: IframeWindow['PDFViewerApplication']) {
+          appValue = value
+          resolve(value)
+          delete contentWindow.PDFViewerApplication
+          contentWindow.PDFViewerApplication = value
+        },
+        configurable: true
+      });
+    });
+
+  private applyViewerOptions = () => {
     const viewerOptions = this.iframe.contentWindow?.PDFViewerApplicationOptions
     viewerOptions?.set('workerSrc', this.getAttribute('worker-src') || DEFAULTS.workerSrc)
     viewerOptions?.set('defaultUrl', this.getFullPath(this.getAttribute('src') || DEFAULTS.src))
     viewerOptions?.set('disablePreferences', true)
-    viewerOptions?.set('pdfBugEnabled', true)
     viewerOptions?.set('eventBusDispatchToDOM', true)
     viewerOptions?.set('localeProperties', { lang: this.getAttribute('locale') || DEFAULTS.locale })
     viewerOptions?.set('viewerCssTheme', this.getCssThemeOption())
     return viewerOptions
   }
 
-  private handleViewerLoaded = async (viewerApp: IframeWindow['PDFViewerApplication']) => {
-    const viewerOptions = this.applyViewerOptions()
-    await viewerApp.initializedPromise
-
-    if (this.initResolver) {
-      this.initResolver({ viewerApp, viewerOptions })
-      this.initResolver = undefined
+  private getIframeLocationHash = () => {
+    const params: Record<string, string> = {
+      page: this.getAttribute('page') || DEFAULTS.page,
+      zoom: this.getAttribute('zoom') || DEFAULTS.zoom,
+      pagemode: this.getAttribute('pagemode') || DEFAULTS.pagemode,
+      search: this.getAttribute('search') || DEFAULTS.search,
+      phrase: this.getAttribute('phrase') || DEFAULTS.phrase,
+      locale: this.getAttribute('locale') || DEFAULTS.locale
     }
+    return '#' + Object.entries(params).map(([k, v]) => `${k}=${v}`).join('&')
+  }
+
+  private buildViewerEntry = async () => {
+    const [viewerEntry, viewerCss] = await Promise.all([
+      import('./web/viewer-min.html?raw'),
+      import('./web/viewer.css?inline'),
+    ])
+    const completeHtml = viewerEntry.default
+      .replace('</head>', `
+        <style>${viewerCss.default}</style>
+        ${Array.from(this.viewerStyles).map(style => `<style>${style}</style>`).join('\n')}
+      </head>`)
+    this.iframe.addEventListener('load', this.buildViewerApp, { once: true })
+    this.iframe.srcdoc = completeHtml
+  }
+
+  private setupViewerApp = async () => {
+    const viewerApp = await this.onViewerAppCreated()
+    const viewerOptions = this.applyViewerOptions()
+    await viewerApp?.initializedPromise
+
+    this.applyIframeHash()
 
     this.dispatchEvent(new CustomEvent('initialized', { 
       detail: { 
@@ -165,31 +193,6 @@ export class PdfjsViewerElement extends HTMLElement {
     }))
   }
 
-  private getIframeLocationHash() {
-    const params: Record<string, string> = {
-      page: this.getAttribute('page') || DEFAULTS.page,
-      zoom: this.getAttribute('zoom') || DEFAULTS.zoom,
-      pagemode: this.getAttribute('pagemode') || DEFAULTS.pagemode,
-      search: this.getAttribute('search') || DEFAULTS.search,
-      phrase: this.getAttribute('phrase') || DEFAULTS.phrase
-    }
-    const locale = this.getAttribute('locale')
-    if (locale) params.locale = locale
-    return '#' + Object.entries(params).map(([k, v]) => `${k}=${v}`).join('&')
-  }
-
-  private async buildViewerEntry() {
-    const [viewerEntry, viewerCss] = await Promise.all([
-      import('./web/viewer-min.html?raw'),
-      import('./web/viewer.css?inline'),
-    ])
-    const completeHtml = viewerEntry.default
-      .replace('</head>', `
-        <style>${viewerCss.default}</style>
-      </head>`)
-    this.iframe.srcdoc = completeHtml
-  }
-
   private buildViewerApp = async () => {
     const [pdfjsBuild, viewerBuild] = await Promise.all([
       import('./build/pdf.min.mjs?raw'),
@@ -199,22 +202,16 @@ export class PdfjsViewerElement extends HTMLElement {
     this.injectScript(pdfjsBuild.default)
     this.injectScript(viewerBuild.default)
 
-    await this.onViewerAppLoaded()
+    await this.setupViewerApp()
   }
 
   async connectedCallback() {
-    this.resetInitializedPromise()
     this.iframe = this.shadowRoot?.querySelector('iframe') as PdfjsViewerElementIframe
     this.iframe.setAttribute('title', this.getAttribute('iframe-title') || DEFAULTS.iframeTitle)
-    this.iframeLocationHash = this.getIframeLocationHash()
-    this.iframe.contentWindow.location.hash = this.iframeLocationHash
-
-    this.iframe.addEventListener('load', this.buildViewerApp)
     await this.buildViewerEntry()
   }
   
   disconnectedCallback() {
-    this.resetInitializedPromise(new Error('[pdfjs-viewer-element] Disconnected'))
     this.cleanupLocaleResource()
     this.iframe.removeEventListener('load', this.buildViewerApp)
     this.iframe.src = 'about:blank'
@@ -225,40 +222,47 @@ export class PdfjsViewerElement extends HTMLElement {
 
   async attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null) {
     if (oldValue === newValue) return
-    this.iframeLocationHash = this.getIframeLocationHash()
-    if (this.iframe) {
-      this.iframe.contentWindow.location.hash = this.iframeLocationHash
-    }
-    if (name === 'locale') {
-      this.cleanupLocaleResource()
-    }
-    if (hardRefreshAttributes.includes(name)) {
-      this.resetInitializedPromise()
-      await this.iframe?.contentWindow?.PDFViewerApplication?.initializedPromise
-      this.iframe?.contentWindow?.location.reload()
+    if (!this.iframe) return
+    switch (name) {
+      case 'src': {
+        const viewerApp = this.iframe.contentWindow?.PDFViewerApplication
+        if (viewerApp) {
+          await viewerApp.initializedPromise
+          const url = this.getFullPath(newValue || DEFAULTS.src)
+          if (url) {
+            viewerApp.open({ url })
+          }
+        }
+        return
+      }
+      case 'locale':
+        this.cleanupLocaleResource()
+        await this.buildViewerEntry()
+        return
+      case 'viewer-css-theme':
+        this.applyViewerTheme()
+        return
+      case 'worker-src': {
+        const viewerOptions = this.iframe.contentWindow?.PDFViewerApplicationOptions
+        viewerOptions?.set('workerSrc', newValue || DEFAULTS.workerSrc)
+        return
+      }
+      default:
+        this.applyIframeHash()
     }
   }
 
-  public async adoptViewerStyles(styles: string) {
-    await this.initPromise
-    const doc = this.iframe.contentDocument
-    if (!doc) return
-    const sharedStyles = new CSSStyleSheet()
-    sharedStyles.replaceSync(styles)
-    doc.adoptedStyleSheets = [...doc.adoptedStyleSheets, sharedStyles]
-  }
-
-  public async initialize() {
-    return this.initPromise
+  public async injectViewerStyles(styles: string) {
+    if (styles) this.viewerStyles.add(styles)
   }
 }
 
 export interface IframeWindow extends Window {
-  PDFViewerApplication: {
+  PDFViewerApplication?: {
     initializedPromise: Promise<void>;
     initialized: boolean;
     eventBus: Record<string, any>;
-    open: (data: Uint8Array) => void;
+    open: (params: { url: string; originalUrl?: string } | { data: Uint8Array } | Uint8Array) => void;
   },
   PDFViewerApplicationOptions: {
     set: (name: string, value: string | boolean | number | Record<string, any>) => void,

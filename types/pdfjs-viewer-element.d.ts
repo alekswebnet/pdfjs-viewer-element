@@ -3,42 +3,42 @@ export declare const ViewerCssTheme: {
     readonly LIGHT: 1;
     readonly DARK: 2;
 };
-export declare const hardRefreshAttributes: string[];
-export declare const allAttributes: string[];
 export declare class PdfjsViewerElement extends HTMLElement {
     constructor();
     iframe: PdfjsViewerElementIframe;
-    iframeLocationHash: string;
-    initializedPromise: Promise<InitializationData>;
-    private initializedResolver?;
-    private initializedRejecter?;
     private localeResourceUrl?;
     private localeResourceLink?;
+    private viewerStyles;
     static get observedAttributes(): string[];
     private getFullPath;
     private getCssThemeOption;
+    private applyIframeHash;
+    private applyViewerTheme;
     private injectScript;
     private injectLocaleData;
     private cleanupLocaleResource;
-    private resetInitializedPromise;
-    private onViewerAppLoaded;
+    private onViewerAppCreated;
     private applyViewerOptions;
-    private handleViewerLoaded;
     private getIframeLocationHash;
     private buildViewerEntry;
+    private setupViewerApp;
     private buildViewerApp;
     connectedCallback(): Promise<void>;
     disconnectedCallback(): void;
     attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): Promise<void>;
-    adoptViewerStyles(styles: string): Promise<void>;
-    initialize(): Promise<InitializationData>;
+    injectViewerStyles(styles: string): Promise<void>;
 }
 export interface IframeWindow extends Window {
-    PDFViewerApplication: {
+    PDFViewerApplication?: {
         initializedPromise: Promise<void>;
         initialized: boolean;
         eventBus: Record<string, any>;
-        open: (data: Uint8Array) => void;
+        open: (params: {
+            url: string;
+            originalUrl?: string;
+        } | {
+            data: Uint8Array;
+        } | Uint8Array) => void;
     };
     PDFViewerApplicationOptions: {
         set: (name: string, value: string | boolean | number | Record<string, any>) => void;
