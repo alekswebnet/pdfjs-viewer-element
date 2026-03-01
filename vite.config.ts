@@ -1,6 +1,7 @@
 /// <reference types="vitest" />
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vitest/config'
 import terser from '@rollup/plugin-terser'
+import { webdriverio } from '@vitest/browser-webdriverio'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -27,7 +28,7 @@ export default defineConfig({
   },
   test: {
     browser: {
-      provider: 'webdriverio',
+      provider: webdriverio(),
       enabled: true,
       // at least one instance is required
       instances: [
