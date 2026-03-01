@@ -12,7 +12,7 @@ describe('Basic tests', async () => {
     )
     expect(getViewerElement()).exist
 
-    viewerApp.eventBus.on('pagesloaded', () => {
+    viewerApp?.eventBus.on('pagesloaded', () => {
       expect(getViewerElement('#viewer .page')).exist
     })
   })
@@ -35,9 +35,9 @@ describe('Basic tests', async () => {
     expect(getViewerElement()).exist
 
     const file = await getFileData()
-    viewerApp.open(file)
+    viewerApp?.open(file)
 
-    viewerApp.eventBus.on('pagesloaded', () => {
+    viewerApp?.eventBus.on('pagesloaded', () => {
       expect(getViewerElement('#viewer .page')).exist
     })
   })
@@ -55,12 +55,21 @@ describe('Basic tests', async () => {
   })
 
   it('should hide the download button', async () => {
-    await mountViewer(`
-      <pdfjs-viewer-element 
-        src="/sample-pdf-10MB.pdf" 
-        viewer-extra-styles="#downloadButton { display: none }"
+    document.body.innerHTML = `
+      <pdfjs-viewer-element
+        src="/sample-pdf-10MB.pdf"
       ></pdfjs-viewer-element>`
-    )
+
+    const viewer = document.body.querySelector('pdfjs-viewer-element') as HTMLElement & {
+      injectViewerStyles: (styles: string) => Promise<void>
+    }
+
+    await new Promise<void>((resolve) => {
+      viewer.addEventListener('initialized', async () => {
+        await viewer.injectViewerStyles('#downloadButton { display: none }')
+        resolve()
+      }, { once: true })
+    })
 
     expect(getViewerElement()).exist
     expect(getComputedStyle(getViewerElement('#downloadButton')!).display).eq('none')
@@ -75,5 +84,63 @@ describe('Basic tests', async () => {
     )
     expect(getViewerElement()).exist
     expect(getIframe().title).eq('Custom title')
+  })
+
+  it('should apply hash-related attributes at runtime', async () => {
+    await mountViewer(`
+      <pdfjs-viewer-element src="/sample-pdf-10MB.pdf"></pdfjs-viewer-element>`
+    )
+
+    const viewer = document.body.querySelector('pdfjs-viewer-element') as HTMLElement
+    viewer.setAttribute('page', '2')
+    viewer.setAttribute('zoom', '200%')
+    viewer.setAttribute('search', 'pdf')
+    viewer.setAttribute('phrase', 'true')
+    viewer.setAttribute('pagemode', 'thumbs')
+
+    const hash = getIframe().contentWindow.location.hash
+    expect(hash).toContain('page=2')
+    expect(hash).toContain('zoom=200%')
+    expect(hash).toContain('search=pdf')
+    expect(hash).toContain('phrase=true')
+    expect(hash).toContain('pagemode=thumbs')
+  })
+
+  it('should apply worker-src option at runtime', async () => {
+    await mountViewer(`
+      <pdfjs-viewer-element src="/sample-pdf-10MB.pdf"></pdfjs-viewer-element>`
+    )
+
+    const viewer = document.body.querySelector('pdfjs-viewer-element') as HTMLElement
+    const workerSrc = 'https://example.com/pdf.worker.min.mjs'
+    viewer.setAttribute('worker-src', workerSrc)
+
+    const options = getIframe().contentWindow.PDFViewerApplicationOptions.getAll()
+    expect(options.workerSrc).eq(workerSrc)
+  })
+
+  it('should open a new document when src changes at runtime', async () => {
+    const viewerApp = await mountViewer(`
+      <pdfjs-viewer-element src="/sample-pdf-10MB.pdf"></pdfjs-viewer-element>`
+    )
+
+    const viewer = document.body.querySelector('pdfjs-viewer-element') as HTMLElement
+    let openedUrl = ''
+    const originalOpen = viewerApp?.open
+    if (viewerApp) {
+      viewerApp.open = ((params: { url: string } | { data: Uint8Array } | Uint8Array) => {
+        if (typeof params === 'object' && 'url' in params) {
+          openedUrl = params.url
+        }
+      }) as typeof viewerApp.open
+    }
+
+    viewer.setAttribute('src', '/sample-pdf-with-images.pdf')
+    await new Promise((resolve) => setTimeout(resolve, 0))
+
+    expect(openedUrl).toContain('/sample-pdf-with-images.pdf')
+    if (viewerApp && originalOpen) {
+      viewerApp.open = originalOpen
+    }
   })
 })

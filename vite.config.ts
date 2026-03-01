@@ -1,9 +1,23 @@
 /// <reference types="vitest" />
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vitest/config'
+import terser from '@rollup/plugin-terser'
+import { webdriverio } from '@vitest/browser-webdriverio'
 
 // https://vitejs.dev/config/
 export default defineConfig({
   build: {
+    minify: 'terser',
+    rollupOptions: {
+      output: {
+        plugins: [
+          terser({
+            compress: true,
+            mangle: false,
+            format: { comments: false }
+          })
+        ]
+      }
+    },
     lib: {
       name: 'PdfjsViewerElement',
       fileName: 'pdfjs-viewer-element',
@@ -14,7 +28,7 @@ export default defineConfig({
   },
   test: {
     browser: {
-      provider: 'webdriverio',
+      provider: webdriverio(),
       enabled: true,
       // at least one instance is required
       instances: [

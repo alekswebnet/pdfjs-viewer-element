@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>pdfjs-viewer-element | Extra styles demo</title>
-   <script type="module" src="https://cdn.jsdelivr.net/npm/pdfjs-viewer-element/dist/pdfjs-viewer-element.js"></script>
+   <script type="module" src="../dist/pdfjs-viewer-element.js"></script>
     <style>
       body {
         margin: 0;
@@ -16,8 +16,34 @@
   <body>
     <pdfjs-viewer-element
       src="/public/sample-pdf-with-images.pdf" 
-      viewer-extra-styles-urls="['/demo/viewer-custom-theme.css']"
-      style="height: 100dvh">
+      style="height: 100dvh"
+    >
     </pdfjs-viewer-element>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Create a very simple toolbar by hiding the middle and right toolbar parts.
+      document.querySelector('pdfjs-viewer-element').injectViewerStyles(`
+       :root {
+          --main-color: #5755FE;
+          --toolbar-icon-bg-color: #0200a8;
+          --field-color: #5755FE;
+          --separator-color: #5755FE;
+          --toolbar-border-color: #5755FE;
+          --field-border-color: #5755FE;
+          --toolbar-bg-color: rgba(139, 147, 255, .1);
+          --body-bg-color: rgba(255, 247, 252, .7);
+          --button-hover-color: rgba(139, 147, 255, .1);
+          --toolbar-icon-hover-bg-color: #0200a8;
+          --toggled-btn-color: #0200a8;
+          --toggled-btn-bg-color: rgba(139, 147, 255, .1);
+          --toggled-hover-active-btn-color: #5755FE;
+          --doorhanger-hover-bg-color: rgba(139, 147, 255, .1);
+          --doorhanger-hover-color: #0200a8;
+          --dropdown-btn-bg-color: rgba(139, 147, 255, .1);
+        }
+      `)
+    })
+  </script>
   </body>
 </html>

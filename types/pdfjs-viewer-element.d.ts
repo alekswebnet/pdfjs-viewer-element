@@ -3,31 +3,44 @@ export declare const ViewerCssTheme: {
     readonly LIGHT: 1;
     readonly DARK: 2;
 };
-export declare const hardRefreshAttributes: string[];
-export declare const allAttributes: string[];
 export declare class PdfjsViewerElement extends HTMLElement {
     constructor();
     iframe: PdfjsViewerElementIframe;
-    iframeLocationHash: string;
+    private localeResourceUrl?;
+    private localeResourceLink?;
+    private viewerStyles;
     static get observedAttributes(): string[];
-    private applyViewerOptions;
-    private handleViewerLoaded;
-    connectedCallback(): Promise<void>;
-    attributeChangedCallback(name: string): Promise<void>;
-    private getIframeLocationHash;
-    private loadViewerResources;
     private getFullPath;
     private getCssThemeOption;
-    private setCssTheme;
-    private setViewerExtraStyles;
-    private injectExtraStylesLinks;
+    private applyIframeHash;
+    private applyViewerTheme;
+    private appendRuntimeStyle;
+    private applyQueuedRuntimeStyles;
+    private injectScript;
+    private injectLocaleData;
+    private cleanupLocaleResource;
+    private onViewerAppCreated;
+    private applyViewerOptions;
+    private getIframeLocationHash;
+    private buildViewerEntry;
+    private setupViewerApp;
+    private buildViewerApp;
+    connectedCallback(): Promise<void>;
+    disconnectedCallback(): void;
+    attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): Promise<void>;
+    injectViewerStyles(styles: string): Promise<void>;
 }
-export interface PdfjsViewerElementIframeWindow extends Window {
-    PDFViewerApplication: {
+export interface IframeWindow extends Window {
+    PDFViewerApplication?: {
         initializedPromise: Promise<void>;
         initialized: boolean;
         eventBus: Record<string, any>;
-        open: (data: Uint8Array) => void;
+        open: (params: {
+            url: string;
+            originalUrl?: string;
+        } | {
+            data: Uint8Array;
+        } | Uint8Array) => void;
     };
     PDFViewerApplicationOptions: {
         set: (name: string, value: string | boolean | number | Record<string, any>) => void;
@@ -35,6 +48,10 @@ export interface PdfjsViewerElementIframeWindow extends Window {
     };
 }
 export interface PdfjsViewerElementIframe extends HTMLIFrameElement {
-    contentWindow: PdfjsViewerElementIframeWindow;
+    contentWindow: IframeWindow;
+}
+export interface InitializationData {
+    viewerApp: IframeWindow['PDFViewerApplication'];
+    viewerOptions: IframeWindow['PDFViewerApplicationOptions'];
 }
 export default PdfjsViewerElement;
