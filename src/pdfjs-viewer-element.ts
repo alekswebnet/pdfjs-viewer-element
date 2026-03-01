@@ -68,6 +68,26 @@ export class PdfjsViewerElement extends HTMLElement {
     }
   }
 
+  private appendRuntimeStyle(styles: string) {
+    const doc = this.iframe?.contentDocument
+    if (!doc?.head || !styles) return
+
+    const exists = Array.from(doc.querySelectorAll('style'))
+      .some((styleNode) => styleNode.textContent === styles)
+    if (exists) return
+
+    const styleElement = doc.createElement('style')
+    styleElement.setAttribute('data-pdfjs-viewer-runtime-style', 'true')
+    styleElement.textContent = styles
+    doc.head.appendChild(styleElement)
+  }
+
+  private applyQueuedRuntimeStyles() {
+    this.viewerStyles.forEach((styles) => {
+      this.appendRuntimeStyle(styles)
+    })
+  }
+
   private injectScript(value: string, type = 'module') {
     const doc = this.iframe.contentDocument
     if (!doc) return
@@ -181,6 +201,7 @@ export class PdfjsViewerElement extends HTMLElement {
     const viewerOptions = this.applyViewerOptions()
     await viewerApp?.initializedPromise
 
+    this.applyQueuedRuntimeStyles()
     this.applyIframeHash()
 
     this.dispatchEvent(new CustomEvent('initialized', { 
@@ -253,7 +274,9 @@ export class PdfjsViewerElement extends HTMLElement {
   }
 
   public async injectViewerStyles(styles: string) {
-    if (styles) this.viewerStyles.add(styles)
+    if (!styles) return
+    this.viewerStyles.add(styles)
+    this.appendRuntimeStyle(styles)
   }
 }
 

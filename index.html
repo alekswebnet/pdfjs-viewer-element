@@ -9,7 +9,7 @@
     <script type="module" src="./index.js"></script>
   </head>
   <body style="margin: 0">
-    <!-- <pdfjs-viewer-element 
+    <pdfjs-viewer-element 
       src="/fake-file.pdf" 
       style="height: 600px">
     </pdfjs-viewer-element>
@@ -21,7 +21,7 @@
       page="2"
       style="height: 600px">
     </pdfjs-viewer-element>
-    <button onclick="toggleDownloadButton(document.querySelector('#hideOpenFileViewer'))">Toggle download button</button> -->
+    <button onclick="toggleDownloadButton(document.querySelector('#hideOpenFileViewer'))">Toggle download button</button>
 
     <pdfjs-viewer-element
       id="themedViewer"
@@ -50,10 +50,10 @@
     <button onclick="document.querySelector('#themedViewer').setAttribute('src', '/sample-pdf-10MB.pdf')">Load 10MB PDF</button>
     <hr>
 
-    <!-- <pdfjs-viewer-element
+    <pdfjs-viewer-element
       id="base-viewer"
       locale="uk"
       style="height: clamp(400px, 80dvh, 600px)">
-    </pdfjs-viewer-element> -->
+    </pdfjs-viewer-element>
   </body>
 </html>

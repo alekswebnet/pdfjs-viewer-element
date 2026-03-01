@@ -19,5 +19,14 @@
       style="height: 100dvh"
     >
     </pdfjs-viewer-element>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Create a very simple toolbar by hiding the middle and right toolbar parts.
+      document.querySelector('pdfjs-viewer-element').injectViewerStyles(`
+        #toolbarViewerMiddle, #toolbarViewerRight { display: none; }
+      `)
+    })
+  </script>
   </body>
 </html>

@@ -13,14 +13,18 @@ const pdfData = Uint8Array.from(atob(
  'MDAwIG4gCjAwMDAwMDAzODAgMDAwMDAgbiAKdHJhaWxlcgo8PAogIC9TaXplIDYKICAvUm9v' +
  'dCAxIDAgUgo+PgpzdGFydHhyZWYKNDkyCiUlRU9G'), (m) => m.codePointAt(0));
 
-// document.addEventListener('DOMContentLoaded', async () => {
-//   const { viewerApp } = await document.querySelector('#base-viewer').initialize()
-//   viewerApp.open({ data: pdfData })
-// })
+document.addEventListener('DOMContentLoaded', async () => {
+  document.querySelector('#base-viewer').addEventListener('initialized', (event) => {
+    const { viewerApp } = event.detail
+    viewerApp.open({ data: pdfData })
+  })
+})
 
 const toggleDownloadButton = async (viewerElement) => {
-  const { viewerApp } = await viewerElement.initialize()
-  viewerApp.appConfig.toolbar.download.classList.toggle('hidden')
+  viewerElement.addEventListener('initialized', (event) => {
+    const { viewerApp } = event.detail
+    viewerApp.appConfig.toolbar.download.classList.toggle('hidden')
+  })
 }
 
 window.toggleDownloadButton = toggleDownloadButton

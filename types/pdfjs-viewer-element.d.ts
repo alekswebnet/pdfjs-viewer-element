@@ -14,6 +14,7 @@ export declare class PdfjsViewerElement extends HTMLElement {
     private getCssThemeOption;
     private applyIframeHash;
     private applyViewerTheme;
+    private appendRuntimeStyle;
     private injectScript;
     private injectLocaleData;
     private cleanupLocaleResource;
