@@ -31,6 +31,10 @@ Supported in all [major browsers](https://caniuse.com/custom-elementsv1), and wo
 
 [CodePen demo](https://codepen.io/redrobot753/pen/bNwVVvp)
 
+[React integration CodePen](https://codepen.io/redrobot753/pen/xbEwNrO)
+
+[Vue integration CodePen](https://codepen.io/redrobot753/pen/JoRYqwN)
+
 [Various use cases](https://github.com/alekswebnet/pdfjs-viewer-element/tree/master/demo)
 
 ## Install
@@ -64,6 +68,11 @@ import 'pdfjs-viewer-element'
 ```
 
 The element is block-level and needs an explicit height.
+
+### Framework usage
+
+- [React integration example](https://codepen.io/redrobot753/pen/xbEwNrO)
+- [Vue integration example](https://codepen.io/redrobot753/pen/JoRYqwN)
 
 ## Attributes
 
