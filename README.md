@@ -114,7 +114,7 @@ Set `worker-src` only if you want to serve the worker from a custom location (fo
 ```html
 <pdfjs-viewer-element
   src="/file.pdf"
-  worker-src="https://cdn.jsdelivr.net/npm/pdfjs-dist@v5.5.207/build/pdf.worker.min.mjs">
+  worker-src="https://cdn.jsdelivr.net/npm/pdfjs-dist@5.5.207/build/pdf.worker.min.mjs">
 </pdfjs-viewer-element>
 ```
 
@@ -249,7 +249,7 @@ You can also react to source changes dynamically:
 
 ```javascript
 const viewerElement = document.querySelector('pdfjs-viewer-element')
-viewer.setAttribute('src', '/another-file.pdf')
+viewerElement.setAttribute('src', '/another-file.pdf')
 ```
 
 ## Accessibility
