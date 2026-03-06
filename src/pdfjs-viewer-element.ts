@@ -1,4 +1,6 @@
-const PDFJS_VERSION = '5.5.207'
+const DEFAULT_WORKER_SRC = import.meta.env.DEV
+  ? new URL('./build/pdf.worker.mjs', import.meta.url).href
+  : new URL('./pdf.worker.min.mjs', import.meta.url).href
 
 const DEFAULTS = {
   src: '',
@@ -10,7 +12,8 @@ const DEFAULTS = {
   pagemode: 'none',
   locale: '',
   viewerCssTheme: 'AUTOMATIC',
-  workerSrc: `https://cdn.jsdelivr.net/npm/pdfjs-dist@${PDFJS_VERSION}/build/pdf.worker.min.mjs`
+  workerSrc: DEFAULT_WORKER_SRC,
+  localeSrcTemplate: 'https://cdn.jsdelivr.net/gh/mozilla-l10n/firefox-l10n@main/{locale}/toolkit/toolkit/pdfviewer/viewer.ftl'
 } as const
 
 export const ViewerCssTheme = { AUTOMATIC: 0, LIGHT: 1, DARK: 2 } as const
@@ -36,6 +39,13 @@ export class PdfjsViewerElement extends HTMLElement {
       'src', 'locale', 'viewer-css-theme', 'worker-src', 
       'page', 'search', 'phrase', 'zoom', 'pagemode', 'iframe-title'
     ]
+  }
+
+  private formatTemplate(template: string, params: Record<string, any>) {
+    return template.replace(/\{(\w+)\}/g, (_, key) => {
+      if (!(key in params)) throw new Error(`Missing param: ${key}`);
+      return String(params[key]);
+    });
   }
 
   private getFullPath(path: string) {
@@ -120,8 +130,12 @@ export class PdfjsViewerElement extends HTMLElement {
       this.cleanupLocaleResource()
       return
     }
+    const localeUrl = this.formatTemplate(
+      this.getAttribute('locale-src-template') || DEFAULTS.localeSrcTemplate, 
+      { locale }
+    )
     const localeObject = {
-      [String(locale)]: `https://raw.githubusercontent.com/mozilla-l10n/firefox-l10n/main/${locale}/toolkit/toolkit/pdfviewer/viewer.ftl`
+      [String(locale)]: localeUrl
     }
     const localeLink = doc.createElement('link')
     localeLink.rel = 'resource'

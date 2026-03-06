@@ -14,7 +14,7 @@ Supported in all [major browsers](https://caniuse.com/custom-elementsv1), and wo
 
 ## Features
 
-- Standalone web component with no runtime dependencies
+- Standalone isolated web component with no runtime dependencies
 - Drop-in, iframe-based PDF.js default viewer for any web app
 - Works with same-origin and cross-origin PDF documents
 - Configure via attributes and URL parameters (page, zoom, search, pagemode, locale)
@@ -86,8 +86,9 @@ The element is block-level and needs an explicit height.
 | `zoom` | Zoom level (for example `auto`, `page-width`, `200%`). | `''` |
 | `pagemode` | Sidebar mode: `thumbs`, `bookmarks`, `attachments`, `layers`, `none`. | `none` |
 | `locale` | Viewer UI locale (for example `en-US`, `de`, `uk`). [Available locales](https://github.com/mozilla/pdf.js/tree/master/l10n) | `''` |
+| `locale-src-template` | Locale file URL template. Must contain `{locale}` placeholder. Used together with `locale`. | `https://cdn.jsdelivr.net/gh/mozilla-l10n/firefox-l10n@main/{locale}/toolkit/toolkit/pdfviewer/viewer.ftl` |
 | `viewer-css-theme` | Viewer theme: `AUTOMATIC`, `LIGHT`, `DARK`. | `AUTOMATIC` |
-| `worker-src` | PDF.js worker URL override. | `https://cdn.jsdelivr.net/npm/pdfjs-dist@5.4.624/build/pdf.worker.min.mjs` |
+| `worker-src` | PDF.js worker URL override. | `<package-url>/pdf.worker.min.mjs` |
 
 Play with attributes on [API docs page](https://alekswebnet.github.io/pdfjs-viewer-element/#api).
 
@@ -100,6 +101,41 @@ Most attributes can be updated dynamically:
 - `viewer-css-theme` updates the viewer theme at runtime.
 - `worker-src` updates viewer options for subsequent document loads.
 - `locale` rebuilds the viewer so localization resources can be applied.
+
+## Worker source
+
+By default, the component resolves `worker-src` to the worker shipped with this package (`pdf.worker.min.mjs` in `dist`).
+
+Set `worker-src` only if you want to serve the worker from a custom location (for example your own CDN or static assets path).
+
+- The URL must point to a valid PDF.js module worker file.
+- The worker version should match the bundled PDF.js version.
+
+```html
+<pdfjs-viewer-element
+  src="/file.pdf"
+  worker-src="https://cdn.jsdelivr.net/npm/pdfjs-dist@v5.5.207/build/pdf.worker.min.mjs">
+</pdfjs-viewer-element>
+```
+
+## Locale source template
+
+Use `locale-src-template` when you need to load localization files from a custom host.
+
+- The template must include `{locale}`.
+- `{locale}` is replaced by the `locale` attribute value (for example `de`, `uk`, `en-US`).
+- If `locale` is not set, no locale file is loaded.
+- Changes to `locale-src-template` are applied when the viewer is (re)initialized, for example after setting/changing `locale`.
+
+Example:
+
+```html
+<pdfjs-viewer-element
+  src="/file.pdf"
+  locale="de"
+  locale-src-template="https://cdn.example.com/pdfjs-locales/{locale}/viewer.ftl">
+</pdfjs-viewer-element>
+```
 
 ## Viewer CSS theme
 

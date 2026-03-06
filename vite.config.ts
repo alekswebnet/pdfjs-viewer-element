@@ -11,7 +11,6 @@ export default defineConfig({
       output: {
         plugins: [
           terser({
-            'sourceMap': false,
             compress: true,
             mangle: false,
             format: { comments: false }
