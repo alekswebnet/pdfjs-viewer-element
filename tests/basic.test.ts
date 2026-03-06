@@ -62,14 +62,11 @@ describe('Basic tests', async () => {
 
     const viewer = document.body.querySelector('pdfjs-viewer-element') as HTMLElement & {
       injectViewerStyles: (styles: string) => Promise<void>
+      initPromise: Promise<{ viewerApp?: { initializedPromise: Promise<void> } }>
     }
 
-    await new Promise<void>((resolve) => {
-      viewer.addEventListener('initialized', async () => {
-        await viewer.injectViewerStyles('#downloadButton { display: none }')
-        resolve()
-      }, { once: true })
-    })
+    await viewer.initPromise
+    await viewer.injectViewerStyles('#downloadButton { display: none }')
 
     expect(getViewerElement()).exist
     expect(getComputedStyle(getViewerElement('#downloadButton')!).display).eq('none')

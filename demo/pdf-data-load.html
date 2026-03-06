@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pdfjs-viewer-element | Basic demo</title>
+    <title>pdfjs-viewer-element | PDF data load demo</title>
    <script type="module" src="../dist/pdfjs-viewer-element.js"></script>
     <style>
       body {
@@ -36,10 +36,9 @@
 
 
       document.addEventListener('DOMContentLoaded', async () => {
-        document.querySelector('pdfjs-viewer-element').addEventListener('initialized', (event) => {
-          const { viewerApp } = event.detail
-          viewerApp.open({ data: pdfData })
-        })
+        const viewerElement = document.querySelector('pdfjs-viewer-element')
+        const { viewerApp } = await viewerElement.initPromise
+        viewerApp.open({ data: pdfData })
       })
     </script>
   </body>

@@ -22,15 +22,14 @@
 
     <script>
       document.addEventListener('DOMContentLoaded', async () => {
-        document.querySelector('#viewer').addEventListener('initialized', (event) => {
-          const { viewerApp } = event.detail
+        const viewerElement = document.querySelector('#viewer')
+        const { viewerApp } = await viewerElement.initPromise
           viewerApp.eventBus.on('pagesloaded', () => {
             viewerApp.findBar.open()
             viewerApp.findBar.findField.value = 'and' 
             viewerApp.findBar.highlightAll.checked = true
             viewerApp.findBar.findNextButton.click()
           })
-        })
       })
     </script>
   </body>

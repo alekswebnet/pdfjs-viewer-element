@@ -14,17 +14,14 @@ const pdfData = Uint8Array.from(atob(
  'dCAxIDAgUgo+PgpzdGFydHhyZWYKNDkyCiUlRU9G'), (m) => m.codePointAt(0));
 
 document.addEventListener('DOMContentLoaded', async () => {
-  document.querySelector('#base-viewer').addEventListener('initialized', (event) => {
-    const { viewerApp } = event.detail
-    viewerApp.open({ data: pdfData })
-  })
+  const viewerElement = document.querySelector('#base-viewer')
+  const { viewerApp } = await viewerElement.initPromise
+  viewerApp.open({ data: pdfData })
 })
 
 const toggleDownloadButton = async (viewerElement) => {
-  viewerElement.addEventListener('initialized', (event) => {
-    const { viewerApp } = event.detail
-    viewerApp.appConfig.toolbar.download.classList.toggle('hidden')
-  })
+  const { viewerApp } = await viewerElement.initPromise
+  viewerApp.appConfig.toolbar.download.classList.toggle('hidden')
 }
 
 window.toggleDownloadButton = toggleDownloadButton

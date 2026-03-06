@@ -22,8 +22,10 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
+      const viewerElement = document.querySelector('pdfjs-viewer-element')
+      await viewerElement.initPromise
       // Create a very simple toolbar by hiding the middle and right toolbar parts.
-      document.querySelector('pdfjs-viewer-element').injectViewerStyles(`
+      viewerElement.injectViewerStyles(`
         #toolbarViewerMiddle, #toolbarViewerRight { display: none; }
       `)
     })

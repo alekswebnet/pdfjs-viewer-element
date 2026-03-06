@@ -6,6 +6,7 @@ export declare const ViewerCssTheme: {
 export declare class PdfjsViewerElement extends HTMLElement {
     constructor();
     iframe: PdfjsViewerElementIframe;
+    initPromise: Promise<InitializationData>;
     private localeResourceUrl?;
     private localeResourceLink?;
     private viewerStyles;
@@ -51,7 +52,6 @@ export interface PdfjsViewerElementIframe extends HTMLIFrameElement {
     contentWindow: IframeWindow;
 }
 export interface InitializationData {
-    viewerApp: IframeWindow['PDFViewerApplication'];
-    viewerOptions: IframeWindow['PDFViewerApplicationOptions'];
+    viewerApp?: IframeWindow['PDFViewerApplication'];
 }
 export default PdfjsViewerElement;

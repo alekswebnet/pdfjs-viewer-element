@@ -31,11 +31,11 @@ Supported in all [major browsers](https://caniuse.com/custom-elementsv1), and wo
 
 [CodePen demo](https://codepen.io/redrobot753/pen/bNwVVvp)
 
-[React integration CodePen](https://codepen.io/redrobot753/pen/xbEwNrO)
+[CodePen demo with React](https://codepen.io/redrobot753/pen/xbEwNrO)
 
-[Vue integration CodePen](https://codepen.io/redrobot753/pen/JoRYqwN)
+[CodePen demo with Vue](https://codepen.io/redrobot753/pen/JoRYqwN)
 
-[Various use cases](https://github.com/alekswebnet/pdfjs-viewer-element/tree/master/demo)
+[Usage examples](https://github.com/alekswebnet/pdfjs-viewer-element/tree/master/demo)
 
 ## Install
 
@@ -62,7 +62,7 @@ import 'pdfjs-viewer-element'
 
 ```html
 <pdfjs-viewer-element
-  src="/sample.pdf"
+  src="https://alekswebnet.github.io/sample-pdf-with-images.pdf"
   style="height: 100dvh">
 </pdfjs-viewer-element>
 ```
@@ -115,9 +115,10 @@ Use `viewer-css-theme` attribute to set light or dark theme manually:
 Runtime example:
 
 ```javascript
-const viewer = document.querySelector('pdfjs-viewer-element')
-viewer.setAttribute('viewer-css-theme', 'DARK')
-viewer.setAttribute('viewer-css-theme', 'AUTOMATIC')
+const viewerElement = document.querySelector('pdfjs-viewer-element')
+viewerElement.setAttribute('viewer-css-theme', 'DARK')
+viewerElement.setAttribute('viewer-css-theme', 'LIGHT')
+viewerElement.setAttribute('viewer-css-theme', 'AUTOMATIC')
 ```
 
 ## Viewer custom styles
@@ -130,8 +131,8 @@ You can add your own CSS rules to the viewer application using `injectViewerStyl
 ```
 
 ```javascript
-const viewer = document.querySelector('#viewer')
-viewer.injectViewerStyles(`
+const viewerElement = document.querySelector('#viewer')
+viewerElement.injectViewerStyles(`
   #toolbarViewerMiddle, #toolbarViewerRight { display: none; }
 `)
 ```
@@ -161,89 +162,63 @@ Build your own theme with viewer custom variables and inject it via `injectViewe
 }
 ```
 
-## Methods
+## Methods and Public properties
+
+Methods:
 
 `injectViewerStyles(styles: string)` - Adds custom CSS to the viewer now (when ready) and for future rebuilds.
 
-## Programmatic access to PDF.js
-
-```html
-<pdfjs-viewer-element></pdfjs-viewer-element>
-```
+Example (`injectViewerStyles`):
 
 ```javascript
-// Open PDF file programmatically accessing the viewer application
-document.addEventListener('DOMContentLoaded', async () => {
-  document.querySelector('pdfjs-viewer-element').addEventListener('initialized', (event) => {
-    const { viewerApp, viewerOptions } = event.detail
-    viewerApp.open({ data: pdfData })
-  })
-})
+const viewerElement = document.querySelector('pdfjs-viewer-element')
+
+await viewerElement.injectViewerStyles(`
+  #toolbarViewerRight { display: none; }
+  #findbar { border-top: 2px solid #0200a8; }
+`)
+```
+
+Public properties:
+
+`initPromise: Promise<InitializationData>` - Resolves after internal viewer is completely loaded and initialized, returning `{ viewerApp }`, that gives a programmatic access to PDF.js viewer app (PDFViewerApplication).
+
+Example (`initPromise`):
+
+```javascript
+const viewerElement = document.querySelector('pdfjs-viewer-element')
+const { viewerApp } = await viewerElement.initPromise
+
+viewerApp.open({ url: '/sample.pdf' })
+```
+
+`iframe: PdfjsViewerElementIframe` - Public reference to the internal `iframe` element. Useful when you need direct access to `contentWindow`/`contentDocument`.
+
+Example (`iframe`):
+
+```javascript
+const viewerElement = document.querySelector('pdfjs-viewer-element')
+
+// Access iframe window directly when needed.
+const iframeWindow = viewerElement.iframe.contentWindow
+
+// Read current location hash applied to the viewer.
+console.log(iframeWindow.location.hash)
+
+// Inspect iframe document title.
+console.log(viewerElement.iframe.contentDocument.title)
 ```
 
 You can also react to source changes dynamically:
 
 ```javascript
-const viewer = document.querySelector('pdfjs-viewer-element')
+const viewerElement = document.querySelector('pdfjs-viewer-element')
 viewer.setAttribute('src', '/another-file.pdf')
 ```
-
-## Events
-
-`initialized` - Fired after the PDF.js viewer is ready (after `PDFViewerApplication.initializedPromise` resolves). The event `detail` contains:
-
-- `viewerApp` (`PDFViewerApplication`)
-- `viewerOptions` (`PDFViewerApplicationOptions`)
-
-The event is emitted each time the internal viewer is rebuilt (for example after changing `locale`).
-
-## Migration notes
-
-If you are upgrading from an older version:
-
-- `viewer-extra-styles` and `viewer-extra-styles-urls` attributes are removed.
-- Use `injectViewerStyles(styles)` instead of style attributes.
-- Use the `initialized` event for `viewerApp` / `viewerOptions` access.
-- Runtime `src` updates are supported with `setAttribute('src', ...)`.
 
 ## Accessibility
 
 Use `iframe-title` to add a title to the `iframe` element and improve accessibility.
-
-## Known issues
-
-### The `.mjs` files support
-
-Since v4 PDF.js requires `.mjs` files support, make sure your server has it.
-
-In case of `nginx` this may cause errors, see https://github.com/mozilla/pdf.js/issues/17296
-
-Add `.mjs` files support for `nginx` example:
-
-```bash
-server {
-    # ...
-
-    location / {
-        root   /usr/share/nginx/html;
-        index  index.html;
-
-        location ~* \.mjs$ {
-            types {
-                text/javascript mjs;
-            }
-        }
-    }
-}
-```
-
-## Support via Ko-fi
-
-If you find `pdfjs-viewer-element` useful and want to support its development, consider making a donation via Ko-fi:
-
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/oleksandrshevchuk)
-
-> ❤️ Your support helps with maintenance, bug fixes, and long-term improvements.
 
 ## License
 [MIT](http://opensource.org/licenses/MIT)
