@@ -76,7 +76,7 @@ The element is block-level and needs an explicit height.
 
 ## Attributes
 
-| Attribute | Description | Default |
+| <div style="min-width: 19ch">Attribute</div> | <div style="min-width: 15ch">Description</div> | Default |
 | --- | --- | --- |
 | `src` | PDF file URL. | `''` |
 | `iframe-title` | Title for the internal `iframe` (recommended for accessibility). | `PDF viewer window` |
