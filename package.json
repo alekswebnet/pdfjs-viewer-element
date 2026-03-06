@@ -1,6 +1,6 @@
 {
   "name": "pdfjs-viewer-element",
-  "version": "3.1.1",
+  "version": "3.1.2",
   "license": "MIT",
   "author": {
     "name": "Oleksandr Shevchuk",
@@ -37,7 +37,7 @@
   ],
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc && vite build && node scripts/copy-worker.mjs",
     "test": "vitest",
     "coverage": "vitest run --coverage"
   },
@@ -47,6 +47,7 @@
     "@vitest/browser": "^4.0.18",
     "@vitest/browser-webdriverio": "^4.0.18",
     "jsdom": "^28.1.0",
+    "terser": "^5.39.0",
     "typescript": "^5.9.3",
     "vite": "^7.3.1",
     "vitest": "^4.0.18",
