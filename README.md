@@ -18,7 +18,7 @@ Supported in all [major browsers](https://caniuse.com/custom-elementsv1), and wo
 - Drop-in, iframe-based PDF.js default viewer for any web app
 - Works with same-origin and cross-origin PDF documents
 - Configure via attributes and URL parameters (page, zoom, search, pagemode, locale)
-- Programmatic access to `PDFViewerApplication` and `PDFViewerApplicationOptions` via the `initialized` event
+- Programmatic access to `PDFViewerApplication` via the `initPromise` public property
 - Theme control (automatic/light/dark) plus custom CSS injection
 - Locale override support using PDF.js viewer locales
 - Supports all modern browsers and most JS frameworks
