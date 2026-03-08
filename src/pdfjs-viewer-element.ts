@@ -203,13 +203,15 @@ export class PdfjsViewerElement extends HTMLElement {
 
   private buildViewerEntry = async () => {
     return new Promise<void>(async (resolve) => {
-      const [viewerEntry, viewerCss] = await Promise.all([
+      const [viewerEntry, viewerCss, paperAndInkTheme] = await Promise.all([
         import('./web/viewer.html?raw'),
         import('./web/viewer.css?inline'),
+        import('./themes/paper-and-ink.css?inline')
       ])
       const completeHtml = viewerEntry.default
         .replace('</head>', `
           <style>${viewerCss.default}</style>
+          <style>${paperAndInkTheme.default}</style>
           ${Array.from(this.viewerStyles).map(style => `<style>${style}</style>`).join('\n')}
         </head>`)
       this.iframe.addEventListener('load', () => resolve(), { once: true })
