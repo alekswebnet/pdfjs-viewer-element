@@ -4,10 +4,10 @@
   --sidebar-transition-duration:140ms;
   --sidebar-transition-timing-function:cubic-bezier(0.2, 0.7, 0.2, 1);
 
-  --toolbar-height:42px;
+  --toolbar-height:40px;
   --toolbar-horizontal-padding:4px;
   --toolbar-vertical-padding:4px;
-  --icon-size:18px;
+  --icon-size:17px;
   --toolbar-icon-opacity:0.82;
   --doorhanger-icon-opacity:0.92;
   --doorhanger-height:10px;
@@ -320,6 +320,11 @@ input[type="range"] {
   --button-primary-active-bg-color: #2f73b8;
   --button-primary-fg-color: #ffffff;
   --button-primary-border-color: #4a90d9;
+
+  --radio-bg-color: #f3f1ee;
+  --radio-checked-bg-color: #ffffff;
+  --radio-border-color: #bdb7ae;
+  --radio-checked-border-color: #4a90d9;
 }
 
 .colorPicker {
@@ -482,6 +487,11 @@ input[type="range"] {
     --button-primary-active-bg-color: #b6d4f1;
     --button-primary-fg-color: #101214;
     --button-primary-border-color: #7db0e4;
+
+    --radio-bg-color: #2a2723;
+    --radio-checked-bg-color: #1f1d1a;
+    --radio-border-color: #6a635a;
+    --radio-checked-border-color: #7db0e4;
   }
 
   .colorPicker {
@@ -644,6 +654,11 @@ input[type="range"] {
   --button-primary-active-bg-color: #b6d4f1;
   --button-primary-fg-color: #101214;
   --button-primary-border-color: #7db0e4;
+
+  --radio-bg-color: #2a2723;
+  --radio-checked-bg-color: #1f1d1a;
+  --radio-border-color: #6a635a;
+  --radio-checked-border-color: #7db0e4;
 }
 
 :root[style*="color-scheme: dark"] .colorPicker,
