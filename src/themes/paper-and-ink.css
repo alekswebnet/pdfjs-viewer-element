@@ -5,9 +5,9 @@
   --sidebar-transition-timing-function:cubic-bezier(0.2, 0.7, 0.2, 1);
 
   --toolbar-height:48px;
-  --toolbar-horizontal-padding: 8px;
-  --toolbar-vertical-padding: 8px;
-  --icon-size:17px;
+  --toolbar-horizontal-padding: 4px;
+  --toolbar-vertical-padding: 7px;
+  --icon-size:18px;
   --toolbar-icon-opacity:0.82;
   --doorhanger-icon-opacity:0.92;
   --doorhanger-height:10px;
@@ -981,4 +981,27 @@ input[type="range"] {
   --undo-button-bg-color-active: #333b47;
   --undo-button-border: 1px solid #3d444d;
   --undo-button-fg-color: #e6edf3;
+}
+
+@media all and (max-width: 420px){
+  #toolbarViewerMiddle{
+    display:none;
+  }
+}
+
+@media all and (max-width: 768px){
+  .hiddenSmallView,
+  .hiddenSmallView *{
+    display:none !important;
+  }
+
+  #toolbarContainer #toolbarViewer .toolbarButtonSpacer{
+    width:0;
+  }
+}
+
+@media all and (max-width: 600px){
+  #scaleSelectContainer{
+    display:none;
+  }
 }
