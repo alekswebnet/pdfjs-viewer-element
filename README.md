@@ -1,10 +1,6 @@
 # pdfjs-viewer-element
 
-Custom element that embeds [PDF.js default viewer](https://mozilla.github.io/pdf.js/web/viewer.html) using the `iframe`.
-
-The package provides a custom element, based on PDF.js [viewer options](https://github.com/mozilla/pdf.js/wiki/Viewer-options) and [URL parameters](https://github.com/mozilla/pdf.js/wiki/Debugging-PDF.js#url-parameters) API. 
-
-Supported in all [major browsers](https://caniuse.com/custom-elementsv1), and works with most [JS frameworks](https://custom-elements-everywhere.com/).
+Standalone, isolated, drop-in [PDF.js default viewer](https://mozilla.github.io/pdf.js/web/viewer.html).
 
 [![npm version](https://img.shields.io/npm/v/pdfjs-viewer-element?logo=npm&logoColor=fff)](https://www.npmjs.com/package/pdfjs-viewer-element)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/alekswebnet/pdfjs-viewer-element)
@@ -17,11 +13,12 @@ Supported in all [major browsers](https://caniuse.com/custom-elementsv1), and wo
 - Standalone isolated web component with no runtime dependencies
 - Drop-in, iframe-based PDF.js default viewer for any web app
 - Works with same-origin and cross-origin PDF documents
-- Configure via attributes and URL parameters (page, zoom, search, pagemode, locale)
+- Configure via attributes (page, zoom, search, pagemode, locale)
 - Programmatic access to `PDFViewerApplication` via the `initPromise` public property
 - Built-in Paper & Ink default theme, with theme control (automatic/light/dark) and custom CSS injection
+- Resource path attributes for PDF.js internals (`worker-src`, `c-map-url`, `icc-url`, `standard-font-data-url`, `wasm-url`, and more)
 - Locale override support using PDF.js viewer locales
-- Supports all modern browsers and most JS frameworks
+- Supports all [major browsers](https://caniuse.com/custom-elementsv1) and most [JS frameworks](https://custom-elements-everywhere.com/).
 
 ## Docs
 
