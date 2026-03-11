@@ -13,6 +13,13 @@ const DEFAULTS = {
   locale: '',
   viewerCssTheme: 'AUTOMATIC',
   workerSrc: DEFAULT_WORKER_SRC,
+  debuggerSrc: './debugger.mjs',
+  cMapUrl: '../web/cmaps/',
+  iccUrl: '../web/iccs/',
+  imageResourcesPath: './images/',
+  sandboxBundleSrc: '../build/pdf.sandbox.mjs',
+  standardFontDataUrl: '../web/standard_fonts/',
+  wasmUrl: '../web/wasm/',
   localeSrcTemplate: 'https://cdn.jsdelivr.net/gh/mozilla-l10n/firefox-l10n@main/{locale}/toolkit/toolkit/pdfviewer/viewer.ftl'
 } as const
 
@@ -36,7 +43,9 @@ export class PdfjsViewerElement extends HTMLElement {
 
   static get observedAttributes() {
     return[
-      'src', 'locale', 'viewer-css-theme', 'worker-src', 
+      'src', 'locale', 'viewer-css-theme', 'worker-src',
+      'debugger-src', 'c-map-url', 'icc-url', 'image-resources-path',
+      'sandbox-bundle-src', 'standard-font-data-url', 'wasm-url',
       'page', 'search', 'phrase', 'zoom', 'pagemode', 'iframe-title'
     ]
   }
@@ -182,6 +191,13 @@ export class PdfjsViewerElement extends HTMLElement {
   private applyViewerOptions = () => {
     const viewerOptions = this.iframe.contentWindow?.PDFViewerApplicationOptions
     viewerOptions?.set('workerSrc', this.getAttribute('worker-src') || DEFAULTS.workerSrc)
+    viewerOptions?.set('debuggerSrc', this.getAttribute('debugger-src') || DEFAULTS.debuggerSrc)
+    viewerOptions?.set('cMapUrl', this.getAttribute('c-map-url') || DEFAULTS.cMapUrl)
+    viewerOptions?.set('iccUrl', this.getAttribute('icc-url') || DEFAULTS.iccUrl)
+    viewerOptions?.set('imageResourcesPath', this.getAttribute('image-resources-path') || DEFAULTS.imageResourcesPath)
+    viewerOptions?.set('sandboxBundleSrc', this.getAttribute('sandbox-bundle-src') || DEFAULTS.sandboxBundleSrc)
+    viewerOptions?.set('standardFontDataUrl', this.getAttribute('standard-font-data-url') || DEFAULTS.standardFontDataUrl)
+    viewerOptions?.set('wasmUrl', this.getAttribute('wasm-url') || DEFAULTS.wasmUrl)
     viewerOptions?.set('defaultUrl', this.getFullPath(this.getAttribute('src') || DEFAULTS.src))
     viewerOptions?.set('disablePreferences', true)
     viewerOptions?.set('eventBusDispatchToDOM', true)
@@ -203,13 +219,15 @@ export class PdfjsViewerElement extends HTMLElement {
 
   private buildViewerEntry = async () => {
     return new Promise<void>(async (resolve) => {
-      const [viewerEntry, viewerCss] = await Promise.all([
+      const [viewerEntry, viewerCss, paperAndInkTheme] = await Promise.all([
         import('./web/viewer.html?raw'),
         import('./web/viewer.css?inline'),
+        import('./themes/paper-and-ink.css?inline')
       ])
       const completeHtml = viewerEntry.default
         .replace('</head>', `
           <style>${viewerCss.default}</style>
+          <style>${paperAndInkTheme.default}</style>
           ${Array.from(this.viewerStyles).map(style => `<style>${style}</style>`).join('\n')}
         </head>`)
       this.iframe.addEventListener('load', () => resolve(), { once: true })
@@ -263,6 +281,25 @@ export class PdfjsViewerElement extends HTMLElement {
   async attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null) {
     if (oldValue === newValue) return
     if (!this.iframe) return
+
+    const optionByAttribute = {
+      'worker-src': { key: 'workerSrc', fallback: DEFAULTS.workerSrc },
+      'debugger-src': { key: 'debuggerSrc', fallback: DEFAULTS.debuggerSrc },
+      'c-map-url': { key: 'cMapUrl', fallback: DEFAULTS.cMapUrl },
+      'icc-url': { key: 'iccUrl', fallback: DEFAULTS.iccUrl },
+      'image-resources-path': { key: 'imageResourcesPath', fallback: DEFAULTS.imageResourcesPath },
+      'sandbox-bundle-src': { key: 'sandboxBundleSrc', fallback: DEFAULTS.sandboxBundleSrc },
+      'standard-font-data-url': { key: 'standardFontDataUrl', fallback: DEFAULTS.standardFontDataUrl },
+      'wasm-url': { key: 'wasmUrl', fallback: DEFAULTS.wasmUrl }
+    } as const
+
+    if (name in optionByAttribute) {
+      const viewerOptions = this.iframe.contentWindow?.PDFViewerApplicationOptions
+      const { key, fallback } = optionByAttribute[name as keyof typeof optionByAttribute]
+      viewerOptions?.set(key, newValue || fallback)
+      return
+    }
+
     switch (name) {
       case 'src': {
         const viewerApp = this.iframe.contentWindow?.PDFViewerApplication
@@ -286,11 +323,6 @@ export class PdfjsViewerElement extends HTMLElement {
       case 'viewer-css-theme':
         this.applyViewerTheme()
         return
-      case 'worker-src': {
-        const viewerOptions = this.iframe.contentWindow?.PDFViewerApplicationOptions
-        viewerOptions?.set('workerSrc', newValue || DEFAULTS.workerSrc)
-        return
-      }
       default:
         await this.applyIframeHash()
     }

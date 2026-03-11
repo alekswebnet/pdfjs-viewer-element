@@ -1,10 +1,6 @@
 # pdfjs-viewer-element
 
-Custom element that embeds [PDF.js default viewer](https://mozilla.github.io/pdf.js/web/viewer.html) using the `iframe`.
-
-The package provides a custom element, based on PDF.js [viewer options](https://github.com/mozilla/pdf.js/wiki/Viewer-options) and [URL parameters](https://github.com/mozilla/pdf.js/wiki/Debugging-PDF.js#url-parameters) API. 
-
-Supported in all [major browsers](https://caniuse.com/custom-elementsv1), and works with most [JS frameworks](https://custom-elements-everywhere.com/).
+Standalone, isolated, drop-in [PDF.js default viewer](https://mozilla.github.io/pdf.js/web/viewer.html).
 
 [![npm version](https://img.shields.io/npm/v/pdfjs-viewer-element?logo=npm&logoColor=fff)](https://www.npmjs.com/package/pdfjs-viewer-element)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/alekswebnet/pdfjs-viewer-element)
@@ -17,11 +13,12 @@ Supported in all [major browsers](https://caniuse.com/custom-elementsv1), and wo
 - Standalone isolated web component with no runtime dependencies
 - Drop-in, iframe-based PDF.js default viewer for any web app
 - Works with same-origin and cross-origin PDF documents
-- Configure via attributes and URL parameters (page, zoom, search, pagemode, locale)
+- Configure via attributes (page, zoom, search, pagemode, locale)
 - Programmatic access to `PDFViewerApplication` via the `initPromise` public property
-- Theme control (automatic/light/dark) plus custom CSS injection
+- Built-in Paper & Ink default theme, with theme control (automatic/light/dark) and custom CSS injection
+- Resource path attributes for PDF.js internals (`worker-src`, `c-map-url`, `icc-url`, `standard-font-data-url`, `wasm-url`, and more)
 - Locale override support using PDF.js viewer locales
-- Supports all modern browsers and most JS frameworks
+- Supports all [major browsers](https://caniuse.com/custom-elementsv1) and most [JS frameworks](https://custom-elements-everywhere.com/).
 
 ## Docs
 
@@ -89,6 +86,13 @@ The element is block-level and needs an explicit height.
 | `locale-src-template` | Locale file URL template. Must contain `{locale}` placeholder. Used together with `locale`. | `https://cdn.jsdelivr.net/gh/mozilla-l10n/firefox-l10n@main/{locale}/toolkit/toolkit/pdfviewer/viewer.ftl` |
 | `viewer-css-theme` | Viewer theme: `AUTOMATIC`, `LIGHT`, `DARK`. | `AUTOMATIC` |
 | `worker-src` | PDF.js worker URL override. | `<package-url>/pdf.worker.min.mjs` |
+| `debugger-src` | PDF.js debugger script URL (`debuggerSrc` option). | `./debugger.mjs` |
+| `c-map-url` | CMap directory URL (`cMapUrl` option). | `../web/cmaps/` |
+| `icc-url` | ICC profile directory URL (`iccUrl` option). | `../web/iccs/` |
+| `image-resources-path` | Image resources directory (`imageResourcesPath` option). | `./images/` |
+| `sandbox-bundle-src` | Sandbox bundle URL (`sandboxBundleSrc` option). | `../build/pdf.sandbox.mjs` |
+| `standard-font-data-url` | Standard fonts directory (`standardFontDataUrl` option). | `../web/standard_fonts/` |
+| `wasm-url` | WASM assets directory (`wasmUrl` option). | `../web/wasm/` |
 
 Play with attributes on [API docs page](https://alekswebnet.github.io/pdfjs-viewer-element/#api).
 
@@ -99,7 +103,7 @@ Most attributes can be updated dynamically:
 - `src` updates by calling PDF.js `open({ url })` without rebuilding the viewer.
 - `page`, `search`, `phrase`, `zoom`, `pagemode` update via hash parameters.
 - `viewer-css-theme` updates the viewer theme at runtime.
-- `worker-src` updates viewer options for subsequent document loads.
+- `worker-src`, `debugger-src`, `c-map-url`, `icc-url`, `image-resources-path`, `sandbox-bundle-src`, `standard-font-data-url`, `wasm-url` update viewer options for subsequent document loads.
 - `locale` rebuilds the viewer so localization resources can be applied.
 
 ## Worker source
@@ -139,6 +143,8 @@ Example:
 
 ## Viewer CSS theme
 
+The component includes and applies a default Paper & Ink theme from `src/themes/paper-and-ink.css`.
+
 Use `viewer-css-theme` attribute to set light or dark theme manually:
 
 ```html
@@ -155,6 +161,24 @@ const viewerElement = document.querySelector('pdfjs-viewer-element')
 viewerElement.setAttribute('viewer-css-theme', 'DARK')
 viewerElement.setAttribute('viewer-css-theme', 'LIGHT')
 viewerElement.setAttribute('viewer-css-theme', 'AUTOMATIC')
+```
+
+## PDF.js resource attributes
+
+You can override additional PDF.js viewer resource paths when needed:
+
+```html
+<pdfjs-viewer-element
+  src="/file.pdf"
+  worker-src="/pdf.worker.min.mjs"
+  debugger-src="/debugger.mjs"
+  c-map-url="/cmaps/"
+  icc-url="/iccs/"
+  image-resources-path="/images/"
+  sandbox-bundle-src="/pdf.sandbox.mjs"
+  standard-font-data-url="/standard_fonts/"
+  wasm-url="/wasm/">
+</pdfjs-viewer-element>
 ```
 
 ## Viewer custom styles
