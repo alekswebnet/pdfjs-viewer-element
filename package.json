@@ -7,13 +7,21 @@
     "email": "alekswebnet@gmail.com"
   },
   "keywords": [
-    "pdf",
+    "javascript",
+    "web-component",
+    "typescript",
+    "pdf-viewer",
+    "pdf-document",
     "pdfjs",
-    "pdf viewer",
-    "pdfjs viewer",
-    "web component",
-    "pdfjs viewer element",
-    "pdf"
+    "react-pdf",
+    "vue-pdf",
+    "pdfium",
+    "pdf-lib",
+    "adobe-acrobat",
+    "pdf-sdk",
+    "embed-pdf",
+    "pdfjs-viewer",
+    "embed-pdf-viewer"
   ],
   "main": "./dist/pdfjs-viewer-element.js",
   "module": "./dist/pdfjs-viewer-element.js",
