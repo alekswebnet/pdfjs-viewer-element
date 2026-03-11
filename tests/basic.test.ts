@@ -51,7 +51,7 @@ describe('Basic tests', async () => {
     )
 
     expect(getViewerElement()).exist
-    expect(getComputedStyle(getViewerElement()!).getPropertyValue('--body-bg-color')).toMatch('rgb(42 42 46)')
+    expect(getComputedStyle(getViewerElement()!).getPropertyValue('--body-bg-color')).toMatch('#0d1117')
   })
 
   it('should hide the download button', async () => {
@@ -114,6 +114,68 @@ describe('Basic tests', async () => {
 
     const options = getIframe().contentWindow.PDFViewerApplicationOptions.getAll()
     expect(options.workerSrc).eq(workerSrc)
+  })
+
+  it('should apply extended option attributes at runtime and restore defaults on remove', async () => {
+    await mountViewer(`
+      <pdfjs-viewer-element src="/sample-pdf-10MB.pdf"></pdfjs-viewer-element>`
+    )
+
+    const viewer = document.body.querySelector('pdfjs-viewer-element') as HTMLElement
+    const cases = [
+      {
+        attr: 'debugger-src',
+        key: 'debuggerSrc',
+        value: 'https://example.com/debugger.mjs',
+        fallback: './debugger.mjs'
+      },
+      {
+        attr: 'c-map-url',
+        key: 'cMapUrl',
+        value: 'https://example.com/cmaps/',
+        fallback: '../web/cmaps/'
+      },
+      {
+        attr: 'icc-url',
+        key: 'iccUrl',
+        value: 'https://example.com/iccs/',
+        fallback: '../web/iccs/'
+      },
+      {
+        attr: 'image-resources-path',
+        key: 'imageResourcesPath',
+        value: 'https://example.com/images/',
+        fallback: './images/'
+      },
+      {
+        attr: 'sandbox-bundle-src',
+        key: 'sandboxBundleSrc',
+        value: 'https://example.com/pdf.sandbox.mjs',
+        fallback: '../build/pdf.sandbox.mjs'
+      },
+      {
+        attr: 'standard-font-data-url',
+        key: 'standardFontDataUrl',
+        value: 'https://example.com/standard_fonts/',
+        fallback: '../web/standard_fonts/'
+      },
+      {
+        attr: 'wasm-url',
+        key: 'wasmUrl',
+        value: 'https://example.com/wasm/',
+        fallback: '../web/wasm/'
+      }
+    ] as const
+
+    for (const { attr, key, value, fallback } of cases) {
+      viewer.setAttribute(attr, value)
+      let options = getIframe().contentWindow.PDFViewerApplicationOptions.getAll() as Record<string, string>
+      expect(options[key]).eq(value)
+
+      viewer.removeAttribute(attr)
+      options = getIframe().contentWindow.PDFViewerApplicationOptions.getAll() as Record<string, string>
+      expect(options[key]).eq(fallback)
+    }
   })
 
   it('should open a new document when src changes at runtime', async () => {
