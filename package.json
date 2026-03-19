@@ -1,6 +1,6 @@
 {
   "name": "pdfjs-viewer-element",
-  "version": "3.2.0",
+  "version": "3.2.1",
   "license": "MIT",
   "author": {
     "name": "Oleksandr Shevchuk",
@@ -15,7 +15,7 @@
     "pdfjs",
     "react-pdf",
     "vue-pdf",
-    "pdfium",
+    "pdfjs-dist",
     "pdf-lib",
     "adobe-acrobat",
     "pdf-sdk",

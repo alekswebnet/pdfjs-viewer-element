@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pdfjs-viewer-element | Iframe access demo</title>
+    <script type="module" src="../dist/pdfjs-viewer-element.js"></script>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <pdfjs-viewer-element
+      src="/public/sample-pdf-with-images.pdf" 
+      style="height: 100dvh">
+    </pdfjs-viewer-element>
+  </body>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const viewerElement = document.querySelector('pdfjs-viewer-element')
+      const { viewerOptions } = await viewerElement.setViewerOptions({ 
+        enableSignatureEditor: true
+      })
+      console.log('Viewer options after setting:', viewerOptions.getAll())
+    })
+  </script>
+</html>

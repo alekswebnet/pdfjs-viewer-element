@@ -15,6 +15,7 @@ const pdfData = Uint8Array.from(atob(
 
 document.addEventListener('DOMContentLoaded', async () => {
   const viewerElement = document.querySelector('#base-viewer')
+  if (!viewerElement) return
   const { viewerApp } = await viewerElement.initPromise
   viewerApp.open({ data: pdfData })
 })

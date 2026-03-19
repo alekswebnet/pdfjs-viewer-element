@@ -10,6 +10,7 @@ export declare class PdfjsViewerElement extends HTMLElement {
     private localeResourceUrl?;
     private localeResourceLink?;
     private viewerStyles;
+    private optionsToSet;
     static get observedAttributes(): string[];
     private formatTemplate;
     private getFullPath;
@@ -31,6 +32,12 @@ export declare class PdfjsViewerElement extends HTMLElement {
     disconnectedCallback(): void;
     attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): Promise<void>;
     injectViewerStyles(styles: string): Promise<void>;
+    setViewerOptions(options?: Record<string, string | number>): Promise<{
+        viewerOptions: {
+            set: (name: string, value: string | boolean | number | Record<string, any>) => void;
+            getAll: () => Record<string, any>;
+        };
+    }>;
 }
 export interface IframeWindow extends Window {
     PDFViewerApplication?: {

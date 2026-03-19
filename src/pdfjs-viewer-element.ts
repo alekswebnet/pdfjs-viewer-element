@@ -40,6 +40,7 @@ export class PdfjsViewerElement extends HTMLElement {
   private localeResourceUrl?: string
   private localeResourceLink?: HTMLLinkElement
   private viewerStyles = new Set<string>()
+  private optionsToSet: Record<string, string | number> = {}
 
   static get observedAttributes() {
     return[
@@ -203,6 +204,10 @@ export class PdfjsViewerElement extends HTMLElement {
     viewerOptions?.set('eventBusDispatchToDOM', true)
     viewerOptions?.set('localeProperties', { lang: this.getAttribute('locale') || DEFAULTS.locale })
     viewerOptions?.set('viewerCssTheme', this.getCssThemeOption())
+    for (const [key, value] of Object.entries(this.optionsToSet)) {
+      viewerOptions?.set(key, value)
+    }
+    this.optionsToSet = {}
   }
 
   private getIframeLocationHash = () => {
@@ -332,6 +337,14 @@ export class PdfjsViewerElement extends HTMLElement {
     if (!styles) return
     this.viewerStyles.add(styles)
     this.appendRuntimeStyle(styles)
+  }
+
+  public async setViewerOptions(options: Record<string, string | number> = {}) {
+    this.optionsToSet = options
+    await this.initPromise
+    return {
+      viewerOptions: this.iframe.contentWindow?.PDFViewerApplicationOptions
+    }
   }
 }
 

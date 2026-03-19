@@ -14,9 +14,10 @@ Standalone, isolated, drop-in [PDF.js default viewer](https://mozilla.github.io/
 - Drop-in, iframe-based PDF.js default viewer for any web app
 - Works with same-origin and cross-origin PDF documents
 - Configure via attributes (page, zoom, search, pagemode, locale)
-- Programmatic access to `PDFViewerApplication` via the `initPromise` public property
-- Built-in Paper & Ink default theme, with theme control (automatic/light/dark) and custom CSS injection
 - Resource path attributes for PDF.js internals (`worker-src`, `c-map-url`, `icc-url`, `standard-font-data-url`, `wasm-url`, and more)
+- Configure `PDFViewerApplicationOptions` via the `setViewerOptions` method
+- Access to `PDFViewerApplication` via the `initPromise` property
+- Built-in Paper & Ink default theme, with theme control (automatic/light/dark) and custom CSS injection
 - Locale override support using PDF.js viewer locales
 - Supports all [major browsers](https://caniuse.com/custom-elementsv1) and most [JS frameworks](https://custom-elements-everywhere.com/).
 
@@ -199,36 +200,9 @@ viewerElement.injectViewerStyles(`
 
 `injectViewerStyles(...)` applies styles immediately when the viewer document is ready, and keeps them for future rebuilds.
 
-Build your own theme with viewer custom variables and inject it via `injectViewerStyles(...)`:
-
-```css
-:root {
-  --main-color: #5755FE;
-  --toolbar-icon-bg-color: #0200a8;
-  --field-color: #5755FE;
-  --separator-color: #5755FE;
-  --toolbar-border-color: #5755FE;
-  --field-border-color: #5755FE;
-  --toolbar-bg-color: rgba(139, 147, 255, .1);
-  --body-bg-color: rgba(255, 247, 252, .7);
-  --button-hover-color: rgba(139, 147, 255, .1);
-  --toolbar-icon-hover-bg-color: #0200a8;
-  --toggled-btn-color: #0200a8;
-  --toggled-btn-bg-color: rgba(139, 147, 255, .1);
-  --toggled-hover-active-btn-color: #5755FE;
-  --doorhanger-hover-bg-color: rgba(139, 147, 255, .1);
-  --doorhanger-hover-color: #0200a8;
-  --dropdown-btn-bg-color: rgba(139, 147, 255, .1);
-}
-```
-
-## Methods and Public properties
-
-Methods:
+## Methods and properties
 
 `injectViewerStyles(styles: string)` - Adds custom CSS to the viewer now (when ready) and for future rebuilds.
-
-Example (`injectViewerStyles`):
 
 ```javascript
 const viewerElement = document.querySelector('pdfjs-viewer-element')
@@ -239,11 +213,7 @@ await viewerElement.injectViewerStyles(`
 `)
 ```
 
-Public properties:
-
 `initPromise: Promise<InitializationData>` - Resolves after internal viewer is completely loaded and initialized, returning `{ viewerApp }`, that gives a programmatic access to PDF.js viewer app (PDFViewerApplication).
-
-Example (`initPromise`):
 
 ```javascript
 const viewerElement = document.querySelector('pdfjs-viewer-element')
@@ -252,9 +222,19 @@ const { viewerApp } = await viewerElement.initPromise
 viewerApp.open({ url: '/sample.pdf' })
 ```
 
-`iframe: PdfjsViewerElementIframe` - Public reference to the internal `iframe` element. Useful when you need direct access to `contentWindow`/`contentDocument`.
+`setViewerOptions(options: Record<string, string | number>): Promise<{ viewerOptions: IframeWindow['PDFViewerApplicationOptions'] }>`
 
-Example (`iframe`):
+Updates PDF.js viewer options at runtime. Call this method with an object of key-value pairs to set options such as resource paths, rendering settings, or other PDFViewerApplicationOptions. Resolves after the viewer is initialized and returns the `viewerOptions` for testing purpose.
+
+```javascript
+const viewerElement = document.querySelector('pdfjs-viewer-element')
+await viewerElement.setViewerOptions({
+  enableComment: true,
+  enableSignatureEditor: true
+})
+```
+
+`iframe: PdfjsViewerElementIframe` - Public reference to the internal `iframe` element. Useful when you need direct access to `contentWindow`/`contentDocument`.
 
 ```javascript
 const viewerElement = document.querySelector('pdfjs-viewer-element')
