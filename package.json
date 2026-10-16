@@ -1,5 +1,5 @@
 {
-  "name": "pdfjs-viewer-element",
+  "name": "@missing-elements/pdfjs-viewer",
   "version": "4.2.0",
   "license": "MIT",
   "author": {
@@ -36,16 +36,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/alekswebnet/pdfjs-viewer-element.git"
+    "url": "git+https://github.com/missing-elements/pdfjs-viewer.git"
   },
   "homepage": "https://alekswebnet.github.io/pdfjs-viewer-element/",
   "bugs": {
-    "url": "https://github.com/alekswebnet/pdfjs-viewer-element/issues"
+    "url": "https://github.com/missing-elements/pdfjs-viewer/issues"
   },
   "files": [
     "dist",
     "types"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "sync:pdfjs": "node scripts/sync-pdfjs-assets.mjs",
     "dev": "vite",

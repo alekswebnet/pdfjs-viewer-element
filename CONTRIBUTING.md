@@ -1,6 +1,6 @@
 # Contributing
 
-Thank you for contributing to `pdfjs-viewer-element`.
+Thank you for contributing to `@missing-elements/pdfjs-viewer`.
 
 ## Prerequisites
 
@@ -11,8 +11,8 @@ Thank you for contributing to `pdfjs-viewer-element`.
 ## Local Setup
 
 ```bash
-git clone https://github.com/alekswebnet/pdfjs-viewer-element.git
-cd pdfjs-viewer-element
+git clone https://github.com/missing-elements/pdfjs-viewer.git
+cd pdfjs-viewer
 pnpm install --frozen-lockfile
 pnpm exec playwright install firefox
 ```

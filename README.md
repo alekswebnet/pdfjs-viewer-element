@@ -2,8 +2,8 @@
 
 A standalone, isolated, self-hostable, plug-in custom element for viewing PDF files, based on [PDF.js default viewer](https://mozilla.github.io/pdf.js/web/viewer.html).
 
-[![npm version](https://img.shields.io/npm/v/pdfjs-viewer-element?logo=npm&logoColor=fff)](https://www.npmjs.com/package/pdfjs-viewer-element)
-[![](https://data.jsdelivr.com/v1/package/npm/pdfjs-viewer-element/badge)](https://www.jsdelivr.com/package/npm/pdfjs-viewer-element)
+[![npm version](https://img.shields.io/npm/v/@missing-elements/pdfjs-viewer?logo=npm&logoColor=fff)](https://www.npmjs.com/package/@missing-elements/pdfjs-viewer)
+[![](https://data.jsdelivr.com/v1/package/npm/@missing-elements/pdfjs-viewer/badge)](https://www.jsdelivr.com/package/npm/@missing-elements/pdfjs-viewer)
 [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/pdfjs-viewer-element)
 
 ![PDF.js viewer](image.webp)
@@ -35,7 +35,7 @@ A standalone, isolated, self-hostable, plug-in custom element for viewing PDF fi
 
 [CodePen demo Vue](https://codepen.io/redrobot753/pen/JoRYqwN)
 
-[Usage examples](https://github.com/alekswebnet/pdfjs-viewer-element/tree/master/demo)
+[Usage examples](https://github.com/missing-elements/pdfjs-viewer/tree/master/demo)
 
 [Accessibility guidance](./ACCESSIBILITY.md)
 
@@ -47,16 +47,27 @@ A standalone, isolated, self-hostable, plug-in custom element for viewing PDF fi
 
 ```bash
 # With npm
-npm install pdfjs-viewer-element
+npm install @missing-elements/pdfjs-viewer
 # With pnpm
-pnpm add pdfjs-viewer-element
+pnpm add @missing-elements/pdfjs-viewer
 ```
 
 ### Using browser and CDN:
 
 ```html
-<script type="module" src="https://cdn.jsdelivr.net/npm/pdfjs-viewer-element/dist/pdfjs-viewer-element.js"></script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/@missing-elements/pdfjs-viewer/dist/pdfjs-viewer-element.js"></script>
 ```
+
+### Migrating from `pdfjs-viewer-element`
+
+The package was previously published as [`pdfjs-viewer-element`](https://www.npmjs.com/package/pdfjs-viewer-element), which is now deprecated. Only the package name changed: the `<pdfjs-viewer-element>` tag, file names and API are the same.
+
+```bash
+npm uninstall pdfjs-viewer-element
+npm install @missing-elements/pdfjs-viewer
+```
+
+Update imports and CDN URLs from `pdfjs-viewer-element` to `@missing-elements/pdfjs-viewer`.
 
 ## Usage
 
@@ -120,7 +131,7 @@ Bundlers that do not analyse `new URL(..., import.meta.url)`, esbuild among them
 ```html
 <pdfjs-viewer-element
   src="/file.pdf"
-  assets-base="https://cdn.jsdelivr.net/npm/pdfjs-viewer-element@4/dist/">
+  assets-base="https://cdn.jsdelivr.net/npm/@missing-elements/pdfjs-viewer@4/dist/">
 </pdfjs-viewer-element>
 ```
 
