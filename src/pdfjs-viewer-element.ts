@@ -209,13 +209,17 @@ export class PdfjsViewerElement extends HTMLElement {
     const viewerOptions = this.iframe.contentWindow?.PDFViewerApplicationOptions
     viewerOptions?.set('viewerCssTheme', theme)
 
+    // The theme stylesheet selects its forced palettes by `data-color-scheme`; the inline
+    // `color-scheme` is what PDF.js itself sets for the browser UI.
     const doc = this.iframe.contentDocument
     if (!doc?.documentElement) return
     const mode = theme === ViewerCssTheme.LIGHT ? 'light' : theme === ViewerCssTheme.DARK ? 'dark' : ''
     if (mode) {
       doc.documentElement.style.setProperty('color-scheme', mode)
+      doc.documentElement.setAttribute('data-color-scheme', mode)
     } else {
       doc.documentElement.style.removeProperty('color-scheme')
+      doc.documentElement.removeAttribute('data-color-scheme')
     }
   }
 
@@ -487,6 +491,8 @@ export class PdfjsViewerElement extends HTMLElement {
   private setupViewerApp = async () => {
     const viewerApp = await this.onViewerAppCreated()
     this.applyViewerOptions()
+    // Applied before initialization so a forced palette is in place when the viewer first paints.
+    this.applyViewerTheme()
     await viewerApp?.initializedPromise
 
     this.applyViewerTheme()

@@ -59,25 +59,32 @@ describe('Basic tests', async () => {
     const doc = getIframe().contentDocument!
     const themeSheet = Array.from(doc.styleSheets).find(sheet => sheet.href?.endsWith('/paper-and-ink.css'))!
     const darkRules = Array.from(themeSheet.cssRules).filter(
-      (rule): rule is CSSMediaRule => rule instanceof getIframe().contentWindow.CSSMediaRule
-        && rule.conditionText === '(prefers-color-scheme: dark)'
+      (rule): rule is CSSMediaRule => (rule as CSSMediaRule).conditionText === '(prefers-color-scheme: dark)'
     )
+    // One system dark block per palette; the neutral palette hides the warm one in the colors below.
     expect(darkRules).toHaveLength(2)
+    // `--hover-filter` comes from viewer.css, which switches it on the system scheme alone.
     const colors = () => [
       getComputedStyle(doc.documentElement).getPropertyValue('--body-bg-color').trim(),
-      getComputedStyle(doc.querySelector('#viewsManager')!).getPropertyValue('--text-color').trim()
+      getComputedStyle(doc.querySelector('#viewsManager')!).getPropertyValue('--text-color').trim(),
+      getComputedStyle(doc.documentElement).getPropertyValue('--hover-filter').trim()
     ]
-    for (const systemDark of [false, true, false, true]) {
+    const light = ['#f1f3f5', '#1f2328', 'brightness(0.9)']
+    const dark = ['#0d1117', '#e6edf3', 'brightness(1.4)']
+    for (const systemDark of [false, true, false]) {
       // Toggle matching of the system dark rules without depending on the host's theme.
       darkRules.forEach(rule => { rule.media.mediaText = systemDark ? 'all' : 'not all' })
       viewer.setAttribute('viewer-css-theme', 'LIGHT')
-      expect(colors()).toEqual(['#f1f3f5', '#1f2328'])
+      expect(doc.documentElement.dataset.colorScheme).eq('light')
+      expect(colors()).toEqual(light)
       viewer.setAttribute('viewer-css-theme', 'DARK')
-      expect(colors()).toEqual(['#0d1117', '#e6edf3'])
+      expect(doc.documentElement.dataset.colorScheme).eq('dark')
+      expect(colors()).toEqual(dark)
       viewer.setAttribute('viewer-css-theme', 'AUTOMATIC')
-      expect(colors()).toEqual(systemDark ? ['#0d1117', '#e6edf3'] : ['#f1f3f5', '#1f2328'])
+      expect(doc.documentElement.dataset.colorScheme).toBeUndefined()
+      expect(colors()).toEqual(systemDark ? dark : light)
       viewer.removeAttribute('viewer-css-theme')
-      expect(colors()).toEqual(systemDark ? ['#0d1117', '#e6edf3'] : ['#f1f3f5', '#1f2328'])
+      expect(colors()).toEqual(systemDark ? dark : light)
     }
   })
 

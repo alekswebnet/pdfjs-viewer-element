@@ -364,7 +364,10 @@ input[type="number"] {
     --editor-toolbar-highlight-image: var(--pi-icon-highlight);
 }
 @media (prefers-color-scheme: dark) {
-  :where(:root:not([style*="color-scheme: light"])) {
+  /* The component sets html[data-color-scheme] for viewer-css-theme="LIGHT" and "DARK"; the system
+     dark rules are skipped for LIGHT. :where() adds no specificity, so the nested rules keep the
+     weight of the light rules above and consumer overrides at :root level still win. */
+  :where(:root:not([data-color-scheme="light"])) {
     &:root {
       --main-color: #f2eee8;
       --toolbar-icon-bg-color: #f2eee8;
@@ -528,8 +531,9 @@ input[type="number"] {
 }
 
 /* Support forced dark mode from viewer-css-theme="DARK".
-   The component sets html color-scheme inline, which does not trigger prefers-color-scheme media queries. */
-:root[style*="color-scheme"][style*="dark"] {
+   The inline color-scheme does not trigger prefers-color-scheme media queries, so the component
+   also sets html[data-color-scheme]. */
+:root[data-color-scheme="dark"] {
   --main-color: #f2eee8;
   --toolbar-icon-bg-color: #f2eee8;
   --toolbar-icon-hover-bg-color: #ffffff;
@@ -581,7 +585,7 @@ input[type="number"] {
   --editorFreeHighlight-editing-cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24'%3E%3Cpath d='M2 18c2.5-4 6-6.8 11-8.8l2.2 3.2C10.4 14.2 7 16.6 4.8 20z' fill='%237db0e4' fill-opacity='.6'/%3E%3Cpath d='M13 9.2l2.2 3.2M2 18c2.5-4 6-6.8 11-8.8' fill='none' stroke='%23f2eee8' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") 1 18, pointer;
 }
 
-:root[style*="color-scheme"][style*="dark"] #viewsManager {
+:root[data-color-scheme="dark"] #viewsManager {
   --sidebar-bg-color: rgb(27 26 24 / 0.96);
   --header-bg: rgb(36 34 32 / 0.96);
   --text-color: #f2eee8;
@@ -611,14 +615,14 @@ input[type="number"] {
   --image-shadow: 0 1px 2px rgb(0 0 0 / 28%), 0 0 0 1px var(--image-border-color);
 }
 
-:root[style*="color-scheme"][style*="dark"] .sidebar {
+:root[data-color-scheme="dark"] .sidebar {
   --sidebar-bg-color: #1f1d1a;
   --sidebar-border-color: rgb(242 238 232 / 20%);
   --sidebar-box-shadow: 0 1px 3px rgb(0 0 0 / 35%), 0 6px 16px rgb(0 0 0 / 32%);
   --resizer-hover-bg-color: #7db0e4;
 }
 
-:root[style*="color-scheme"][style*="dark"] .dialog {
+:root[data-color-scheme="dark"] .dialog {
   --dialog-bg-color: #23201c;
   --dialog-border-color: #4c463e;
   --dialog-shadow: 0 8px 24px rgb(0 0 0 / 38%);
@@ -648,13 +652,13 @@ input[type="number"] {
   --radio-checked-border-color: #7db0e4;
 }
 
-:root[style*="color-scheme"][style*="dark"] .colorPicker {
+:root[data-color-scheme="dark"] .colorPicker {
   --hover-outline-color: #9ac2ea;
   --selected-outline-color: #7db0e4;
   --swatch-border-color: #4c463e;
 }
 
-:root[style*="color-scheme"][style*="dark"] .toggle-button {
+:root[data-color-scheme="dark"] .toggle-button {
   --color-accent-primary: light-dark(#4a90d9, #7db0e4);
   --color-accent-primary-hover: light-dark(#3f83cb, #9ac2ea);
   --color-accent-primary-active: light-dark(#2f73b8, #b6d4f1);
@@ -662,11 +666,11 @@ input[type="number"] {
   --border-color-interactive: light-dark(#cfcac3, #f2eee8);
 }
 
-:root[style*="color-scheme"][style*="dark"] .toggle-button[aria-pressed=true] {
+:root[data-color-scheme="dark"] .toggle-button[aria-pressed=true] {
   --toggle-dot-background-color-on-pressed: #1f1d1a;
 }
 
-:root[style*="color-scheme"][style*="dark"] .messageBar {
+:root[data-color-scheme="dark"] .messageBar {
   --message-bar-close-button-color: #f2eee8;
   --message-bar-close-button-color-hover: #ffffff;
   --message-bar-close-button-hover-bg-color: rgb(125 176 228 / 22%);
@@ -674,7 +678,7 @@ input[type="number"] {
   --message-bar-close-button-focus-bg-color: rgb(125 176 228 / 26%);
 }
 
-:root[style*="color-scheme"][style*="dark"] #editorUndoBar {
+:root[data-color-scheme="dark"] #editorUndoBar {
   --text-primary-color: #f2eee8;
   --message-bar-icon-color: #7db0e4;
   --message-bar-bg-color: #273341;
@@ -691,6 +695,10 @@ input[type="number"] {
 
 /* Neutral refresh: remove warm tones while preserving Paper & Ink structure. */
 :root {
+  /* viewer.css switches these on the system scheme alone; the theme keeps them in step with its
+     palettes so a forced LIGHT stays light. */
+  --button-disabled-opacity: 0.4;
+  --hover-filter: brightness(0.9);
   --body-bg-color: #f1f3f5;
   --toolbar-bg-color: #ffffff;
   --toolbar-border-color: #d0d7de;
@@ -777,8 +785,11 @@ input[type="number"] {
 }
 
 @media (prefers-color-scheme: dark) {
-  :where(:root:not([style*="color-scheme: light"])) {
+  /* Guarded like the first palette above. */
+  :where(:root:not([data-color-scheme="light"])) {
     &:root {
+      --button-disabled-opacity: 0.6;
+      --hover-filter: brightness(1.4);
       --main-color: #e6edf3;
       --toolbar-icon-bg-color: #e6edf3;
       --toolbar-icon-hover-bg-color: #ffffff;
@@ -877,7 +888,9 @@ input[type="number"] {
 }
 
 /* Support forced dark mode from viewer-css-theme="DARK" with neutral palette. */
-:root[style*="color-scheme"][style*="dark"] {
+:root[data-color-scheme="dark"] {
+  --button-disabled-opacity: 0.6;
+  --hover-filter: brightness(1.4);
   --main-color: #e6edf3;
   --toolbar-icon-bg-color: #e6edf3;
   --toolbar-icon-hover-bg-color: #ffffff;
@@ -908,7 +921,7 @@ input[type="number"] {
   --thickness-bg: #161b22;
 }
 
-:root[style*="color-scheme"][style*="dark"] #viewsManager {
+:root[data-color-scheme="dark"] #viewsManager {
   --sidebar-bg-color: rgb(13 17 23 / 0.96);
   --header-bg: rgb(22 27 34 / 0.96);
   --text-color: #e6edf3;
@@ -922,12 +935,13 @@ input[type="number"] {
   --image-page-number-fg: #e6edf3;
 }
 
-:root[style*="color-scheme"][style*="dark"] .sidebar {
+:root[data-color-scheme="dark"] .sidebar {
   --sidebar-bg-color: #161b22;
   --sidebar-border-color: rgb(230 237 243 / 22%);
+  --sidebar-box-shadow: 0 1px 3px rgb(0 0 0 / 35%), 0 6px 16px rgb(0 0 0 / 32%);
 }
 
-:root[style*="color-scheme"][style*="dark"] .dialog {
+:root[data-color-scheme="dark"] .dialog {
   --dialog-bg-color: #161b22;
   --dialog-border-color: #3d444d;
   --text-primary-color: #e6edf3;
@@ -950,20 +964,20 @@ input[type="number"] {
   --radio-border-color: #53606d;
 }
 
-:root[style*="color-scheme"][style*="dark"] .colorPicker {
+:root[data-color-scheme="dark"] .colorPicker {
   --swatch-border-color: #3d444d;
 }
 
-:root[style*="color-scheme"][style*="dark"] .toggle-button {
+:root[data-color-scheme="dark"] .toggle-button {
   --color-canvas: light-dark(#ffffff, #161b22);
   --border-color-interactive: light-dark(#c6ccd2, #e6edf3);
 }
 
-:root[style*="color-scheme"][style*="dark"] .toggle-button[aria-pressed=true] {
+:root[data-color-scheme="dark"] .toggle-button[aria-pressed=true] {
   --toggle-dot-background-color-on-pressed: #161b22;
 }
 
-:root[style*="color-scheme"][style*="dark"] #editorUndoBar {
+:root[data-color-scheme="dark"] #editorUndoBar {
   --text-primary-color: #e6edf3;
   --undo-button-bg-color: #21262d;
   --undo-button-bg-color-hover: #2a313c;
