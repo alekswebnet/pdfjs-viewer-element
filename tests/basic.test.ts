@@ -53,6 +53,34 @@ describe('Basic tests', async () => {
     expect(getComputedStyle(getViewerElement()!).getPropertyValue('--body-bg-color')).toMatch('#0d1117')
   })
 
+  it('should keep LIGHT fixed while automatic mode follows the system theme', async () => {
+    await mountViewer('<pdfjs-viewer-element viewer-css-theme="LIGHT"></pdfjs-viewer-element>')
+    const viewer = document.body.querySelector('pdfjs-viewer-element')!
+    const doc = getIframe().contentDocument!
+    const themeSheet = Array.from(doc.styleSheets).find(sheet => sheet.href?.endsWith('/paper-and-ink.css'))!
+    const darkRules = Array.from(themeSheet.cssRules).filter(
+      (rule): rule is CSSMediaRule => rule instanceof getIframe().contentWindow.CSSMediaRule
+        && rule.conditionText === '(prefers-color-scheme: dark)'
+    )
+    expect(darkRules).toHaveLength(2)
+    const colors = () => [
+      getComputedStyle(doc.documentElement).getPropertyValue('--body-bg-color').trim(),
+      getComputedStyle(doc.querySelector('#viewsManager')!).getPropertyValue('--text-color').trim()
+    ]
+    for (const systemDark of [false, true, false, true]) {
+      // Toggle matching of the system dark rules without depending on the host's theme.
+      darkRules.forEach(rule => { rule.media.mediaText = systemDark ? 'all' : 'not all' })
+      viewer.setAttribute('viewer-css-theme', 'LIGHT')
+      expect(colors()).toEqual(['#f1f3f5', '#1f2328'])
+      viewer.setAttribute('viewer-css-theme', 'DARK')
+      expect(colors()).toEqual(['#0d1117', '#e6edf3'])
+      viewer.setAttribute('viewer-css-theme', 'AUTOMATIC')
+      expect(colors()).toEqual(systemDark ? ['#0d1117', '#e6edf3'] : ['#f1f3f5', '#1f2328'])
+      viewer.removeAttribute('viewer-css-theme')
+      expect(colors()).toEqual(systemDark ? ['#0d1117', '#e6edf3'] : ['#f1f3f5', '#1f2328'])
+    }
+  })
+
   it('should hide the download button', async () => {
     document.body.innerHTML = `
       <pdfjs-viewer-element
