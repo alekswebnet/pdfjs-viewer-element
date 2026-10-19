@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pdfjs-viewer-element | Static file attributes demo</title>
+    <script type="module" src="../dist/pdfjs-viewer-element.js"></script>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!--
+      Build the package before serving this demo over HTTP.
+      Each runtime file URL is supplied independently, without assets-base.
+      Replace these URLs with your static pipeline's eg. content-hashed URLs.
+      Use files from the same package release and set attributes before connection.
+
+      For example for Django ManifestStaticFilesStorage, copy dist into static/pdfjs/,
+      run collectstatic and use the following in a Django template:
+
+      {% load static %}
+      <script type="module" src="{% static 'pdfjs/pdfjs-viewer-element.js' %}"></script>
+      <pdfjs-viewer-element
+        src="/file.pdf"
+        pdfjs-lib-src="{% static 'pdfjs/pdf.mjs' %}"
+        viewer-src="{% static 'pdfjs/viewer.mjs' %}"
+        worker-src="{% static 'pdfjs/pdf.worker.min.mjs' %}"
+        viewer-css-src="{% static 'pdfjs/viewer.css' %}"
+        theme-css-src="{% static 'pdfjs/paper-and-ink.css' %}"
+        image-resources-path="{% get_static_prefix %}pdfjs/images/"
+        style="height: 100dvh">
+      </pdfjs-viewer-element>
+
+      Adjust the static prefix to your deployment. Keep original filenames available
+      for resources loaded by directory and filename, such as annotation icons,
+      CMaps, fonts and WASM; configure their resource path attributes as needed.
+      For a separate static host, configure module script CORS and the page's CSP.
+    -->
+    <pdfjs-viewer-element
+      src="/public/sample-pdf-with-images.pdf"
+      pdfjs-lib-src="../dist/pdf.mjs"
+      viewer-src="../dist/viewer.mjs"
+      worker-src="../dist/pdf.worker.min.mjs"
+      viewer-css-src="../dist/viewer.css"
+      theme-css-src="../dist/paper-and-ink.css"
+      image-resources-path="../dist/images/"
+      style="height: 100dvh">
+    </pdfjs-viewer-element>
+  </body>
+</html>

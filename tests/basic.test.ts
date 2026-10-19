@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { getFileData, getViewerElement, mountViewer, getIframe } from './utils'
-import '../src/pdfjs-viewer-element'
+import { PdfjsViewerElement } from '../src/pdfjs-viewer-element'
 
 describe('Basic tests', async () => {
   it('should render the PDF file', async () => {
@@ -108,11 +108,12 @@ describe('Basic tests', async () => {
     )
 
     const viewer = document.body.querySelector('pdfjs-viewer-element') as HTMLElement
-    const workerSrc = 'https://example.com/pdf.worker.min.mjs'
-    viewer.setAttribute('worker-src', workerSrc)
+    for (const workerSrc of ['https://example.com/pdf.worker.min.mjs', '/static/pdfjs/pdf.worker.abc.mjs', './pdf.worker.mjs']) {
+      viewer.setAttribute('worker-src', workerSrc)
 
-    const options = getIframe().contentWindow.PDFViewerApplicationOptions.getAll()
-    expect(options.workerSrc).eq(workerSrc)
+      const options = getIframe().contentWindow.PDFViewerApplicationOptions.getAll()
+      expect(options.workerSrc).eq(new URL(workerSrc, location.href).href)
+    }
   })
 
   it('should include external worker origin in CSP script and worker directives', async () => {
@@ -258,6 +259,29 @@ describe('Basic tests', async () => {
     }
   })
 
+  it('should load individual runtime URLs without assets-base', async () => {
+    await mountViewer(`
+      <pdfjs-viewer-element
+        pdfjs-lib-src="/src/build/pdf.mjs?manifest=123"
+        viewer-src="/src/web/viewer.mjs?manifest=123"
+        worker-src="/src/build/pdf.worker.mjs?manifest=123"
+        viewer-css-src="/src/web/viewer.css?manifest=123"
+        theme-css-src="/src/themes/paper-and-ink.css?manifest=123">
+      </pdfjs-viewer-element>`
+    )
+
+    const doc = getIframe().contentDocument!
+    for (const path of ['/src/build/pdf.mjs', '/src/web/viewer.mjs']) {
+      expect(doc.querySelector(`script[src="${location.origin}${path}?manifest=123"]`)).exist
+    }
+    for (const path of ['/src/web/viewer.css', '/src/themes/paper-and-ink.css']) {
+      expect(doc.querySelector(`link[href="${location.origin}${path}?manifest=123"]`)).exist
+    }
+    expect(getIframe().contentWindow.PDFViewerApplicationOptions.getAll().workerSrc)
+      .eq(new URL('/src/build/pdf.worker.mjs?manifest=123', location.href).href)
+    expect(getViewerElement()).exist
+  })
+
   it('should open a new document when src changes at runtime', async () => {
     const viewerApp = await mountViewer(`
       <pdfjs-viewer-element src="/sample-pdf-10MB.pdf"></pdfjs-viewer-element>`
@@ -280,6 +304,42 @@ describe('Basic tests', async () => {
     expect(openedUrl).toContain('/sample-pdf-with-images.pdf')
     if (viewerApp && originalOpen) {
       viewerApp.open = originalOpen
+    }
+  })
+})
+
+describe('Runtime file URL overrides', () => {
+  const files = {
+    workerSrc: ['worker-src', 'pdf.worker.min.mjs'],
+    pdfjsLibSrc: ['pdfjs-lib-src', 'pdf.mjs'],
+    viewerSrc: ['viewer-src', 'viewer.mjs'],
+    viewerCssSrc: ['viewer-css-src', 'viewer.css'],
+    themeCssSrc: ['theme-css-src', 'paper-and-ink.css']
+  } as const
+
+  it.each([undefined, '/static/pdfjs'])('resolves individual URLs with assets-base=%s', (assetsBase) => {
+    const viewer = new PdfjsViewerElement()
+    if (assetsBase) viewer.setAttribute('assets-base', assetsBase)
+    const defaults = viewer['getRuntimeFileUrls']()
+
+    for (const [key, [attribute, file]] of Object.entries(files)) {
+      const field = key as keyof typeof files
+      const path = `/static/hashed/${file}?v=123`
+      viewer.setAttribute(attribute, path)
+      expect(viewer['getRuntimeFileUrls']()[field]).eq(new URL(path, location.href).href)
+      viewer.setAttribute(attribute, 'https://cdn.example.com/' + file)
+      expect(viewer['getRuntimeFileUrls']()[field]).eq('https://cdn.example.com/' + file)
+      viewer.setAttribute(attribute, '')
+      expect(viewer['getRuntimeFileUrls']()[field]).eq(defaults[field])
+      viewer.setAttribute(attribute, ' \t\n ')
+      expect(viewer['getRuntimeFileUrls']()[field]).eq(defaults[field])
+      viewer.setAttribute(attribute, `  ${path}  `)
+      expect(viewer['getRuntimeFileUrls']()[field]).eq(new URL(path, location.href).href)
+      viewer.removeAttribute(attribute)
+      expect(viewer['getRuntimeFileUrls']()).toEqual(defaults)
+      if (assetsBase) {
+        expect(defaults[field]).eq(new URL(`${assetsBase}/${file}`, location.href).href)
+      }
     }
   })
 })

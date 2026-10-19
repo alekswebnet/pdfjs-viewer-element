@@ -32,7 +32,7 @@ const DEFAULT_PAPER_AND_INK_THEME_CSS_SRC = import.meta.env.DEV
 // File names inside the package `dist` folder, used when `assets-base` is set.
 const DIST_FILE_NAMES = {
   workerSrc: 'pdf.worker.min.mjs',
-  pdfSrc: 'pdf.mjs',
+  pdfjsLibSrc: 'pdf.mjs',
   viewerSrc: 'viewer.mjs',
   viewerCssSrc: 'viewer.css',
   themeCssSrc: 'paper-and-ink.css'
@@ -42,7 +42,7 @@ type RuntimeFileUrls = Record<keyof typeof DIST_FILE_NAMES, string>
 
 const DEFAULT_RUNTIME_FILE_URLS: RuntimeFileUrls = {
   workerSrc: DEFAULT_BUILT_IN_WORKER_SRC,
-  pdfSrc: DEFAULT_PDF_SRC,
+  pdfjsLibSrc: DEFAULT_PDF_SRC,
   viewerSrc: DEFAULT_VIEWER_SRC,
   viewerCssSrc: DEFAULT_VIEWER_CSS_SRC,
   themeCssSrc: DEFAULT_PAPER_AND_INK_THEME_CSS_SRC
@@ -140,9 +140,13 @@ export class PdfjsViewerElement extends HTMLElement {
   // Read when the viewer is (re)built, so the attribute must be present before connection.
   private getRuntimeFileUrls(): RuntimeFileUrls {
     const assetsBase = this.getAssetsBase()
-    if (!assetsBase) return DEFAULT_RUNTIME_FILE_URLS
 
-    const resolveFile = (fileName: string) => {
+    const resolveFile = (field: keyof typeof DIST_FILE_NAMES) => {
+      const attr = this.getAttribute(field.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`))?.trim()
+      if (attr) return this.getFullPath(attr)
+      if (!assetsBase) return DEFAULT_RUNTIME_FILE_URLS[field]
+
+      const fileName = DIST_FILE_NAMES[field]
       try {
         return new URL(fileName, assetsBase).href
       } catch {
@@ -151,16 +155,12 @@ export class PdfjsViewerElement extends HTMLElement {
     }
 
     return {
-      workerSrc: resolveFile(DIST_FILE_NAMES.workerSrc),
-      pdfSrc: resolveFile(DIST_FILE_NAMES.pdfSrc),
-      viewerSrc: resolveFile(DIST_FILE_NAMES.viewerSrc),
-      viewerCssSrc: resolveFile(DIST_FILE_NAMES.viewerCssSrc),
-      themeCssSrc: resolveFile(DIST_FILE_NAMES.themeCssSrc)
+      workerSrc: resolveFile('workerSrc'),
+      pdfjsLibSrc: resolveFile('pdfjsLibSrc'),
+      viewerSrc: resolveFile('viewerSrc'),
+      viewerCssSrc: resolveFile('viewerCssSrc'),
+      themeCssSrc: resolveFile('themeCssSrc')
     }
-  }
-
-  private getWorkerSrc() {
-    return this.getAttribute('worker-src') || this.getRuntimeFileUrls().workerSrc
   }
 
   private getImageResourcesPath() {
@@ -383,7 +383,7 @@ export class PdfjsViewerElement extends HTMLElement {
 
   private applyViewerOptions = () => {
     const viewerOptions = this.iframe.contentWindow?.PDFViewerApplicationOptions
-    viewerOptions?.set('workerSrc', this.getWorkerSrc())
+    viewerOptions?.set('workerSrc', this.getRuntimeFileUrls().workerSrc)
     viewerOptions?.set('debuggerSrc', this.getAttribute('debugger-src') || DEFAULTS.debuggerSrc)
     viewerOptions?.set('cMapUrl', this.getAttribute('c-map-url') || DEFAULTS.cMapUrl)
     viewerOptions?.set('iccUrl', this.getAttribute('icc-url') || DEFAULTS.iccUrl)
@@ -432,13 +432,13 @@ export class PdfjsViewerElement extends HTMLElement {
       const toSourceList = (sources: string[]) =>
         Array.from(new Set(sources.filter(Boolean))).join(' ')
 
-      const { pdfSrc, viewerSrc, viewerCssSrc, themeCssSrc } = this.getRuntimeFileUrls()
-      const workerSrcOrigin = resolveHttpOrigin(this.getWorkerSrc())
+      const { pdfjsLibSrc, viewerSrc, viewerCssSrc, themeCssSrc, workerSrc } = this.getRuntimeFileUrls()
+      const workerSrcOrigin = resolveHttpOrigin(workerSrc)
 
       const scriptSources = toSourceList([
         "'self'",
         window.location.origin,
-        resolveHttpOrigin(pdfSrc),
+        resolveHttpOrigin(pdfjsLibSrc),
         resolveHttpOrigin(viewerSrc),
         workerSrcOrigin
       ])
@@ -508,8 +508,8 @@ export class PdfjsViewerElement extends HTMLElement {
 
     await this.injectLocaleData()
 
-    const { pdfSrc, viewerSrc } = this.getRuntimeFileUrls()
-    await this.injectScript(pdfSrc)
+    const { pdfjsLibSrc, viewerSrc } = this.getRuntimeFileUrls()
+    await this.injectScript(pdfjsLibSrc)
     await this.injectScript(viewerSrc)
 
     return await setupPromise
@@ -547,7 +547,7 @@ export class PdfjsViewerElement extends HTMLElement {
 
     if (name === 'worker-src') {
       const viewerOptions = this.iframe.contentWindow?.PDFViewerApplicationOptions
-      viewerOptions?.set('workerSrc', newValue || this.getRuntimeFileUrls().workerSrc)
+      viewerOptions?.set('workerSrc', this.getRuntimeFileUrls().workerSrc)
       return
     }
 
