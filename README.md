@@ -142,6 +142,7 @@ Bundlers that do not analyse `new URL(..., import.meta.url)`, esbuild among them
 - The value is a directory URL, relative to the page or absolute. A trailing slash is added when missing.
 - Individual runtime URL attributes take precedence over `assets-base` for their respective files, including `worker-src`.
 - The attribute is read when the viewer is (re)initialized, so set it before the element is attached to the document.
+- All runtime files must come from the same package release as the element. The viewer HTML is built into the element, and mixing PDF.js versions breaks the viewer.
 
 PDF.js annotation icons are a separate case: the viewer loads them at runtime as `imageResourcesPath + 'annotation-' + name + '.svg'`, a dynamic name no bundler can emit. If `assets-base` is set, `imageResourcesPath` defaults to `assets-base + 'images/'`. Otherwise serve the package `dist/images` folder and set `image-resources-path` explicitly.
 

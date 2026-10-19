@@ -29,24 +29,17 @@ const DEFAULT_PAPER_AND_INK_THEME_CSS_SRC = import.meta.env.DEV
   ? new URL('./themes/paper-and-ink.css', import.meta.url).href
   : new URL(/* @vite-ignore */ './paper-and-ink.css', import.meta.url).href
 
-// File names inside the package `dist` folder, used when `assets-base` is set.
-const DIST_FILE_NAMES = {
-  workerSrc: 'pdf.worker.min.mjs',
-  pdfjsLibSrc: 'pdf.mjs',
-  viewerSrc: 'viewer.mjs',
-  viewerCssSrc: 'viewer.css',
-  themeCssSrc: 'paper-and-ink.css'
+// Runtime files of the viewer: the attribute that overrides each URL, the file name inside the
+// package `dist` folder (used when `assets-base` is set) and the bundled default.
+const RUNTIME_FILES = {
+  workerSrc: { attribute: 'worker-src', fileName: 'pdf.worker.min.mjs', defaultUrl: DEFAULT_BUILT_IN_WORKER_SRC },
+  pdfjsLibSrc: { attribute: 'pdfjs-lib-src', fileName: 'pdf.mjs', defaultUrl: DEFAULT_PDF_SRC },
+  viewerSrc: { attribute: 'viewer-src', fileName: 'viewer.mjs', defaultUrl: DEFAULT_VIEWER_SRC },
+  viewerCssSrc: { attribute: 'viewer-css-src', fileName: 'viewer.css', defaultUrl: DEFAULT_VIEWER_CSS_SRC },
+  themeCssSrc: { attribute: 'theme-css-src', fileName: 'paper-and-ink.css', defaultUrl: DEFAULT_PAPER_AND_INK_THEME_CSS_SRC }
 } as const
 
-type RuntimeFileUrls = Record<keyof typeof DIST_FILE_NAMES, string>
-
-const DEFAULT_RUNTIME_FILE_URLS: RuntimeFileUrls = {
-  workerSrc: DEFAULT_BUILT_IN_WORKER_SRC,
-  pdfjsLibSrc: DEFAULT_PDF_SRC,
-  viewerSrc: DEFAULT_VIEWER_SRC,
-  viewerCssSrc: DEFAULT_VIEWER_CSS_SRC,
-  themeCssSrc: DEFAULT_PAPER_AND_INK_THEME_CSS_SRC
-}
+type RuntimeFileUrls = Record<keyof typeof RUNTIME_FILES, string>
 
 const DEFAULTS = {
   src: '',
@@ -141,12 +134,12 @@ export class PdfjsViewerElement extends HTMLElement {
   private getRuntimeFileUrls(): RuntimeFileUrls {
     const assetsBase = this.getAssetsBase()
 
-    const resolveFile = (field: keyof typeof DIST_FILE_NAMES) => {
-      const attr = this.getAttribute(field.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`))?.trim()
+    const resolveFile = (field: keyof typeof RUNTIME_FILES) => {
+      const { attribute, fileName, defaultUrl } = RUNTIME_FILES[field]
+      const attr = this.getAttribute(attribute)?.trim()
       if (attr) return this.getFullPath(attr)
-      if (!assetsBase) return DEFAULT_RUNTIME_FILE_URLS[field]
+      if (!assetsBase) return defaultUrl
 
-      const fileName = DIST_FILE_NAMES[field]
       try {
         return new URL(fileName, assetsBase).href
       } catch {
@@ -414,7 +407,7 @@ export class PdfjsViewerElement extends HTMLElement {
     return '#' + Object.entries(params).map(([k, v]) => `${k}=${v}`).join('&')
   }
 
-  private buildViewerEntry = async () => {
+  private buildViewerEntry = async (runtimeFileUrls: RuntimeFileUrls) => {
     return new Promise<void>(async (resolve) => {
       const viewerEntry = await import('virtual:pdfjs-viewer-html')
       const resolveHttpOrigin = (url: string) => {
@@ -432,7 +425,11 @@ export class PdfjsViewerElement extends HTMLElement {
       const toSourceList = (sources: string[]) =>
         Array.from(new Set(sources.filter(Boolean))).join(' ')
 
-      const { pdfjsLibSrc, viewerSrc, viewerCssSrc, themeCssSrc, workerSrc } = this.getRuntimeFileUrls()
+      // Attribute values that are not valid URLs reach the markup as written, so escape them.
+      const escapeAttribute = (value: string) =>
+        value.replace(/&/g, '&amp;').replace(/"/g, '&quot;')
+
+      const { pdfjsLibSrc, viewerSrc, viewerCssSrc, themeCssSrc, workerSrc } = runtimeFileUrls
       const workerSrcOrigin = resolveHttpOrigin(workerSrc)
 
       const scriptSources = toSourceList([
@@ -478,8 +475,8 @@ export class PdfjsViewerElement extends HTMLElement {
 
       const completeHtml = viewerHtmlWithSrcdocCsp
         .replace('</head>', `
-          <link rel="stylesheet" href="${viewerCssSrc}">
-          <link rel="stylesheet" href="${themeCssSrc}">
+          <link rel="stylesheet" href="${escapeAttribute(viewerCssSrc)}">
+          <link rel="stylesheet" href="${escapeAttribute(themeCssSrc)}">
           ${Array.from(this.viewerStyles).map(style => `<style>${style}</style>`).join('\n')}
         </head>`)
       this.iframe.addEventListener('load', () => resolve(), { once: true })
@@ -500,7 +497,7 @@ export class PdfjsViewerElement extends HTMLElement {
     }
   }
 
-  private buildViewerApp = async () => {
+  private buildViewerApp = async (runtimeFileUrls: RuntimeFileUrls) => {
     await this.applyIframeHash()
 
     // Set viewer options as soon as PDFViewerApplication is created.
@@ -508,20 +505,23 @@ export class PdfjsViewerElement extends HTMLElement {
 
     await this.injectLocaleData()
 
-    const { pdfjsLibSrc, viewerSrc } = this.getRuntimeFileUrls()
-    await this.injectScript(pdfjsLibSrc)
-    await this.injectScript(viewerSrc)
+    await this.injectScript(runtimeFileUrls.pdfjsLibSrc)
+    await this.injectScript(runtimeFileUrls.viewerSrc)
 
     return await setupPromise
+  }
+
+  // Runtime file URLs are read once per build, so the srcdoc CSP always allows the files it loads.
+  private buildViewer = async () => {
+    const runtimeFileUrls = this.getRuntimeFileUrls()
+    await this.buildViewerEntry(runtimeFileUrls)
+    return await this.buildViewerApp(runtimeFileUrls)
   }
 
   async connectedCallback() {
     this.iframe = this.shadowRoot?.querySelector('iframe') as PdfjsViewerElementIframe
     this.iframe.setAttribute('title', this.getAttribute('iframe-title') || DEFAULTS.iframeTitle)
-    this.initPromise = (async () => {
-      await this.buildViewerEntry()
-      return await this.buildViewerApp()
-    })()
+    this.initPromise = this.buildViewer()
   }
   
   disconnectedCallback() {
@@ -584,10 +584,7 @@ export class PdfjsViewerElement extends HTMLElement {
         await this.injectLocaleData()
         const didApplyRuntimeLocale = await this.applyLocaleAtRuntime()
         if (!didApplyRuntimeLocale) {
-          this.initPromise = (async () => {
-            await this.buildViewerEntry()
-            return await this.buildViewerApp()
-          })()
+          this.initPromise = this.buildViewer()
           await this.initPromise
         }
         await this.applyIframeHash()

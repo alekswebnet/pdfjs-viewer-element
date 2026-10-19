@@ -282,6 +282,51 @@ describe('Basic tests', async () => {
     expect(getViewerElement()).exist
   })
 
+  it('should include individual runtime URL origins in CSP', async () => {
+    // Hosts under `.invalid` never resolve: the CSP is written before the scripts fail to load.
+    document.body.innerHTML = `
+      <pdfjs-viewer-element
+        pdfjs-lib-src="https://pdfjs-lib.invalid/pdf.mjs"
+        viewer-src="https://viewer.invalid/viewer.mjs"
+        viewer-css-src="https://viewer-css.invalid/viewer.css"
+        theme-css-src="https://theme-css.invalid/paper-and-ink.css">
+      </pdfjs-viewer-element>`
+    const viewer = document.body.querySelector('pdfjs-viewer-element') as PdfjsViewerElement
+    await viewer.initPromise.catch(() => {})
+
+    const cspMeta = getIframe().contentDocument?.querySelector('meta[http-equiv="Content-Security-Policy"]')
+    const csp = cspMeta?.getAttribute('content') || ''
+    expect(csp).toMatch(/script-src-elem[^;]*https:\/\/pdfjs-lib\.invalid/)
+    expect(csp).toMatch(/script-src-elem[^;]*https:\/\/viewer\.invalid/)
+    expect(csp).toMatch(/style-src[^;]*https:\/\/viewer-css\.invalid/)
+    expect(csp).toMatch(/style-src[^;]*https:\/\/theme-css\.invalid/)
+  })
+
+  it('should keep the runtime URLs read at connection for the whole build', async () => {
+    document.body.innerHTML = `<pdfjs-viewer-element></pdfjs-viewer-element>`
+    const viewer = document.body.querySelector('pdfjs-viewer-element') as PdfjsViewerElement
+    viewer.setAttribute('pdfjs-lib-src', 'https://pdfjs-lib.invalid/pdf.mjs')
+    await viewer.initPromise
+
+    expect(getIframe().contentDocument!.querySelector('script[src^="https://pdfjs-lib.invalid"]')).not.exist
+    expect(getViewerElement()).exist
+  })
+
+  it('should not inject markup from an invalid stylesheet URL', async () => {
+    // The theme stylesheet is optional, so the viewer still initializes without it.
+    const invalidUrl = 'http://[invalid"><link rel="stylesheet" href="/injected.css">'
+    await mountViewer(`
+      <pdfjs-viewer-element theme-css-src='${invalidUrl}'></pdfjs-viewer-element>`
+    )
+
+    const doc = getIframe().contentDocument!
+    const stylesheets = Array.from(doc.querySelectorAll('link[rel="stylesheet"]'))
+      .map((link) => link.getAttribute('href'))
+    expect(stylesheets).toContain(invalidUrl)
+    expect(stylesheets).not.toContain('/injected.css')
+    expect(getViewerElement()).exist
+  })
+
   it('should open a new document when src changes at runtime', async () => {
     const viewerApp = await mountViewer(`
       <pdfjs-viewer-element src="/sample-pdf-10MB.pdf"></pdfjs-viewer-element>`

@@ -48,6 +48,7 @@ export declare class PdfjsViewerElement extends HTMLElement {
     private buildViewerEntry;
     private setupViewerApp;
     private buildViewerApp;
+    private buildViewer;
     connectedCallback(): Promise<void>;
     disconnectedCallback(): void;
     attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): Promise<void>;
