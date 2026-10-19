@@ -189,7 +189,7 @@ Example:
 
 The component includes and applies a default Paper & Ink theme from `src/themes/paper-and-ink.css`.
 
-Use `viewer-css-theme` attribute to set light or dark theme manually:
+Use `viewer-css-theme` attribute to set light or dark theme manually. `LIGHT` and `DARK` override the system color scheme, `AUTOMATIC` (the default) follows it:
 
 ```html
 <pdfjs-viewer-element 
