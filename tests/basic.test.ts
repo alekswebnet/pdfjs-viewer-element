@@ -330,6 +330,10 @@ describe('Runtime file URL overrides', () => {
       expect(viewer['getRuntimeFileUrls']()[field]).eq('https://cdn.example.com/' + file)
       viewer.setAttribute(attribute, '')
       expect(viewer['getRuntimeFileUrls']()[field]).eq(defaults[field])
+      viewer.setAttribute(attribute, ' \t\n ')
+      expect(viewer['getRuntimeFileUrls']()[field]).eq(defaults[field])
+      viewer.setAttribute(attribute, `  ${path}  `)
+      expect(viewer['getRuntimeFileUrls']()[field]).eq(new URL(path, location.href).href)
       viewer.removeAttribute(attribute)
       expect(viewer['getRuntimeFileUrls']()).toEqual(defaults)
       if (assetsBase) {

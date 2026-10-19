@@ -142,7 +142,7 @@ export class PdfjsViewerElement extends HTMLElement {
     const assetsBase = this.getAssetsBase()
 
     const resolveFile = (field: keyof typeof DIST_FILE_NAMES) => {
-      const attr = this.getAttribute(field.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`))
+      const attr = this.getAttribute(field.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`))?.trim()
       if (attr) return this.getFullPath(attr)
       if (!assetsBase) return DEFAULT_RUNTIME_FILE_URLS[field]
 
