@@ -108,11 +108,12 @@ describe('Basic tests', async () => {
     )
 
     const viewer = document.body.querySelector('pdfjs-viewer-element') as HTMLElement
-    const workerSrc = 'https://example.com/pdf.worker.min.mjs'
-    viewer.setAttribute('worker-src', workerSrc)
+    for (const workerSrc of ['https://example.com/pdf.worker.min.mjs', '/static/pdfjs/pdf.worker.abc.mjs', './pdf.worker.mjs']) {
+      viewer.setAttribute('worker-src', workerSrc)
 
-    const options = getIframe().contentWindow.PDFViewerApplicationOptions.getAll()
-    expect(options.workerSrc).eq(workerSrc)
+      const options = getIframe().contentWindow.PDFViewerApplicationOptions.getAll()
+      expect(options.workerSrc).eq(new URL(workerSrc, location.href).href)
+    }
   })
 
   it('should include external worker origin in CSP script and worker directives', async () => {

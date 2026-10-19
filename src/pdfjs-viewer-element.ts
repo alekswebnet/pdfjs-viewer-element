@@ -547,7 +547,7 @@ export class PdfjsViewerElement extends HTMLElement {
 
     if (name === 'worker-src') {
       const viewerOptions = this.iframe.contentWindow?.PDFViewerApplicationOptions
-      viewerOptions?.set('workerSrc', newValue || this.getRuntimeFileUrls().workerSrc)
+      viewerOptions?.set('workerSrc', this.getRuntimeFileUrls().workerSrc)
       return
     }
 
