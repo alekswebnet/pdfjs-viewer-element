@@ -262,7 +262,7 @@ describe('Basic tests', async () => {
   it('should load individual runtime URLs without assets-base', async () => {
     await mountViewer(`
       <pdfjs-viewer-element
-        pdf-src="/src/build/pdf.mjs?manifest=123"
+        pdfjs-lib-src="/src/build/pdf.mjs?manifest=123"
         viewer-src="/src/web/viewer.mjs?manifest=123"
         worker-src="/src/build/pdf.worker.mjs?manifest=123"
         viewer-css-src="/src/web/viewer.css?manifest=123"
@@ -311,7 +311,7 @@ describe('Basic tests', async () => {
 describe('Runtime file URL overrides', () => {
   const files = {
     workerSrc: ['worker-src', 'pdf.worker.min.mjs'],
-    pdfSrc: ['pdf-src', 'pdf.mjs'],
+    pdfjsLibSrc: ['pdfjs-lib-src', 'pdf.mjs'],
     viewerSrc: ['viewer-src', 'viewer.mjs'],
     viewerCssSrc: ['viewer-css-src', 'viewer.css'],
     themeCssSrc: ['theme-css-src', 'paper-and-ink.css']

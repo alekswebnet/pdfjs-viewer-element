@@ -101,7 +101,7 @@ The element is block-level and needs an explicit height.
 | viewer&#8209;css&#8209;theme | Viewer theme: `AUTOMATIC`, `LIGHT`, `DARK`. | `AUTOMATIC` |
 | assets&#8209;base | Directory URL of the viewer runtime files (`viewer.mjs`, `pdf.mjs`, `pdf.worker.min.mjs`, `viewer.css`, `paper-and-ink.css`). Only needed when your bundler does not handle `new URL('./file', import.meta.url)`, see [Bundlers](#bundlers-and-assets-base). | folder of `pdfjs-viewer-element.js` |
 | worker&#8209;src | PDF.js worker URL override. | bundled worker (`./build/pdf.worker.mjs` in dev, `pdf.worker.min.mjs` next to the element or in `assets-base`) |
-| pdf&#8209;src | PDF.js library module URL override. | bundled `pdf.mjs`, or `assets-base + pdf.mjs` |
+| pdfjs&#8209;lib&#8209;src | PDF.js library module URL override. | bundled `pdf.mjs`, or `assets-base + pdf.mjs` |
 | viewer&#8209;src | PDF.js viewer module URL override. | bundled `viewer.mjs`, or `assets-base + viewer.mjs` |
 | viewer&#8209;css&#8209;src | PDF.js viewer stylesheet URL override. | bundled `viewer.css`, or `assets-base + viewer.css` |
 | theme&#8209;css&#8209;src | Paper & Ink theme stylesheet URL override. | bundled `paper-and-ink.css`, or `assets-base + paper-and-ink.css` |
@@ -124,7 +124,7 @@ Most attributes can be updated dynamically:
 - `viewer-css-theme` updates the viewer theme at runtime.
 - `worker-src`, `debugger-src`, `c-map-url`, `icc-url`, `image-resources-path`, `sandbox-bundle-src`, `standard-font-data-url`, `wasm-url` update viewer options for subsequent document loads.
 - `locale` rebuilds the viewer so localization resources can be applied.
-- `assets-base`, `pdf-src`, `viewer-src`, `viewer-css-src`, `theme-css-src` and `locale-src-template` are read when the viewer is (re)initialized, so set them before the element is attached. Changing them alone does not reload the viewer.
+- `assets-base`, `pdfjs-lib-src`, `viewer-src`, `viewer-css-src`, `theme-css-src` and `locale-src-template` are read when the viewer is (re)initialized, so set them before the element is attached. Changing them alone does not reload the viewer.
 
 ## Bundlers and assets base
 

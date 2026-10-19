@@ -32,7 +32,7 @@ const DEFAULT_PAPER_AND_INK_THEME_CSS_SRC = import.meta.env.DEV
 // File names inside the package `dist` folder, used when `assets-base` is set.
 const DIST_FILE_NAMES = {
   workerSrc: 'pdf.worker.min.mjs',
-  pdfSrc: 'pdf.mjs',
+  pdfjsLibSrc: 'pdf.mjs',
   viewerSrc: 'viewer.mjs',
   viewerCssSrc: 'viewer.css',
   themeCssSrc: 'paper-and-ink.css'
@@ -42,7 +42,7 @@ type RuntimeFileUrls = Record<keyof typeof DIST_FILE_NAMES, string>
 
 const DEFAULT_RUNTIME_FILE_URLS: RuntimeFileUrls = {
   workerSrc: DEFAULT_BUILT_IN_WORKER_SRC,
-  pdfSrc: DEFAULT_PDF_SRC,
+  pdfjsLibSrc: DEFAULT_PDF_SRC,
   viewerSrc: DEFAULT_VIEWER_SRC,
   viewerCssSrc: DEFAULT_VIEWER_CSS_SRC,
   themeCssSrc: DEFAULT_PAPER_AND_INK_THEME_CSS_SRC
@@ -156,7 +156,7 @@ export class PdfjsViewerElement extends HTMLElement {
 
     return {
       workerSrc: resolveFile('workerSrc'),
-      pdfSrc: resolveFile('pdfSrc'),
+      pdfjsLibSrc: resolveFile('pdfjsLibSrc'),
       viewerSrc: resolveFile('viewerSrc'),
       viewerCssSrc: resolveFile('viewerCssSrc'),
       themeCssSrc: resolveFile('themeCssSrc')
@@ -432,13 +432,13 @@ export class PdfjsViewerElement extends HTMLElement {
       const toSourceList = (sources: string[]) =>
         Array.from(new Set(sources.filter(Boolean))).join(' ')
 
-      const { pdfSrc, viewerSrc, viewerCssSrc, themeCssSrc, workerSrc } = this.getRuntimeFileUrls()
+      const { pdfjsLibSrc, viewerSrc, viewerCssSrc, themeCssSrc, workerSrc } = this.getRuntimeFileUrls()
       const workerSrcOrigin = resolveHttpOrigin(workerSrc)
 
       const scriptSources = toSourceList([
         "'self'",
         window.location.origin,
-        resolveHttpOrigin(pdfSrc),
+        resolveHttpOrigin(pdfjsLibSrc),
         resolveHttpOrigin(viewerSrc),
         workerSrcOrigin
       ])
@@ -508,8 +508,8 @@ export class PdfjsViewerElement extends HTMLElement {
 
     await this.injectLocaleData()
 
-    const { pdfSrc, viewerSrc } = this.getRuntimeFileUrls()
-    await this.injectScript(pdfSrc)
+    const { pdfjsLibSrc, viewerSrc } = this.getRuntimeFileUrls()
+    await this.injectScript(pdfjsLibSrc)
     await this.injectScript(viewerSrc)
 
     return await setupPromise

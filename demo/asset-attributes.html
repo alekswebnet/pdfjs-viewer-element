@@ -27,7 +27,7 @@
       <script type="module" src="{% static 'pdfjs/pdfjs-viewer-element.js' %}"></script>
       <pdfjs-viewer-element
         src="/file.pdf"
-        pdf-src="{% static 'pdfjs/pdf.mjs' %}"
+        pdfjs-lib-src="{% static 'pdfjs/pdf.mjs' %}"
         viewer-src="{% static 'pdfjs/viewer.mjs' %}"
         worker-src="{% static 'pdfjs/pdf.worker.min.mjs' %}"
         viewer-css-src="{% static 'pdfjs/viewer.css' %}"
@@ -43,7 +43,7 @@
     -->
     <pdfjs-viewer-element
       src="/public/sample-pdf-with-images.pdf"
-      pdf-src="../dist/pdf.mjs"
+      pdfjs-lib-src="../dist/pdf.mjs"
       viewer-src="../dist/viewer.mjs"
       worker-src="../dist/pdf.worker.min.mjs"
       viewer-css-src="../dist/viewer.css"
